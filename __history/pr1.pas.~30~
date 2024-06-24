@@ -16,7 +16,6 @@ type
     TabSheet1: TTabSheet;
     Label1: TLabel;
     ListBox1: TListBox;
-    procedure ListBox1Click(Sender: TObject);
 
 
   private
@@ -35,16 +34,5 @@ implementation
 
 
 
-
-procedure TwinMain.ListBox1Click(Sender: TObject);
-  var LI:TStrings;
-  i:integer;
-  s:string;
-begin
-  LI:=ListBox1.Items;
-  i:=ListBox1.ItemIndex;
-  s:=LI[i];
-  ShowMessage(s);
-end;
 
 end.

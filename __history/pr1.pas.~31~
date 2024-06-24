@@ -41,8 +41,7 @@ procedure TwinMain.ListBox1Click(Sender: TObject);
   i:integer;
   s:string;
 begin
-  LI:=ListBox1.Items;
-  i:=ListBox1.ItemIndex;
+  i:=winMain.ListBox1.ItemIndex;
   s:=LI[i];
   ShowMessage(s);
 end;
