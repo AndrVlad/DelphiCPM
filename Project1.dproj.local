@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.247,=D:\Delphi Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.867,=D:\Delphi Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.500,=D:\Delphi Projects\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.192,D:\Delphi Projects\pr1.dfm=D:\Delphi Projects\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.738,=D:\Delphi Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.025,=D:\Delphi Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.192,D:\Delphi Projects\pr1.pas=D:\Delphi Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.041,D:\Delphi Projects\devStat.dfm=D:\Delphi Projects\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.449,D:\Delphi Projects\Project1.dproj=D:\Delphi Projects\Project1.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.987,D:\Delphi Projects\commandTest.pas=D:\Delphi Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.987,D:\Delphi Projects\commandTest.dfm=D:\Delphi Projects\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.041,D:\Delphi Projects\devStat.pas=D:\Delphi Projects\Unit1.pas</Transaction>
+  </Transactions>
+</BorlandProject>

@@ -1,0 +1,46 @@
+unit pr1;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.Menus;
+
+type
+  TwinMain = class(TForm)
+    MainMenu: TMainMenu;
+    StatusBar1: TStatusBar;
+    config: TMenuItem;
+    testChannel: TMenuItem;
+    testCommand: TMenuItem;
+    procedure testCommandClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  winMain: TwinMain;
+
+implementation
+
+{$R *.dfm}
+
+uses commandTest;
+
+procedure TwinMain.testCommandClick(Sender: TObject);
+var
+   CommandTestForm: TtestComm;
+
+   begin
+      CommandTestForm.Show;
+      // CommandTestForm := TtestComm.Create(Self);
+    {try
+      CommandTestForm.ShowModal;
+    finally
+      CommandTestForm.Free;
+    end;  }
+end;
+
+end.
