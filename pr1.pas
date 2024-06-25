@@ -22,11 +22,13 @@ type
     Label3: TLabel;
     ListBox3: TListBox;
     ListBox4: TListBox;
-    TFCom31: TForm;
+    GroupBox1: TGroupBox;
+    Memo1: TMemo;
     procedure ListBox1Click(Sender: TObject);
     procedure ComboBox1Change(Sender: TObject);
     procedure ListBox3Click(Sender: TObject);
-    procedure CreateShowForm(var inForm:TForm);
+    procedure configClick(Sender: TObject);
+    //procedure CreateShowForm(var inForm: TForm);
   private
     { Private declarations }
   public
@@ -39,7 +41,7 @@ var
 implementation
 
 {$R *.dfm}
-uses Unit1;
+uses Unit1,Unit2;
 
 procedure TwinMain.ComboBox1Change(Sender: TObject);
 
@@ -63,6 +65,15 @@ begin
   3: ListBox4.Visible:=True;
 
   end;
+end;
+
+procedure TwinMain.configClick(Sender: TObject);
+begin
+  FControls:= TFControls.Create(Self);
+  FControls.ShowModal;
+
+
+
 end;
 
 procedure TwinMain.ListBox1Click(Sender: TObject);
@@ -89,17 +100,18 @@ var LI:TStrings;
   item_ind:integer;
   s:string;
 begin
-  LI:=ListBox3.Items;
-  item_ind:=ListBox3.ItemIndex;
-
-  case item_ind of
-  0: CreateShowForm();
-  end;
 
   LI:=ListBox3.Items;
   item_ind:=ListBox3.ItemIndex;
   s:=LI[item_ind];
-  ShowMessage(s);
+  FCom31:=TFCom31.Create(Self);
+
+  case item_ind of
+  0: FCom31.ShowModal;
+  1: ShowMessage(s);
+  2:
+  end;
+
 end;
 
 procedure CreateShowForm(var inForm:TForm);

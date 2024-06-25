@@ -5,7 +5,8 @@ uses
   pr1 in 'pr1.pas' {winMain},
   devStat in 'devStat.pas' {deviceStatus},
   commandTest in 'commandTest.pas' {testComm},
-  Unit1 in 'Unit1.pas' {FCom31};
+  Unit1 in 'Unit1.pas' {FCom31},
+  Unit2 in 'Unit2.pas' {FControls};
 
 {$R *.res}
 
