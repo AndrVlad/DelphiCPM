@@ -112,6 +112,10 @@
             <Form>testComm</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="Unit1.pas">
+            <Form>FCom31</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

@@ -22,11 +22,11 @@ type
     Label3: TLabel;
     ListBox3: TListBox;
     ListBox4: TListBox;
+    TFCom31: TForm;
     procedure ListBox1Click(Sender: TObject);
     procedure ComboBox1Change(Sender: TObject);
     procedure ListBox3Click(Sender: TObject);
-
-
+    procedure CreateShowForm(var inForm:TForm);
   private
     { Private declarations }
   public
@@ -39,10 +39,7 @@ var
 implementation
 
 {$R *.dfm}
-
-
-
-
+uses Unit1;
 
 procedure TwinMain.ComboBox1Change(Sender: TObject);
 
@@ -96,7 +93,7 @@ begin
   item_ind:=ListBox3.ItemIndex;
 
   case item_ind of
-  0: ;
+  0: CreateShowForm();
   end;
 
   LI:=ListBox3.Items;
@@ -104,4 +101,11 @@ begin
   s:=LI[item_ind];
   ShowMessage(s);
 end;
+
+procedure CreateShowForm(var inForm:TForm);
+var i:integer;
+begin
+
+end;
+
 end.
