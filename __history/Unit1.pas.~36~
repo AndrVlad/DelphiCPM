@@ -24,6 +24,7 @@ type
 
 var
   FCom31: TFCom31;
+  stopButtonPressed: Boolean;
 
 implementation
 
@@ -31,16 +32,47 @@ uses Unit2,pr1;
 
 {$R *.dfm}
 
+function GetLastErrorMessage: string;
+var
+  ErrorCode: DWORD;
+  Buffer: array[0..255] of Char;
+begin
+  ErrorCode := GetLastError;
+  FormatMessage(
+    FORMAT_MESSAGE_FROM_SYSTEM,
+    nil,
+    ErrorCode,
+    0,
+    Buffer,
+    Length(Buffer),
+    nil
+  );
+  Result := Format('Error code: %d, Message: %s', [ErrorCode, Buffer]);
+end;
+
 procedure TFCom31.Button1Click(Sender: TObject);
 var
   buffer: array[0..255] of Byte;
   bytesWritten: DWORD;
+  OverWrite: POverlapped;
 begin
-  ShowMessage('Данные отправлены');
+  //ShowMessage('Данные отправлены');
   //bytesWritten := 0;
   buffer[0]:=$41;
-  if(WriteFile(FControls.Phndl, buffer, SizeOf(buffer), bytesWritten, nil)) then
-    if bytesWritten > 0 then
+
+  if FControls.Phndl = INVALID_HANDLE_VALUE then
+  ShowMessage('Ошибка дескриптора порта')
+  else
+  ShowMessage('Дескриптор порта действителен');
+
+  if(not WriteFile(FControls.Phndl, buffer, 1, bytesWritten, OverWrite))
+  and (GetLastError <> ERROR_IO_PENDING) then
+    ShowMessage(GetLastErrorMessage)
+    //ShowMessage('Ошибка в функции отправки')
+  else
+    ShowMessage('TRUE в функции отправки');
+
+  if bytesWritten > 0 then
       ShowMessage('Данные отправлены')
     else
       ShowMessage('Ошибка отправки');

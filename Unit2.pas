@@ -39,7 +39,7 @@ begin
 
   Phndl := CreateFile(PChar(PortName),
   GENERIC_READ or GENERIC_WRITE, 0, nil,
-  OPEN_EXISTING, FILE_FLAG_OVERLAPPED, 0);
+  OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
   if Phndl <> INVALID_HANDLE_VALUE then
     ShowMessage('Порт открыт')
@@ -91,7 +91,7 @@ begin
   begin
   Phndl := CreateFile(PChar('COM' + IntToStr(i + 1)),
   GENERIC_READ or GENERIC_WRITE, 0, nil,
-  OPEN_EXISTING, FILE_FLAG_OVERLAPPED, 0);
+  OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
   if Phndl <> INVALID_HANDLE_VALUE then
   ComboBox1.Items.Add('COM' + IntToStr(i + 1));

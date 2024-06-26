@@ -32,26 +32,24 @@ uses Unit2,pr1;
 
 {$R *.dfm}
 
-procedure TFCom31.Button1Click(Sender: TObject);
+function GetLastErrorMessage: string;
 var
-  buffer: array[0..255] of Byte;
-  bytesWritten: DWORD;
+  ErrorCode: DWORD;
+  Buffer: array[0..255] of Char;
 begin
-  //ShowMessage('Данные отправлены');
-  //bytesWritten := 0;
-  buffer[0]:=$41;
-
-  stopButtonPressed := False;
-
-  while not stopButtonPressed do
-  begin
-    WriteFile(FControls.Phndl, buffer, SizeOf(buffer), bytesWritten, nil);
-  end;
-
-  FCom31.Close;
+  ErrorCode := GetLastError;
+  FormatMessage(
+    FORMAT_MESSAGE_FROM_SYSTEM,
+    nil,
+    ErrorCode,
+    0,
+    Buffer,
+    Length(Buffer),
+    nil
+  );
+  Result := Format('Error code: %d, Message: %s', [ErrorCode, Buffer]);
 end;
 
-{
 procedure TFCom31.Button1Click(Sender: TObject);
 var
   buffer: array[0..255] of Byte;
@@ -61,11 +59,15 @@ begin
   //bytesWritten := 0;
   buffer[0]:=$41;
 
-
+  if FControls.Phndl = INVALID_HANDLE_VALUE then
+  ShowMessage('Ошибка дескриптора порта')
+  else
+  ShowMessage('Дескриптор порта действителен');
 
   if(not WriteFile(FControls.Phndl, buffer, SizeOf(buffer), bytesWritten, nil))
   and (GetLastError <> ERROR_IO_PENDING) then
-    ShowMessage('Ошибка в функции отправки')
+    ShowMessage(GetLastErrorMessage)
+    //ShowMessage('Ошибка в функции отправки')
   else
     ShowMessage('TRUE в функции отправки');
 
@@ -77,7 +79,6 @@ begin
 
   FCom31.Close;
 end;
-}
 
 procedure TFCom31.Button2Click(Sender: TObject);
 begin

@@ -30,7 +30,6 @@ type
 var
   FControls: TFControls;
 
-
 implementation
 
 {$R *.dfm}
@@ -49,13 +48,19 @@ begin
 
   GetCommState(Phndl, DCB);
 
-  DCB.BaudRate := CBR_14400;
+  DCB.BaudRate := 115200;
   DCB.Parity := NOPARITY;
-  DCB.ByteSize := 7;
+  DCB.ByteSize := 8;
   DCB.StopBits := ONESTOPBIT;
 
   if (SetCommState(Phndl, DCB)) then
     ShowMessage('Настройки заданы');
+
+  PurgeComm(Phndl, PURGE_TXCLEAR or PURGE_RXCLEAR);
+  {
+
+  if (PurgeComm(Phndl, PURGE_TXCLEAR or PURGE_RXCLEAR)) then
+    ShowMessage('Буфер очищен');  }
 
 end;
 
