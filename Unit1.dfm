@@ -26,7 +26,7 @@ object FCom31: TFCom31
     Caption = #1053#1072#1087#1088#1103#1078#1077#1085#1080#1077', '#1042':'
   end
   object Button1: TButton
-    Left = 57
+    Left = 65
     Top = 136
     Width = 129
     Height = 25
@@ -35,7 +35,7 @@ object FCom31: TFCom31
     OnClick = Button1Click
   end
   object Button2: TButton
-    Left = 192
+    Left = 214
     Top = 136
     Width = 75
     Height = 25
