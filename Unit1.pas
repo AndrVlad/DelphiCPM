@@ -41,26 +41,6 @@ begin
   //bytesWritten := 0;
   buffer[0]:=$41;
 
-  stopButtonPressed := False;
-
-  while not stopButtonPressed do
-  begin
-    WriteFile(FControls.Phndl, buffer, SizeOf(buffer), bytesWritten, nil);
-    sleep(100);
-  end;
-
-end;
-
-{
-procedure TFCom31.Button1Click(Sender: TObject);
-var
-  buffer: array[0..255] of Byte;
-  bytesWritten: DWORD;
-begin
-  //ShowMessage('Данные отправлены');
-  //bytesWritten := 0;
-  buffer[0]:=$41;
-
 
 
   if(not WriteFile(FControls.Phndl, buffer, SizeOf(buffer), bytesWritten, nil))
@@ -77,16 +57,10 @@ begin
 
   FCom31.Close;
 end;
-}
 
 procedure TFCom31.Button2Click(Sender: TObject);
 begin
-  stopButtonPressed := True;
-end;
-{
-procedure TFCom31.Button2Click(Sender: TObject);
-begin
   FCom31.Close;
-end;  }
+end;
 
 end.
