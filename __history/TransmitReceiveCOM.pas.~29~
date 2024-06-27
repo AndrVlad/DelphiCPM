@@ -17,6 +17,15 @@ var
   Rbuffer: array[0..255] of Byte;
   //OverWrite: POverlapped;
 
+function BytesToString(const Bytes: array of Byte): string;
+var
+  I: Integer;
+begin
+  Result := '';
+  for I := Low(Bytes) to High(Bytes) do
+    Result := Result + Chr(Bytes[I]);
+end;
+
 procedure WriteCOM;
 var
   buffer: array[0..255] of Byte;
@@ -64,7 +73,7 @@ begin
 
   GetCommState(Phndl, DCB);
 
-  DCB.BaudRate := 115200;
+  DCB.BaudRate := 9600;
   DCB.Parity := NOPARITY;
   DCB.ByteSize := 8;
   DCB.StopBits := ONESTOPBIT;
@@ -80,7 +89,9 @@ procedure ReadCOM;
 var
   Rbuffer: array[0..255] of Byte;
   bytesReaden: DWORD;
+  Data: string;
 begin
+  FIllChar(Rbuffer,SizeOf(Rbuffer),0);
   if not SetCommMask(Phndl, EV_RXCHAR) then
   ShowMessage('Маска не задалась');
 
@@ -91,7 +102,10 @@ begin
   ShowMessage('Считывание успешно')
   else
   ShowMessage('Ничего не считано');
-  ShowMessage(string(RBuffer));
+
+  Data := BytesToString(RBuffer);
+  ShowMessage(Data);
+
 end;
 
 function GetLastErrorMessage: string;

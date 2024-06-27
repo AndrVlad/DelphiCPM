@@ -14,29 +14,41 @@ uses
 var
   Phndl: THandle;
   DCB: TDcb;
-  OverWrite: POverlapped;
+  Rbuffer: array[0..255] of Byte;
+  //OverWrite: POverlapped;
+
+function BytesToString(const Bytes: array of Byte): string;
+var
+  I: Integer;
+begin
+  Result := '';
+  for I := Low(Bytes) to High(Bytes) do
+    Result := Result + Chr(Bytes[I]);
+end;
 
 procedure WriteCOM;
+type
+  buffer = array of Byte;
 var
-  buffer: array[0..255] of Byte;
-  bytesWritten: DWORD;
 
+  bytesWritten: DWORD;
+  BBB: buffer;
 begin
   //ShowMessage('Данные отправлены');
   //bytesWritten := 0;
-  buffer[0]:=$42;
+  BBB:=[48,49,50,51,52];
 
   //OverWrite.hEvent := CreateEvent(nil, True, False, nil);
 
-  if OverWrite.hEvent = Null then
-  ShowMessage('Ошибка создания события');
+  //if OverWrite.hEvent = Null then
+  //ShowMessage('Ошибка создания события');
 
   if Phndl = INVALID_HANDLE_VALUE then
   ShowMessage('Ошибка дескриптора порта')
   else
   ShowMessage('Дескриптор порта действителен');
 
-  if(not WriteFile(Phndl, buffer, SizeOf(buffer), bytesWritten, nil))
+  if(not WriteFile(Phndl, BBB, SizeOf(BBB), bytesWritten, nil))
   and (GetLastError <> ERROR_IO_PENDING) then
     //ShowMessage(GetLastErrorMessage)
     ShowMessage('Ошибка в функции отправки')
@@ -55,8 +67,6 @@ begin
   Phndl := CreateFile(PChar(PortName),
   GENERIC_READ or GENERIC_WRITE, 0, nil,
   OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
-  //FILE_FLAG_OVERLAPPED
-  //FILE_ATTRIBUTE_NORMAL
 
   if Phndl <> INVALID_HANDLE_VALUE then
     ShowMessage('Порт открыт')
@@ -65,7 +75,7 @@ begin
 
   GetCommState(Phndl, DCB);
 
-  DCB.BaudRate := 115200;
+  DCB.BaudRate := 9600;
   DCB.Parity := NOPARITY;
   DCB.ByteSize := 8;
   DCB.StopBits := ONESTOPBIT;
@@ -79,13 +89,25 @@ end;
 
 procedure ReadCOM;
 var
-  buffer: array[0..255] of Byte;
+  Rbuffer: array[0..255] of Byte;
+  testBuffer: array[0..255] of Byte;
   bytesReaden: DWORD;
+  Data: string;
 begin
+  FIllChar(Rbuffer,SizeOf(Rbuffer),0);
   if not SetCommMask(Phndl, EV_RXCHAR) then
   ShowMessage('Маска не задалась');
 
-  ReadFile(Phndl,buffer,SizeOf(buffer),bytesReaden,nil);
+  if (not ReadFile(Phndl,Rbuffer,SizeOf(Rbuffer),bytesReaden,nil)) then
+    ShowMessage('Ошибка в функции приема');
+
+  if bytesReaden < 0 then
+  ShowMessage('Ничего не считано');
+
+  //Data := BytesToString(RBuffer);
+  testBuffer[0] := 05;
+  Data := BytesToString(testBuffer);
+  ShowMessage(Data);
 
 end;
 

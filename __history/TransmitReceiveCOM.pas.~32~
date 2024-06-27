@@ -27,14 +27,16 @@ begin
 end;
 
 procedure WriteCOM;
+type
+  buffer = array of Byte;
 var
-  buffer: array[0..255] of Byte;
-  bytesWritten: DWORD;
 
+  bytesWritten: DWORD;
+  BBB: buffer;
 begin
   //ShowMessage('Данные отправлены');
   //bytesWritten := 0;
-  buffer[0]:=$42;
+  BBB:=[48,49,50,51,52];
 
   //OverWrite.hEvent := CreateEvent(nil, True, False, nil);
 
@@ -46,7 +48,7 @@ begin
   else
   ShowMessage('Дескриптор порта действителен');
 
-  if(not WriteFile(Phndl, buffer, SizeOf(buffer), bytesWritten, nil))
+  if(not WriteFile(Phndl, BBB, SizeOf(buffer), bytesWritten, nil))
   and (GetLastError <> ERROR_IO_PENDING) then
     //ShowMessage(GetLastErrorMessage)
     ShowMessage('Ошибка в функции отправки')
@@ -73,7 +75,7 @@ begin
 
   GetCommState(Phndl, DCB);
 
-  DCB.BaudRate := 115200;
+  DCB.BaudRate := 9600;
   DCB.Parity := NOPARITY;
   DCB.ByteSize := 8;
   DCB.StopBits := ONESTOPBIT;
@@ -91,6 +93,7 @@ var
   bytesReaden: DWORD;
   Data: string;
 begin
+  FIllChar(Rbuffer,SizeOf(Rbuffer),0);
   if not SetCommMask(Phndl, EV_RXCHAR) then
   ShowMessage('Маска не задалась');
 
@@ -104,6 +107,7 @@ begin
 
   Data := BytesToString(RBuffer);
   ShowMessage(Data);
+
 end;
 
 function GetLastErrorMessage: string;

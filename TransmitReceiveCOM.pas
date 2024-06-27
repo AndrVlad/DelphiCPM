@@ -27,14 +27,16 @@ begin
 end;
 
 procedure WriteCOM;
+type
+  buffer = array of Byte;
 var
-  buffer: array[0..255] of Byte;
-  bytesWritten: DWORD;
 
+  bytesWritten: DWORD;
+  BBB: buffer;
 begin
   //ShowMessage('Данные отправлены');
   //bytesWritten := 0;
-  buffer[0]:=$42;
+  BBB:=[48,49,50,51,52];
 
   //OverWrite.hEvent := CreateEvent(nil, True, False, nil);
 
@@ -46,12 +48,12 @@ begin
   else
   ShowMessage('Дескриптор порта действителен');
 
-  if(not WriteFile(Phndl, buffer, SizeOf(buffer), bytesWritten, nil))
+  if(not WriteFile(Phndl, BBB, SizeOf(BBB), bytesWritten, nil))
   and (GetLastError <> ERROR_IO_PENDING) then
     //ShowMessage(GetLastErrorMessage)
-    ShowMessage('Ошибка в функции отправки')
-  else
-    ShowMessage('TRUE в функции отправки');
+    ShowMessage('Ошибка в функции отправки');
+  {else
+    ShowMessage('TRUE в функции отправки');}
 
   if bytesWritten > 0 then
       ShowMessage('Данные отправлены')
@@ -66,14 +68,12 @@ begin
   GENERIC_READ or GENERIC_WRITE, 0, nil,
   OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
-  if Phndl <> INVALID_HANDLE_VALUE then
-    ShowMessage('Порт открыт')
-  else
+  if Phndl = INVALID_HANDLE_VALUE then
     ShowMessage('Порт не удалось открыть');
 
   GetCommState(Phndl, DCB);
 
-  DCB.BaudRate := 115200;
+  DCB.BaudRate := 9600;
   DCB.Parity := NOPARITY;
   DCB.ByteSize := 8;
   DCB.StopBits := ONESTOPBIT;
@@ -88,6 +88,7 @@ end;
 procedure ReadCOM;
 var
   Rbuffer: array[0..255] of Byte;
+  testBuffer: array[0..255] of Byte;
   bytesReaden: DWORD;
   Data: string;
 begin
@@ -98,12 +99,12 @@ begin
   if (not ReadFile(Phndl,Rbuffer,SizeOf(Rbuffer),bytesReaden,nil)) then
     ShowMessage('Ошибка в функции приема');
 
-  if bytesReaden > 0 then
-  ShowMessage('Считывание успешно')
-  else
+  if bytesReaden < 0 then
   ShowMessage('Ничего не считано');
 
-  Data := BytesToString(RBuffer);
+  //Data := BytesToString(RBuffer);
+  testBuffer[0] := 05;
+  Data := BytesToString(testBuffer);
   ShowMessage(Data);
 
 end;

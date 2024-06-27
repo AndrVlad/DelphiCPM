@@ -17,15 +17,26 @@ var
   Rbuffer: array[0..255] of Byte;
   //OverWrite: POverlapped;
 
-procedure WriteCOM;
+function BytesToString(const Bytes: array of Byte): string;
 var
-  buffer: array[0..255] of Byte;
-  bytesWritten: DWORD;
+  I: Integer;
+begin
+  Result := '';
+  for I := Low(Bytes) to High(Bytes) do
+    Result := Result + Chr(Bytes[I]);
+end;
 
+procedure WriteCOM;
+type
+  buffer = array[0..4] of Byte;
+var
+
+  bytesWritten: DWORD;
+  BBB: buffer;
 begin
   //ShowMessage('Данные отправлены');
   //bytesWritten := 0;
-  buffer[0]:=$42;
+  BBB:=[42,42,42,42,42];
 
   //OverWrite.hEvent := CreateEvent(nil, True, False, nil);
 
@@ -64,7 +75,7 @@ begin
 
   GetCommState(Phndl, DCB);
 
-  DCB.BaudRate := 115200;
+  DCB.BaudRate := 9600;
   DCB.Parity := NOPARITY;
   DCB.ByteSize := 8;
   DCB.StopBits := ONESTOPBIT;
@@ -80,7 +91,9 @@ procedure ReadCOM;
 var
   Rbuffer: array[0..255] of Byte;
   bytesReaden: DWORD;
+  Data: string;
 begin
+  FIllChar(Rbuffer,SizeOf(Rbuffer),0);
   if not SetCommMask(Phndl, EV_RXCHAR) then
   ShowMessage('Маска не задалась');
 
@@ -90,8 +103,10 @@ begin
   if bytesReaden > 0 then
   ShowMessage('Считывание успешно')
   else
-    ShowMessage('Проблема при считывании');
+  ShowMessage('Ничего не считано');
 
+  Data := BytesToString(RBuffer);
+  ShowMessage(Data);
 
 end;
 
