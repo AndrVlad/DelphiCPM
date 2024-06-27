@@ -29,6 +29,7 @@ type
     procedure ListBox3Click(Sender: TObject);
     procedure configClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure OutVoltageValue;
     //procedure FormClose(Sender: TObject; var Action: TCloseAction);
     //procedure CreateShowForm(var inForm: TForm);
   private
@@ -43,7 +44,7 @@ var
 implementation
 
 {$R *.dfm}
-uses Unit1,Unit2;
+uses Unit1,Unit2,TransmitReceiveCOM;
 
 procedure TwinMain.ComboBox1Change(Sender: TObject);
 
@@ -111,7 +112,7 @@ begin
 
   case item_ind of
   0: FCom31.ShowModal;
-  1: ShowMessage(s);
+  1: OutVoltageValue;
   2:
   end;
 
@@ -121,6 +122,15 @@ procedure CreateShowForm(var inForm:TForm);
 var i:integer;
 begin
 
+end;
+
+procedure TwinMain.OutVoltageValue;
+
+begin
+  // вызов процедуры чтения
+  // код получения считанных данных и вывод в memo
+  ShowMessage('Ты тут');
+  ReadCOM;
 end;
 
 procedure TwinMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);

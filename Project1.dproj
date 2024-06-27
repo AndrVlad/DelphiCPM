@@ -120,6 +120,7 @@
             <Form>FControls</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="TransmitReceiveCOM.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

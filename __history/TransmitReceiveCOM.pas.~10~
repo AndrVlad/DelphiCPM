@@ -1,0 +1,89 @@
+unit TransmitReceiveCOM;
+
+interface
+procedure ReadCOM;
+procedure InitCOM(PortName: string);
+procedure WriteCOM;
+
+implementation
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Samples.Spin,Unit2;
+
+var
+  Phndl: THandle;
+
+procedure WriteCOM;
+var
+  buffer: array[0..255] of Byte;
+  bytesWritten: DWORD;
+  OverWrite: POverlapped;
+begin
+  //ShowMessage('Данные отправлены');
+  //bytesWritten := 0;
+  buffer[0]:=$42;
+
+  if Phndl = INVALID_HANDLE_VALUE then
+  ShowMessage('Ошибка дескриптора порта')
+  else
+  ShowMessage('Дескриптор порта действителен');
+
+  if(not WriteFile(Phndl, buffer, 1, bytesWritten, nil))
+  and (GetLastError <> ERROR_IO_PENDING) then
+    //ShowMessage(GetLastErrorMessage)
+    ShowMessage('Ошибка в функции отправки')
+  else
+    ShowMessage('TRUE в функции отправки');
+
+  if bytesWritten > 0 then
+      ShowMessage('Данные отправлены')
+    else
+      ShowMessage('Ошибка отправки');
+  //FCom31.Close;
+end;
+
+procedure InitCOM(PortName: string);
+begin
+  Phndl := CreateFile(PChar(PortName),
+  GENERIC_READ or GENERIC_WRITE, 0, nil,
+  OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+
+  if Phndl <> INVALID_HANDLE_VALUE then
+    ShowMessage('Порт открыт')
+  else
+    ShowMessage('Порт не удалось открыть');
+end;
+
+procedure ReadCOM;
+var
+  buffer: array[0..255] of Byte;
+  bytesReaden: DWORD;
+begin
+  if not SetCommMask(Phndl, EV_RXCHAR) then
+  ShowMessage('Маска не задалась');
+
+  ReadFile(Phndl,buffer,SizeOf(buffer),bytesReaden,nil);
+
+end;
+
+function GetLastErrorMessage: string;
+var
+  ErrorCode: DWORD;
+  Buffer: array[0..255] of Char;
+begin
+  ErrorCode := GetLastError;
+  FormatMessage(
+    FORMAT_MESSAGE_FROM_SYSTEM,
+    nil,
+    ErrorCode,
+    0,
+    Buffer,
+    Length(Buffer),
+    nil
+  );
+  Result := Format('Error code: %d, Message: %s', [ErrorCode, Buffer]);
+end;
+
+
+end.

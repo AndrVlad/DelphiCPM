@@ -28,9 +28,10 @@ var
 
 implementation
 
-uses Unit2,pr1;
+uses Unit2,pr1,TransmitReceiveCOM;
 
 {$R *.dfm}
+
 
 function GetLastErrorMessage: string;
 var
@@ -49,37 +50,10 @@ begin
   );
   Result := Format('Error code: %d, Message: %s', [ErrorCode, Buffer]);
 end;
-
+// отправка данных
 procedure TFCom31.Button1Click(Sender: TObject);
-var
-  buffer: array[0..255] of Byte;
-  bytesWritten: DWORD;
-  OverWrite: POverlapped;
 begin
-  //ShowMessage('Данные отправлены');
-  //bytesWritten := 0;
-  buffer[0]:=$42;
-
-  if FControls.Phndl = INVALID_HANDLE_VALUE then
-  ShowMessage('Ошибка дескриптора порта')
-  else
-  ShowMessage('Дескриптор порта действителен');
-
-  if(not WriteFile(FControls.Phndl, buffer, 1, bytesWritten, nil))
-  and (GetLastError <> ERROR_IO_PENDING) then
-    ShowMessage(GetLastErrorMessage)
-    //ShowMessage('Ошибка в функции отправки')
-  else
-    ShowMessage('TRUE в функции отправки');
-
-  if bytesWritten > 0 then
-      ShowMessage('Данные отправлены')
-    else
-      ShowMessage('Ошибка отправки');
-
-
-
-
+  WriteCOM;
   FCom31.Close;
 end;
 

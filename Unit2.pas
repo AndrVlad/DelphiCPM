@@ -34,34 +34,11 @@ implementation
 
 {$R *.dfm}
 
+uses TransmitReceiveCOM;
+// инициализация выбранного порта
 procedure TFControls.Button1Click(Sender: TObject);
 begin
-
-  Phndl := CreateFile(PChar(PortName),
-  GENERIC_READ or GENERIC_WRITE, 0, nil,
-  OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
-
-  if Phndl <> INVALID_HANDLE_VALUE then
-    ShowMessage('Порт открыт')
-  else
-    ShowMessage('Порт не удалось открыть');
-
-  GetCommState(Phndl, DCB);
-
-  DCB.BaudRate := 115200;
-  DCB.Parity := NOPARITY;
-  DCB.ByteSize := 8;
-  DCB.StopBits := ONESTOPBIT;
-
-  if (SetCommState(Phndl, DCB)) then
-    ShowMessage('Настройки заданы');
-
-  PurgeComm(Phndl, PURGE_TXCLEAR or PURGE_RXCLEAR);
-  {
-
-  if (PurgeComm(Phndl, PURGE_TXCLEAR or PURGE_RXCLEAR)) then
-    ShowMessage('Буфер очищен');  }
-
+  InitCOM(PortName);
 end;
 
 procedure TFControls.Button2Click(Sender: TObject);

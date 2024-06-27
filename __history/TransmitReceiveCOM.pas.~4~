@@ -1,0 +1,20 @@
+unit TransmitReceiveCOM;
+
+interface
+procedure ReadCOM;
+
+implementation
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Samples.Spin,Unit2;
+
+procedure ReadCOM;
+begin
+  if not SetCommMask(FControls.Phndl, EV_RXCHAR) then
+  ShowMessage('Маска не задалась');
+
+
+end;
+
+end.
