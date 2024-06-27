@@ -91,7 +91,6 @@ var
   bytesReaden: DWORD;
   Data: string;
 begin
-  FIllChar(Rbuffer,SizeOf(Rbuffer),0);
   if not SetCommMask(Phndl, EV_RXCHAR) then
   ShowMessage('Маска не задалась');
 
@@ -105,7 +104,7 @@ begin
 
   Data := BytesToString(RBuffer);
   ShowMessage(Data);
-
+  Buffer:='';
 end;
 
 function GetLastErrorMessage: string;

@@ -23,9 +23,14 @@ type
     ListBox3: TListBox;
     ListBox4: TListBox;
     GroupBox1: TGroupBox;
+    Memo1: TMemo;
     procedure ListBox1Click(Sender: TObject);
     procedure ComboBox1Change(Sender: TObject);
     procedure ListBox3Click(Sender: TObject);
+    procedure configClick(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure OutVoltageValue;
+    //procedure FormClose(Sender: TObject; var Action: TCloseAction);
     //procedure CreateShowForm(var inForm: TForm);
   private
     { Private declarations }
@@ -39,7 +44,7 @@ var
 implementation
 
 {$R *.dfm}
-uses Unit1;
+uses Unit1,Unit2,TransmitReceiveCOM;
 
 procedure TwinMain.ComboBox1Change(Sender: TObject);
 
@@ -63,6 +68,16 @@ begin
   3: ListBox4.Visible:=True;
 
   end;
+end;
+
+procedure TwinMain.configClick(Sender: TObject);
+begin
+  FControls:= TFControls.Create(Self);
+  FControls.InquiryPort(Sender);
+  FControls.ShowModal;
+  //Unit2.InquiryPort;
+
+
 end;
 
 procedure TwinMain.ListBox1Click(Sender: TObject);
@@ -97,7 +112,7 @@ begin
 
   case item_ind of
   0: FCom31.ShowModal;
-  1: ShowMessage(s);
+  1: OutVoltageValue;
   2:
   end;
 
@@ -107,6 +122,21 @@ procedure CreateShowForm(var inForm:TForm);
 var i:integer;
 begin
 
+end;
+
+procedure TwinMain.OutVoltageValue;
+
+begin
+  // вызов процедуры чтения
+  // код получения считанных данных и вывод в memo
+  ShowMessage('Ты тут');
+  ReadCOM;
+end;
+
+procedure TwinMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+begin
+  if MessageDlg('Завершить работу приложения?', mtConfirmation, [mbOk, mbCancel], 0) = mrCancel
+  then CanClose:= False;
 end;
 
 end.

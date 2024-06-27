@@ -128,9 +128,11 @@ procedure TwinMain.OutVoltageValue;
 
 begin
   // вызов процедуры чтения
-  // код получения считанных данных и вывод в memo
-  ShowMessage('Ты тут');
   ReadCOM;
+  // код получения считанных данных и вывод в memo
+
+  //ShowMessage('Ты тут');
+
 end;
 
 procedure TwinMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);

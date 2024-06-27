@@ -13,23 +13,40 @@ uses
 
 var
   Phndl: THandle;
+  DCB: TDcb;
+  Rbuffer: array[0..255] of Byte;
+  //OverWrite: POverlapped;
+
+function BytesToString(const Bytes: array of Byte): string;
+var
+  I: Integer;
+begin
+  Result := '';
+  for I := Low(Bytes) to High(Bytes) do
+    Result := Result + Chr(Bytes[I]);
+end;
 
 procedure WriteCOM;
 var
   buffer: array[0..255] of Byte;
   bytesWritten: DWORD;
-  OverWrite: POverlapped;
+
 begin
   //ShowMessage('Данные отправлены');
   //bytesWritten := 0;
   buffer[0]:=$42;
+
+  //OverWrite.hEvent := CreateEvent(nil, True, False, nil);
+
+  //if OverWrite.hEvent = Null then
+  //ShowMessage('Ошибка создания события');
 
   if Phndl = INVALID_HANDLE_VALUE then
   ShowMessage('Ошибка дескриптора порта')
   else
   ShowMessage('Дескриптор порта действителен');
 
-  if(not WriteFile(Phndl, buffer, 1, bytesWritten, nil))
+  if(not WriteFile(Phndl, buffer, SizeOf(buffer), bytesWritten, nil))
   and (GetLastError <> ERROR_IO_PENDING) then
     //ShowMessage(GetLastErrorMessage)
     ShowMessage('Ошибка в функции отправки')
@@ -53,18 +70,38 @@ begin
     ShowMessage('Порт открыт')
   else
     ShowMessage('Порт не удалось открыть');
+
+  GetCommState(Phndl, DCB);
+
+  DCB.BaudRate := 115200;
+  DCB.Parity := NOPARITY;
+  DCB.ByteSize := 8;
+  DCB.StopBits := ONESTOPBIT;
+
+  if (SetCommState(Phndl, DCB)) then
+    ShowMessage('Настройки заданы');
+
+  PurgeComm(Phndl, PURGE_TXCLEAR or PURGE_RXCLEAR);
+
 end;
 
 procedure ReadCOM;
 var
-  buffer: array[0..255] of Byte;
+  Rbuffer: array[0..255] of Byte;
   bytesReaden: DWORD;
 begin
   if not SetCommMask(Phndl, EV_RXCHAR) then
   ShowMessage('Маска не задалась');
 
-  ReadFile(Phndl,buffer,SizeOf(buffer),bytesReaden,nil);
+  if (not ReadFile(Phndl,Rbuffer,SizeOf(Rbuffer),bytesReaden,nil)) then
+    ShowMessage('Ошибка в функции приема');
 
+  if bytesReaden > 0 then
+  ShowMessage('Считывание успешно')
+  else
+  ShowMessage('Ничего не считано');
+
+  ShowMessage(string(RBuffer));
 end;
 
 function GetLastErrorMessage: string;

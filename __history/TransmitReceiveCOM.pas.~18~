@@ -14,17 +14,7 @@ uses
 var
   Phndl: THandle;
   DCB: TDcb;
-  Rbuffer: array[0..255] of Byte;
-  //OverWrite: POverlapped;
-
-function BytesToString(const Bytes: array of Byte): string;
-var
-  I: Integer;
-begin
-  Result := '';
-  for I := Low(Bytes) to High(Bytes) do
-    Result := Result + Chr(Bytes[I]);
-end;
+  OverWrite: POverlapped;
 
 procedure WriteCOM;
 var
@@ -38,8 +28,8 @@ begin
 
   //OverWrite.hEvent := CreateEvent(nil, True, False, nil);
 
-  //if OverWrite.hEvent = Null then
-  //ShowMessage('Ошибка создания события');
+  if OverWrite.hEvent = Null then
+  ShowMessage('Ошибка создания события');
 
   if Phndl = INVALID_HANDLE_VALUE then
   ShowMessage('Ошибка дескриптора порта')
@@ -65,6 +55,8 @@ begin
   Phndl := CreateFile(PChar(PortName),
   GENERIC_READ or GENERIC_WRITE, 0, nil,
   OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+  //FILE_FLAG_OVERLAPPED
+  //FILE_ATTRIBUTE_NORMAL
 
   if Phndl <> INVALID_HANDLE_VALUE then
     ShowMessage('Порт открыт')
@@ -87,24 +79,13 @@ end;
 
 procedure ReadCOM;
 var
-  Rbuffer: array[0..255] of Byte;
+  buffer: array[0..255] of Byte;
   bytesReaden: DWORD;
-  Data: string;
 begin
-  FIllChar(Rbuffer,SizeOf(Rbuffer),0);
   if not SetCommMask(Phndl, EV_RXCHAR) then
   ShowMessage('Маска не задалась');
 
-  if (not ReadFile(Phndl,Rbuffer,SizeOf(Rbuffer),bytesReaden,nil)) then
-    ShowMessage('Ошибка в функции приема');
-
-  if bytesReaden > 0 then
-  ShowMessage('Считывание успешно')
-  else
-  ShowMessage('Ничего не считано');
-
-  Data := BytesToString(RBuffer);
-  ShowMessage(Data);
+  ReadFile(Phndl,buffer,SizeOf(buffer),bytesReaden,nil);
 
 end;
 
