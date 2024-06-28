@@ -2,20 +2,20 @@
 <BorlandProject>
 	<Transactions>
     <Transaction>1899.12.30 00:00:00.000.738,=D:\Delphi Projects\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.247,=D:\Delphi Projects\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.987,D:\Delphi Projects\Unit1.pas=D:\Delphi Projects\commandTest.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.867,=D:\Delphi Projects\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.449,D:\Delphi Projects\Project1.dproj=D:\Delphi Projects\Project1.dproj</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.192,D:\Delphi Projects\Unit1.pas=D:\Delphi Projects\pr1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.041,D:\Delphi Projects\Unit1.pas=D:\Delphi Projects\devStat.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.025,=D:\Delphi Projects\Unit1.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.500,=D:\Delphi Projects\Unit2.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.807,=D:\Учеба\Практика\DelphiCPM\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.182,D:\Учеба\Практика\DelphiCPM\Unit3.pas=D:\Учеба\Практика\DelphiCPM\TransmitReceiveCOM.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.607,=D:\Учеба\Практика\DelphiCPM\Unit3.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.192,D:\Delphi Projects\Unit1.dfm=D:\Delphi Projects\pr1.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.041,D:\Delphi Projects\Unit1.dfm=D:\Delphi Projects\devStat.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.987,D:\Delphi Projects\Unit1.dfm=D:\Delphi Projects\commandTest.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.987,D:\Delphi Projects\commandTest.pas=D:\Delphi Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.449,D:\Delphi Projects\Project1.dproj=D:\Delphi Projects\Project1.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.025,=D:\Delphi Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.867,=D:\Delphi Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.247,=D:\Delphi Projects\Unit1.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.722,=D:\Учеба\Практика\DelphiCPM\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.987,D:\Delphi Projects\commandTest.dfm=D:\Delphi Projects\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.041,D:\Delphi Projects\devStat.pas=D:\Delphi Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.192,D:\Delphi Projects\pr1.pas=D:\Delphi Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.607,=D:\Учеба\Практика\DelphiCPM\Unit3.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.041,D:\Delphi Projects\devStat.dfm=D:\Delphi Projects\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.192,D:\Delphi Projects\pr1.dfm=D:\Delphi Projects\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.182,D:\Учеба\Практика\DelphiCPM\TransmitReceiveCOM.pas=D:\Учеба\Практика\DelphiCPM\Unit3.pas</Transaction>
   </Transactions>
 </BorlandProject>
