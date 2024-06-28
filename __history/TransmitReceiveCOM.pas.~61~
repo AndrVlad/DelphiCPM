@@ -29,14 +29,26 @@ end;
 procedure WriteCOM;
 type
   buffer = array of Byte;
-var
 
+  //buffer = array of Char;
+var
   bytesWritten: DWORD;
-  BBB: buffer;
+  testBuffer: array[0..4] of Byte;
+  Wbuffer: buffer;
 begin
-  //ShowMessage('Данные отправлены');
+
   //bytesWritten := 0;
-  BBB:=[48,49,50,51,52];
+  //BBB:=[48,49,50,51,52];
+  //FIllChar(Wbuffer,SizeOf(Wbuffer),0);
+  //Wbuffer:=[5,9,4,1,14];
+  //FIllChar(Wbuffer,SizeOf(Wbuffer),0);
+  //Wbuffer:=['5','9','4','1','E'];
+  testBuffer[0] := 0;
+  testBuffer[1] := 39;
+  testBuffer[2] := 34;
+  testBuffer[3] := 31;
+  testBuffer[4] := 45;
+
 
   //OverWrite.hEvent := CreateEvent(nil, True, False, nil);
 
@@ -44,11 +56,9 @@ begin
   //ShowMessage('Ошибка создания события');
 
   if Phndl = INVALID_HANDLE_VALUE then
-  ShowMessage('Ошибка дескриптора порта')
-  else
-  ShowMessage('Дескриптор порта действителен');
+  ShowMessage('Ошибка дескриптора порта');
 
-  if(not WriteFile(Phndl, BBB, SizeOf(BBB), bytesWritten, nil))
+  if(not WriteFile(Phndl, Wbuffer, SizeOf(Wbuffer), bytesWritten, nil))
   and (GetLastError <> ERROR_IO_PENDING) then
     //ShowMessage(GetLastErrorMessage)
     ShowMessage('Ошибка в функции отправки');
@@ -68,7 +78,7 @@ begin
   GENERIC_READ or GENERIC_WRITE, 0, nil,
   OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
-  if Phndl <> INVALID_HANDLE_VALUE then
+  if Phndl = INVALID_HANDLE_VALUE then
     ShowMessage('Порт не удалось открыть');
 
   GetCommState(Phndl, DCB);
@@ -99,12 +109,12 @@ begin
   if (not ReadFile(Phndl,Rbuffer,SizeOf(Rbuffer),bytesReaden,nil)) then
     ShowMessage('Ошибка в функции приема');
 
-  if bytesReaden < 0 then
+  if bytesReaden = 0 then
   ShowMessage('Ничего не считано');
 
-  //Data := BytesToString(RBuffer);
-  testBuffer[0] := 05;
-  Data := BytesToString(testBuffer);
+  Data := BytesToString(RBuffer);
+  //testBuffer[0] := 05;
+  //Data := BytesToString(testBuffer);
   ShowMessage(Data);
 
 end;

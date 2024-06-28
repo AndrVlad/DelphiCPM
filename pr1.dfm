@@ -1,8 +1,8 @@
 object winMain: TwinMain
   Left = 0
   Top = 0
-  Caption = 'AnalyzeCPM'
-  ClientHeight = 584
+  Caption = 'TestCPM'
+  ClientHeight = 574
   ClientWidth = 908
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -14,7 +14,7 @@ object winMain: TwinMain
   TextHeight = 15
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 565
+    Top = 555
     Width = 908
     Height = 19
     Panels = <>

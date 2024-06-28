@@ -30,25 +30,20 @@ procedure WriteCOM;
 type
   buffer = array of Byte;
 var
-
   bytesWritten: DWORD;
-  BBB: buffer;
+  Wbuffer: array[0..4] of Byte;
 begin
-  //ShowMessage('Данные отправлены');
-  //bytesWritten := 0;
-  BBB:=[48,49,50,51,52];
 
-  //OverWrite.hEvent := CreateEvent(nil, True, False, nil);
-
-  //if OverWrite.hEvent = Null then
-  //ShowMessage('Ошибка создания события');
+  Wbuffer[0] := Ord(Chr(5));
+  Wbuffer[1] := Ord('9');
+  Wbuffer[2] := Ord('4');
+  Wbuffer[3] := Ord('1');
+  Wbuffer[4] := Ord('E');
 
   if Phndl = INVALID_HANDLE_VALUE then
-  ShowMessage('Ошибка дескриптора порта')
-  else
-  ShowMessage('Дескриптор порта действителен');
+  ShowMessage('Ошибка дескриптора порта');
 
-  if(not WriteFile(Phndl, BBB, SizeOf(BBB), bytesWritten, nil))
+  if(not WriteFile(Phndl, Wbuffer, SizeOf(Wbuffer), bytesWritten, nil))
   and (GetLastError <> ERROR_IO_PENDING) then
     //ShowMessage(GetLastErrorMessage)
     ShowMessage('Ошибка в функции отправки');
@@ -99,12 +94,12 @@ begin
   if (not ReadFile(Phndl,Rbuffer,SizeOf(Rbuffer),bytesReaden,nil)) then
     ShowMessage('Ошибка в функции приема');
 
-  if bytesReaden < 0 then
+  if bytesReaden = 0 then
   ShowMessage('Ничего не считано');
 
-  //Data := BytesToString(RBuffer);
-  testBuffer[0] := 05;
-  Data := BytesToString(testBuffer);
+  Data := BytesToString(RBuffer);
+  //testBuffer[0] := 05;
+  //Data := BytesToString(testBuffer);
   ShowMessage(Data);
 
 end;
