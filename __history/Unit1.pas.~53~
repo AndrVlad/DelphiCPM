@@ -65,17 +65,18 @@ begin
     ShowMessage('Ошибка! Не выбран источник или не введено напряжение');
     Exit;
   end;
-
+  //msg := '941E';
   if (voltageSource > 15) then
-  begin
-     msg := msg+IntToHex(voltageSourceVal,2)+IntToHex(voltageSource-16,1)+'E';
-     WriteCOM(msg,1);
-  end
+     msg := msg+IntToHex(voltageSourceVal,2)+IntToHex(voltageSource-16,1)+'E'
   else
-  begin
      msg := msg+IntToHex(voltageSourceVal,2)+IntToHex(voltageSource,1)+'E';
-     WriteCOM(msg,0);
-  end;
+
+
+  msg := msg+IntToHex(voltageSourceVal,2)+IntToHex(voltageSource,1)+'E';
+  //ShowMessage(msg);
+
+
+  WriteCOM(msg,0);
   FCom31.Close;
 end;
 

@@ -117,8 +117,8 @@ begin
   if (not ReadFile(Phndl,Rbuffer,SizeOf(Rbuffer),bytesReaden,nil)) then
     ShowMessage('Ошибка в функции приема');
 
-  {if bytesReaden = 0 then
-  ShowMessage('Ничего не считано');  }
+  if bytesReaden = 0 then
+  ShowMessage('Ничего не считано');
 
   Data := BytesToString(RBuffer);
   ShowMessage(Data);

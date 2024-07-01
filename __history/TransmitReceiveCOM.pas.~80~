@@ -21,13 +21,8 @@ var
   I: Integer;
 begin
   Result := '';
-  if Bytes[0] = 5 then
-    Result := Result + '05'
-  else if Bytes[0] = 7 then
-    Result := Result + '07';
-{  else
-    логика на случай получения некорректной посылки }
-
+  if Chr(Bytes[0]) = '05' then
+     Result := Result + '5';
   for I := Low(Bytes)+1 to High(Bytes) do
     Result := Result + Chr(Bytes[I]);
 end;
@@ -117,10 +112,12 @@ begin
   if (not ReadFile(Phndl,Rbuffer,SizeOf(Rbuffer),bytesReaden,nil)) then
     ShowMessage('Ошибка в функции приема');
 
-  {if bytesReaden = 0 then
-  ShowMessage('Ничего не считано');  }
+  if bytesReaden = 0 then
+  ShowMessage('Ничего не считано');
 
   Data := BytesToString(RBuffer);
+  //testBuffer[0] := 05;
+  //Data := BytesToString(testBuffer);
   ShowMessage(Data);
 
 end;

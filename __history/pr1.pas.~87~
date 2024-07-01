@@ -135,7 +135,6 @@ begin
       msg := '02'+IntToStr(i)+'F';
       WriteCOM(msg,0);
       sleep(1000);
-
     end;
   {
   for i := 1 to 31 do

@@ -59,23 +59,13 @@ procedure TFCom31.Button1Click(Sender: TObject);
 var
   msg: string;
 begin
-
   if (voltageSource = 0) or (voltageSourceVal = 0) then
   begin
     ShowMessage('Ошибка! Не выбран источник или не введено напряжение');
     Exit;
   end;
 
-  if (voltageSource > 15) then
-  begin
-     msg := msg+IntToHex(voltageSourceVal,2)+IntToHex(voltageSource-16,1)+'E';
-     WriteCOM(msg,1);
-  end
-  else
-  begin
-     msg := msg+IntToHex(voltageSourceVal,2)+IntToHex(voltageSource,1)+'E';
-     WriteCOM(msg,0);
-  end;
+  WriteCOM(msg);
   FCom31.Close;
 end;
 

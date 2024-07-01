@@ -82,6 +82,7 @@ object FCom31: TFCom31
       '28'
       '29'
       '30'
+      '31'
       '31')
   end
   object SpinEdit1: TSpinEdit
@@ -89,10 +90,9 @@ object FCom31: TFCom31
     Top = 45
     Width = 97
     Height = 24
-    MaxValue = 256
+    MaxValue = 0
     MinValue = 0
     TabOrder = 3
     Value = 0
-    OnChange = SpinEdit1Change
   end
 end

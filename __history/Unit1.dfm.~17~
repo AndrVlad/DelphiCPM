@@ -82,6 +82,7 @@ object FCom31: TFCom31
       '28'
       '29'
       '30'
+      '31'
       '31')
   end
   object SpinEdit1: TSpinEdit

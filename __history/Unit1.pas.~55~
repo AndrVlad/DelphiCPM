@@ -65,7 +65,7 @@ begin
     ShowMessage('Ошибка! Не выбран источник или не введено напряжение');
     Exit;
   end;
-
+  //msg := '941E';
   if (voltageSource > 15) then
   begin
      msg := msg+IntToHex(voltageSourceVal,2)+IntToHex(voltageSource-16,1)+'E';

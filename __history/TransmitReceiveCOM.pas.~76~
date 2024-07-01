@@ -15,28 +15,16 @@ var
   Phndl: THandle;
   DCB: TDcb;
   Rbuffer: array[0..255] of Byte;
+  //OverWrite: POverlapped;
 
 function BytesToString(const Bytes: array of Byte): string;
 var
   I: Integer;
 begin
   Result := '';
-  if Bytes[0] = 5 then
-    Result := Result + '05'
-  else if Bytes[0] = 7 then
-    Result := Result + '07';
-{  else
-    логика на случай получения некорректной посылки }
-
-  for I := Low(Bytes)+1 to High(Bytes) do
+  for I := Low(Bytes) to High(Bytes) do
     Result := Result + Chr(Bytes[I]);
 end;
-
-{
-  Отправляет посылку по COM-порту
-  1 парам. - строка данных без первого байта
-  2 парам. - тип передачи посылки и формирование первого байта
-}
 
 procedure WriteCOM(msg: string; commandType: integer);
 type
@@ -63,22 +51,31 @@ begin
           end;
         end;
     2: begin
-            // логика на случай отсылки для ** (шлем 2 раза посылку сначала с 5,
-            // затем с 7 первым байтом)
+            // логика на случай отсылки для ** (шлем 2 раза с 5 и 7)
         end;
   end;
-
+  {
+  Wbuffer[0] := Ord(Chr(5));
+  Wbuffer[1] := Ord('9');
+  Wbuffer[2] := Ord('4');
+  Wbuffer[3] := Ord('1');
+  Wbuffer[4] := Ord('E');
+  }
   if Phndl = INVALID_HANDLE_VALUE then
   ShowMessage('Ошибка дескриптора порта');
 
   if(not WriteFile(Phndl, Wbuffer, SizeOf(Wbuffer), bytesWritten, nil))
   and (GetLastError <> ERROR_IO_PENDING) then
+    //ShowMessage(GetLastErrorMessage)
     ShowMessage('Ошибка в функции отправки');
+  {else
+    ShowMessage('TRUE в функции отправки');}
 
   if bytesWritten > 0 then
       ShowMessage('Данные отправлены')
     else
       ShowMessage('Ошибка отправки');
+  //FCom31.Close;
 end;
 
 procedure InitCOM(PortName: string);
@@ -107,6 +104,7 @@ end;
 procedure ReadCOM;
 var
   Rbuffer: array[0..255] of Byte;
+  testBuffer: array[0..255] of Byte;
   bytesReaden: DWORD;
   Data: string;
 begin
@@ -117,10 +115,12 @@ begin
   if (not ReadFile(Phndl,Rbuffer,SizeOf(Rbuffer),bytesReaden,nil)) then
     ShowMessage('Ошибка в функции приема');
 
-  {if bytesReaden = 0 then
-  ShowMessage('Ничего не считано');  }
+  if bytesReaden = 0 then
+  ShowMessage('Ничего не считано');
 
   Data := BytesToString(RBuffer);
+  //testBuffer[0] := 05;
+  //Data := BytesToString(testBuffer);
   ShowMessage(Data);
 
 end;
