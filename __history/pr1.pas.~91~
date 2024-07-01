@@ -28,8 +28,8 @@ type
     procedure ComboBox1Change(Sender: TObject);
     procedure ListBox3Click(Sender: TObject);
     procedure configClick(Sender: TObject);
-    procedure OnCloseQuery(Sender: TObject; var CanClose: Boolean);
-    //procedure CreateShowForm(var inForm: TForm);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure OutVoltageValue;
   private
     { Private declarations }
   public
@@ -42,11 +42,13 @@ var
 implementation
 
 {$R *.dfm}
-uses Unit1,Unit2;
+uses Unit1,Unit2,TransmitReceiveCOM;
+
+// обработка выбора группы команды
 
 procedure TwinMain.ComboBox1Change(Sender: TObject);
 
-  var LI:TStrings;
+  var CI:TStrings;
   item_ind:integer;
   s:string;
 begin
@@ -56,7 +58,7 @@ begin
   ListBox3.Visible:=False;
   ListBox4.Visible:=False;
 
-  LI:=ComboBox1.Items;
+  CI:=ComboBox1.Items;
   item_ind:=ComboBox1.ItemIndex;
 
   case item_ind of
@@ -68,14 +70,13 @@ begin
   end;
 end;
 
+// обработка меню настроек
+
 procedure TwinMain.configClick(Sender: TObject);
 begin
   FControls:= TFControls.Create(Self);
   FControls.InquiryPort(Sender);
   FControls.ShowModal;
-  //Unit2.InquiryPort;
-
-
 end;
 
 procedure TwinMain.ListBox1Click(Sender: TObject);
@@ -110,7 +111,7 @@ begin
 
   case item_ind of
   0: FCom31.ShowModal;
-  1: ShowMessage(s);
+  1: OutVoltageValue;
   2:
   end;
 
@@ -122,9 +123,50 @@ begin
 
 end;
 
-procedure TwinMain.OnCloseQuery(Sender: TObject; var CanClose: Boolean);
+procedure TwinMain.OutVoltageValue;
+var
+  i: integer;
+  SendMsg: string;
+  ReceivedMsg: string;
+
 begin
-  ShowMessage('Закрытие');
-  CanClose := True;
+  {SendMsg := '02'+IntToStr(i)+'F';
+  WriteCOM(SendMsg,0);
+  sleep(1000);
+  }
+  ReceivedMsg := ReadCOM;
+  Memo1.Clear;
+  Memo1.Lines.Add('ВВ-источник №1: '+ReceivedMsg+'В');
+{
+  for i := 1 to 3 do
+    begin
+      msg := '02'+IntToStr(i)+'F';
+      WriteCOM(msg,0);
+      sleep(1000);
+
+    end;
+  }
+  {
+  for i := 1 to 31 do
+    begin
+    if i <= 15 then
+      WriteCOM(msg,0)
+    else
+      WriteCom(msg,1);
+    end;
+    }
+  // вызов процедуры чтения
+  //ReadCOM;
+  // код получения считанных данных и вывод в memo
+
+  //ShowMessage('Ты тут');
+
 end;
+
+procedure TwinMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+begin
+  if MessageDlg('Завершить работу приложения?', mtConfirmation, [mbOk, mbCancel], 0) = mrCancel
+  then CanClose:= False;
+end;
+
 end.

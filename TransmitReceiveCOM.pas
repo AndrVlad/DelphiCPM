@@ -1,7 +1,7 @@
 unit TransmitReceiveCOM;
 
 interface
-procedure ReadCOM;
+function ReadCOM: string;
 procedure InitCOM(PortName: string);
 procedure WriteCOM(msg: string; commandType: integer);
 
@@ -15,6 +15,8 @@ var
   Phndl: THandle;
   DCB: TDcb;
   Rbuffer: array[0..255] of Byte;
+
+// функция преобразования байта посылки в строку
 
 function BytesToString(const Bytes: array of Byte): string;
 var
@@ -81,6 +83,7 @@ begin
       ShowMessage('Ошибка отправки');
 end;
 
+// инициализация COM-порта
 procedure InitCOM(PortName: string);
 begin
   Phndl := CreateFile(PChar(PortName),
@@ -104,7 +107,11 @@ begin
 
 end;
 
-procedure ReadCOM;
+{
+  Функция чтения с COM-порта
+  Возвращает полученную посылку в виде строки.
+}
+function ReadCOM:string;
 var
   Rbuffer: array[0..255] of Byte;
   bytesReaden: DWORD;
@@ -117,13 +124,15 @@ begin
   if (not ReadFile(Phndl,Rbuffer,SizeOf(Rbuffer),bytesReaden,nil)) then
     ShowMessage('Ошибка в функции приема');
 
-  {if bytesReaden = 0 then
+  { if bytesReaden = 0 then
   ShowMessage('Ничего не считано');  }
 
   Data := BytesToString(RBuffer);
-  ShowMessage(Data);
+  Result := Data;
 
 end;
+
+// функция для отладки - получение и расшифровка кода ошибки функции
 
 function GetLastErrorMessage: string;
 var

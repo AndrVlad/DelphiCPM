@@ -16,7 +16,6 @@ type
     procedure ComboBox1Change(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
-    //procedure InquiryPort(Sender: TObject);
   private
     { Private declarations }
   public
@@ -34,42 +33,24 @@ implementation
 
 {$R *.dfm}
 
+uses TransmitReceiveCOM;
+
+// инициализация выбранного порта из меню Настройки
+
 procedure TFControls.Button1Click(Sender: TObject);
 begin
-
-  Phndl := CreateFile(PChar(PortName),
-  GENERIC_READ or GENERIC_WRITE, 0, nil,
-  OPEN_EXISTING, FILE_FLAG_OVERLAPPED, 0);
-
-  if Phndl <> INVALID_HANDLE_VALUE then
-    ShowMessage('Порт открыт')
-  else
-    ShowMessage('Порт не удалось открыть');
-
-  GetCommState(Phndl, DCB);
-
-  DCB.BaudRate := CBR_14400;
-  DCB.Parity := NOPARITY;
-  DCB.ByteSize := 8;
-  DCB.StopBits := ONESTOPBIT;
-
-  if (SetCommState(Phndl, DCB)) then
-    ShowMessage('Настройки заданы');
-
-  PurgeComm(Phndl, PURGE_TXCLEAR or PURGE_RXCLEAR);x
-  {
-
-  if (PurgeComm(Phndl, PURGE_TXCLEAR or PURGE_RXCLEAR)) then
-    ShowMessage('Буфер очищен');  }
-
+  InitCOM(PortName);
 end;
 
+// закрытие(сброс) выбранного порта из меню Настройки
 procedure TFControls.Button2Click(Sender: TObject);
 begin
   ShowMessage('Закрытие порта');
   CloseHandle(Phndl);
 
 end;
+
+// обработка списка выбора порта
 
 procedure TFControls.ComboBox1Change(Sender: TObject);
 var
@@ -91,7 +72,7 @@ begin
   begin
   Phndl := CreateFile(PChar('COM' + IntToStr(i + 1)),
   GENERIC_READ or GENERIC_WRITE, 0, nil,
-  OPEN_EXISTING, FILE_FLAG_OVERLAPPED, 0);
+  OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
   if Phndl <> INVALID_HANDLE_VALUE then
   ComboBox1.Items.Add('COM' + IntToStr(i + 1));

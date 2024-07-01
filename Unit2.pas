@@ -16,7 +16,6 @@ type
     procedure ComboBox1Change(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
-    //procedure InquiryPort(Sender: TObject);
   private
     { Private declarations }
   public
@@ -35,18 +34,23 @@ implementation
 {$R *.dfm}
 
 uses TransmitReceiveCOM;
-// инициализаци€ выбранного порта
+
+// инициализаци€ выбранного порта из меню Ќастройки
+
 procedure TFControls.Button1Click(Sender: TObject);
 begin
   InitCOM(PortName);
 end;
 
+// закрытие(сброс) выбранного порта из меню Ќастройки
 procedure TFControls.Button2Click(Sender: TObject);
 begin
   ShowMessage('«акрытие порта');
   CloseHandle(Phndl);
 
 end;
+
+// обработка списка выбора порта
 
 procedure TFControls.ComboBox1Change(Sender: TObject);
 var
@@ -59,21 +63,22 @@ begin
 
 end;
 
+// опрос доступных портов
+
 procedure TFControls.InquiryPort(Sender: TObject);
 var
   i: integer;
 begin
-
   for i := 0 to 31 do
   begin
-  Phndl := CreateFile(PChar('COM' + IntToStr(i + 1)),
-  GENERIC_READ or GENERIC_WRITE, 0, nil,
-  OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+    Phndl := CreateFile(PChar('COM' + IntToStr(i + 1)),
+    GENERIC_READ or GENERIC_WRITE, 0, nil,
+    OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
-  if Phndl <> INVALID_HANDLE_VALUE then
-  ComboBox1.Items.Add('COM' + IntToStr(i + 1));
-  CloseHandle(Phndl);
-end;
+    if Phndl <> INVALID_HANDLE_VALUE then
+      ComboBox1.Items.Add('COM' + IntToStr(i + 1));
+    CloseHandle(Phndl);
+  end;
 end;
 
 end.

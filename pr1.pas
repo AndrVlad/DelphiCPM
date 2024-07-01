@@ -30,8 +30,6 @@ type
     procedure configClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure OutVoltageValue;
-    //procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    //procedure CreateShowForm(var inForm: TForm);
   private
     { Private declarations }
   public
@@ -45,6 +43,8 @@ implementation
 
 {$R *.dfm}
 uses Unit1,Unit2,TransmitReceiveCOM;
+
+// обработка выбора группы команды
 
 procedure TwinMain.ComboBox1Change(Sender: TObject);
 
@@ -70,15 +70,18 @@ begin
   end;
 end;
 
+// обработка меню настроек
+
 procedure TwinMain.configClick(Sender: TObject);
 begin
   FControls:= TFControls.Create(Self);
-  FControls.InquiryPort(Sender);
+  FControls.InquiryPort(Sender); // опрос портов
   FControls.ShowModal;
-  //Unit2.InquiryPort;
-
-
 end;
+
+{
+  ListBox(1-4) - обработчики выбора команд из соответствующей выбранной группы
+}
 
 procedure TwinMain.ListBox1Click(Sender: TObject);
   var LI:TStrings;
@@ -91,11 +94,6 @@ begin
   case item_ind of
   0: ;
   end;
-
-  LI:=ListBox1.Items;
-  item_ind:=ListBox1.ItemIndex;
-  s:=LI[item_ind];
-  ShowMessage(s);
 
 end;
 
@@ -118,18 +116,23 @@ begin
 
 end;
 
-procedure CreateShowForm(var inForm:TForm);
-var i:integer;
-begin
-
-end;
+// процедура вывода напряжений ВВ-источников, считанных из СРМ
 
 procedure TwinMain.OutVoltageValue;
 var
   i: integer;
-  msg: string;
-begin
+  SendMsg: string;
+  ReceivedMsg: string;
 
+begin
+  {SendMsg := '02'+IntToStr(i)+'F';
+  WriteCOM(SendMsg,0);
+  sleep(1000);
+  }
+  ReceivedMsg := ReadCOM;
+  Memo1.Clear;
+  Memo1.Lines.Add('ВВ-источник №1: '+ReceivedMsg+'В');
+{
   for i := 1 to 3 do
     begin
       msg := '02'+IntToStr(i)+'F';
@@ -137,6 +140,7 @@ begin
       sleep(1000);
 
     end;
+  }
   {
   for i := 1 to 31 do
     begin

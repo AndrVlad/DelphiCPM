@@ -48,7 +48,7 @@ uses Unit1,Unit2,TransmitReceiveCOM;
 
 procedure TwinMain.ComboBox1Change(Sender: TObject);
 
-  var LI:TStrings;
+  var CI:TStrings;
   item_ind:integer;
   s:string;
 begin
@@ -58,7 +58,7 @@ begin
   ListBox3.Visible:=False;
   ListBox4.Visible:=False;
 
-  LI:=ComboBox1.Items;
+  CI:=ComboBox1.Items;
   item_ind:=ComboBox1.ItemIndex;
 
   case item_ind of
@@ -125,14 +125,43 @@ begin
 end;
 
 procedure TwinMain.OutVoltageValue;
+var
+  i: integer;
+  SendMsg: string;
+  ReceivedMsg: string;
 
 begin
-  // вызов процедуры чтения
-  // код получения считанных данных и вывод в memo
-  ShowMessage('Ты тут');
-end;
+  SendMsg := '02'+IntToStr(i)+'F';
+  WriteCOM(SendMsg,0);
+  sleep(1000);
+  ReceivedMsg := ReadCOM;
+  Memo1.Clear;
+  Memo1.Lines.Add('ВВ-источник №1: '+ReceivedMsg+'В');
+{
+  for i := 1 to 3 do
+    begin
+      msg := '02'+IntToStr(i)+'F';
+      WriteCOM(msg,0);
+      sleep(1000);
 
-procedure
+    end;
+  }
+  {
+  for i := 1 to 31 do
+    begin
+    if i <= 15 then
+      WriteCOM(msg,0)
+    else
+      WriteCom(msg,1);
+    end;
+    }
+  // вызов процедуры чтения
+  //ReadCOM;
+  // код получения считанных данных и вывод в memo
+
+  //ShowMessage('Ты тут');
+
+end;
 
 procedure TwinMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
