@@ -95,8 +95,12 @@ end;
 
 // выбор значения напряжения ВВ-источника
 procedure TFCom31.SpinEdit1Change(Sender: TObject);
+var
+  voltage_d: double;
 begin
-    voltageSourceVal := SpinEdit1.Value;
+  voltage_d := SpinEdit1.Value/19;
+  voltageSourceVal := Round(voltage_d);
 end;
 
 end.
+
