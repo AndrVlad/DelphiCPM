@@ -216,9 +216,8 @@ begin
 
 procedure MyThread.OutVoltageValue;//Процедура вывода в Memo;
 begin
-SendMessage(winMain.Memo1.Handle, EM_LINESCROLL, 0,winMain.Memo1.Lines.Count);
-winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+String(RBuffer);//Загружаем в Memo содержимое буфера;
-RBuffer:='';//Очищаем переменную буфера;
+winMain.Memo1.Lines.Add(String(RBuffer));//Загружаем в Memo содержимое буфера;
+//RBuffer:='';//Очищаем переменную буфера;
 end;
 
 {

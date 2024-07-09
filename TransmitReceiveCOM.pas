@@ -1,6 +1,7 @@
 unit TransmitReceiveCOM;
 
 interface
+function getPhndl: THandle;
 function ReadCOM: string;
 procedure InitCOM(PortName: string);
 procedure WriteCOM(msg: string; commandType: integer);
@@ -9,12 +10,18 @@ implementation
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Samples.Spin,Unit2;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Samples.Spin,Unit2,pr1;
 
 var
   Phndl: THandle;
   DCB: TDcb;
   Rbuffer: array[0..255] of Byte;
+
+
+function getPhndl: THandle;
+begin
+  Result := Phndl;
+end;
 
 // функция преобразования байта посылки в строку
 
@@ -73,7 +80,13 @@ begin
   if Phndl = INVALID_HANDLE_VALUE then
   ShowMessage('Ошибка дескриптора порта');
 
+  {
   if(not WriteFile(Phndl, Wbuffer, SizeOf(Wbuffer), bytesWritten, nil))
+  and (GetLastError <> ERROR_IO_PENDING) then
+    ShowMessage('Ошибка в функции отправки');
+  }
+
+  if(not WriteFile(Phndl, Wbuffer, SizeOf(Wbuffer), bytesWritten, @winMain.OverRead))
   and (GetLastError <> ERROR_IO_PENDING) then
     ShowMessage('Ошибка в функции отправки');
 
@@ -86,16 +99,25 @@ end;
 // инициализация COM-порта
 procedure InitCOM(PortName: string);
 begin
+  {
   Phndl := CreateFile(PChar(PortName),
   GENERIC_READ or GENERIC_WRITE, 0, nil,
   OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+  }
+
+  Phndl := CreateFile(PChar(PortName),
+  Generic_Read+Generic_Write, 0,nil,
+  Open_Existing,File_Flag_Overlapped,0);
 
   if Phndl = INVALID_HANDLE_VALUE then
     ShowMessage('Порт не удалось открыть');
 
+  PurgeComm(Phndl, Purge_TXabort or Purge_RXabort
+  or Purge_TXclear or Purge_RXclear);
+
   GetCommState(Phndl, DCB);
 
-  DCB.BaudRate := 9600;
+  DCB.BaudRate := 19200;
   DCB.Parity := NOPARITY;
   DCB.ByteSize := 8;
   DCB.StopBits := ONESTOPBIT;
@@ -103,7 +125,8 @@ begin
   if (SetCommState(Phndl, DCB)) then
     ShowMessage('Настройки заданы');
 
-  PurgeComm(Phndl, PURGE_TXCLEAR or PURGE_RXCLEAR);
+  if not SetCommMask(Phndl, EV_RXchar) then
+  ShowMessage('Маска не задалась');
 
 end;
 
@@ -118,7 +141,7 @@ var
   Data: string;
 begin
   FIllChar(Rbuffer,SizeOf(Rbuffer),0);
-  if not SetCommMask(Phndl, EV_RXCHAR) then
+  if not SetCommMask(Phndl, EV_RXchar) then
   ShowMessage('Маска не задалась');
 
   if (not ReadFile(Phndl,Rbuffer,SizeOf(Rbuffer),bytesReaden,nil)) then

@@ -89,7 +89,8 @@ object FCom31: TFCom31
     Top = 45
     Width = 97
     Height = 24
-    MaxValue = 256
+    Increment = 19
+    MaxValue = 2500
     MinValue = 0
     TabOrder = 3
     Value = 0

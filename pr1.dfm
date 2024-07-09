@@ -18,8 +18,8 @@ object winMain: TwinMain
     Width = 908
     Height = 19
     Panels = <>
-    ExplicitTop = 537
-    ExplicitWidth = 898
+    ExplicitTop = 554
+    ExplicitWidth = 904
   end
   object PageControl1: TPageControl
     Left = 0
@@ -153,6 +153,15 @@ object winMain: TwinMain
             'Memo1')
           TabOrder = 0
         end
+      end
+      object Button1: TButton
+        Left = 408
+        Top = 272
+        Width = 75
+        Height = 25
+        Caption = 'Button1'
+        TabOrder = 6
+        OnClick = Button1Click
       end
     end
   end

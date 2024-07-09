@@ -71,13 +71,19 @@ var
 begin
   for i := 0 to 31 do
   begin
+    {
     Phndl := CreateFile(PChar('COM' + IntToStr(i + 1)),
     GENERIC_READ or GENERIC_WRITE, 0, nil,
     OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+    }
+
+    Phndl := CreateFile(PChar('COM' + IntToStr(i + 1)),
+    Generic_Read or Generic_Write, 0, nil, open_existing,
+    file_flag_overlapped,0);
 
     if Phndl <> INVALID_HANDLE_VALUE then
       ComboBox1.Items.Add('COM' + IntToStr(i + 1));
-    CloseHandle(Phndl);
+      CloseHandle(Phndl);
   end;
 end;
 

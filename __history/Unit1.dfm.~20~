@@ -2,8 +2,8 @@ object FCom31: TFCom31
   Left = 0
   Top = 0
   Caption = #1042#1074#1086#1076' '#1085#1072#1087#1088#1103#1078#1077#1085#1080#1103' '#1074'/'#1074' '#1080#1089#1090#1086#1095#1085#1080#1082#1086#1074
-  ClientHeight = 175
-  ClientWidth = 322
+  ClientHeight = 183
+  ClientWidth = 321
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -26,7 +26,7 @@ object FCom31: TFCom31
     Caption = #1053#1072#1087#1088#1103#1078#1077#1085#1080#1077', '#1042':'
   end
   object Button1: TButton
-    Left = 57
+    Left = 65
     Top = 136
     Width = 129
     Height = 25
@@ -35,7 +35,7 @@ object FCom31: TFCom31
     OnClick = Button1Click
   end
   object Button2: TButton
-    Left = 192
+    Left = 214
     Top = 136
     Width = 75
     Height = 25
@@ -50,6 +50,7 @@ object FCom31: TFCom31
     Height = 23
     Style = csDropDownList
     TabOrder = 2
+    OnChange = ComboBox1Change
     Items.Strings = (
       '1'
       '2'
@@ -81,7 +82,6 @@ object FCom31: TFCom31
       '28'
       '29'
       '30'
-      '31'
       '31')
   end
   object SpinEdit1: TSpinEdit
@@ -89,9 +89,10 @@ object FCom31: TFCom31
     Top = 45
     Width = 97
     Height = 24
-    MaxValue = 0
+    MaxValue = 256
     MinValue = 0
     TabOrder = 3
     Value = 0
+    OnChange = SpinEdit1Change
   end
 end
