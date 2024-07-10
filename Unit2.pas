@@ -40,14 +40,15 @@ uses TransmitReceiveCOM;
 procedure TFControls.Button1Click(Sender: TObject);
 begin
   InitCOM(PortName);
+  FControls.Close;
 end;
 
 // закрытие(сброс) выбранного порта из меню Настройки
 procedure TFControls.Button2Click(Sender: TObject);
 begin
-  ShowMessage('Закрытие порта');
-  CloseHandle(Phndl);
-
+  //ShowMessage('Закрытие порта');
+  CloseHandle(getPhndl);
+  InquiryPort(Self);
 end;
 
 // обработка списка выбора порта

@@ -56,6 +56,8 @@ var
   i: integer;
 begin
 
+
+
   case commandType of
     0: begin
           Wbuffer[0] := Ord(Chr(5));
@@ -89,11 +91,11 @@ begin
   if(not WriteFile(Phndl, Wbuffer, SizeOf(Wbuffer), bytesWritten, @winMain.OverRead))
   and (GetLastError <> ERROR_IO_PENDING) then
     ShowMessage('Ошибка в функции отправки');
-
+  {
   if bytesWritten > 0 then
       ShowMessage('Данные отправлены')
     else
-      ShowMessage('Ошибка отправки');
+      ShowMessage('Ошибка отправки'); }
 end;
 
 // инициализация COM-порта
@@ -111,10 +113,10 @@ begin
 
   if Phndl = INVALID_HANDLE_VALUE then
     ShowMessage('Порт не удалось открыть');
-
+  {
   PurgeComm(Phndl, Purge_TXabort or Purge_RXabort
   or Purge_TXclear or Purge_RXclear);
-
+  }
   GetCommState(Phndl, DCB);
 
   DCB.BaudRate := 19200;

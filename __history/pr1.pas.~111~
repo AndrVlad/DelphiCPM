@@ -162,15 +162,21 @@ begin
   s:=LI[item_ind];
   FCom31:=TFCom31.Create(Self);
 
+  MyThr:=MyThread.Create(false); //Создаем поток чтения;
+  MyThr.FreeOnTerminate:=true; //Запускаем поток чтения;
+  MyThr.Priority:=tpNormal; //Устанавливаем приоритет;
+
   case item_ind of
   0: FCom31.ShowModal;
+  { открытие чтения по нажатию
+
   1: //OutVoltageValue;
   begin
     MyThr:=MyThread.Create(false); //Создаем поток чтения;
     MyThr.FreeOnTerminate:=true; //Запускаем поток чтения;
     MyThr.Priority:=tpNormal; //Устанавливаем приоритет;
   end;
-
+   }
   end;
 
 end;
@@ -216,7 +222,8 @@ begin
 
 procedure MyThread.OutVoltageValue;//Процедура вывода в Memo;
 begin
-winMain.Memo1.Lines.Add(String(RBuffer));//Загружаем в Memo содержимое буфера;
+SendMessage(winMain.Memo1.Handle, EM_LINESCROLL, 0,winMain.Memo1.Lines.Count);
+winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+String(RBuffer);//Загружаем в Memo содержимое буфера;
 RBuffer:='';//Очищаем переменную буфера;
 end;
 

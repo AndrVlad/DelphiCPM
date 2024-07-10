@@ -57,6 +57,7 @@ var
   Btr, Mask, Temp, Signal: DWORD;
   Rbuffer: array[0..50] of AnsiChar;
   Action: TCloseAction;
+  OverRead:TOverlapped;
 implementation
 
 {$R *.dfm}
@@ -215,8 +216,9 @@ begin
 
 procedure MyThread.OutVoltageValue;//Процедура вывода в Memo;
 begin
-winMain.Memo1.Lines.Add(String(RBuffer));//Загружаем в Memo содержимое буфера;
-//RBuffer:='';//Очищаем переменную буфера;
+SendMessage(winMain.Memo1.Handle, EM_LINESCROLL, 0,winMain.Memo1.Lines.Count);
+winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+String(RBuffer);//Загружаем в Memo содержимое буфера;
+RBuffer:='';//Очищаем переменную буфера;
 end;
 
 {

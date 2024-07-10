@@ -56,15 +56,26 @@ end;
 
 // отправка команды установки напряжения на выбранном ВВ-источнике
 procedure TFCom31.Button1Click(Sender: TObject);
-
+var
+  msg: string;
 begin
+
   if (voltageSource = 0) or (voltageSourceVal = 0) then
   begin
     ShowMessage('Ошибка! Не выбран источник или не введено напряжение');
     Exit;
   end;
 
-  WriteCOM;
+  if (voltageSource > 15) then
+  begin
+     msg := msg+IntToHex(voltageSourceVal,2)+IntToHex(voltageSource-16,1)+'E';
+     WriteCOM(msg,1);
+  end
+  else
+  begin
+     msg := msg+IntToHex(voltageSourceVal,2)+IntToHex(voltageSource,1)+'E';
+     WriteCOM(msg,0);
+  end;
   FCom31.Close;
 end;
 
@@ -84,8 +95,12 @@ end;
 
 // выбор значения напряжения ВВ-источника
 procedure TFCom31.SpinEdit1Change(Sender: TObject);
+var
+  voltage_d: double;
 begin
-    voltageSourceVal := SpinEdit1.Value;
+  voltage_d := SpinEdit1.Value/19;
+  voltageSourceVal := Round(voltage_d);
 end;
 
 end.
+

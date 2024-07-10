@@ -35,19 +35,23 @@ implementation
 
 uses TransmitReceiveCOM;
 
-// инициализация выбранного порта, выбранного в настройках
+// инициализация выбранного порта из меню Настройки
 
 procedure TFControls.Button1Click(Sender: TObject);
 begin
   InitCOM(PortName);
+  FControls.Close;
 end;
 
+// закрытие(сброс) выбранного порта из меню Настройки
 procedure TFControls.Button2Click(Sender: TObject);
 begin
   ShowMessage('Закрытие порта');
   CloseHandle(Phndl);
 
 end;
+
+// обработка списка выбора порта
 
 procedure TFControls.ComboBox1Change(Sender: TObject);
 var
@@ -60,21 +64,28 @@ begin
 
 end;
 
+// опрос доступных портов
+
 procedure TFControls.InquiryPort(Sender: TObject);
 var
   i: integer;
 begin
-
   for i := 0 to 31 do
   begin
-  Phndl := CreateFile(PChar('COM' + IntToStr(i + 1)),
-  GENERIC_READ or GENERIC_WRITE, 0, nil,
-  OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+    {
+    Phndl := CreateFile(PChar('COM' + IntToStr(i + 1)),
+    GENERIC_READ or GENERIC_WRITE, 0, nil,
+    OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+    }
 
-  if Phndl <> INVALID_HANDLE_VALUE then
-  ComboBox1.Items.Add('COM' + IntToStr(i + 1));
-  CloseHandle(Phndl);
-end;
+    Phndl := CreateFile(PChar('COM' + IntToStr(i + 1)),
+    Generic_Read or Generic_Write, 0, nil, open_existing,
+    file_flag_overlapped,0);
+
+    if Phndl <> INVALID_HANDLE_VALUE then
+      ComboBox1.Items.Add('COM' + IntToStr(i + 1));
+      CloseHandle(Phndl);
+  end;
 end;
 
 end.
