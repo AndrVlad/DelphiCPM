@@ -7,8 +7,7 @@ uses
   commandTest in 'commandTest.pas' {testComm},
   Unit1 in 'Unit1.pas' {FCom31},
   Unit2 in 'Unit2.pas' {FControls},
-  TransmitReceiveCOM in 'TransmitReceiveCOM.pas',
-  TurnOnFilter in 'TurnOnFilter.pas' {Form3};
+  TransmitReceiveCOM in 'TransmitReceiveCOM.pas';
 
 {$R *.res}
 
@@ -16,6 +15,5 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TwinMain, winMain);
-  Application.CreateForm(TForm3, Form3);
   Application.Run;
 end.

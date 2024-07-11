@@ -21,18 +21,17 @@ type
     Label2: TLabel;
     Label3: TLabel;
     ListBox3: TListBox;
-    ListBox4: TListBox;
     GroupBox1: TGroupBox;
     Memo1: TMemo;
     Button1: TButton;
 
     procedure ListBox1Click(Sender: TObject);
     procedure ComboBox1Change(Sender: TObject);
-    procedure ListBox3Click(Sender: TObject);
     procedure configClick(Sender: TObject);
     //procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Button1Click(Sender: TObject);
+    procedure ListBox2Click(Sender: TObject);
     //procedure OutVoltageValue;
   private
     { Private declarations }
@@ -91,7 +90,7 @@ begin
  end;
 
 
-// обработка выбора группы команды
+// обработка кнопки Очистить окно вывода из COM-порта
 
 procedure TwinMain.Button1Click(Sender: TObject);
 begin
@@ -100,6 +99,8 @@ RBuffer:='';
 Memo1.Lines.Clear;
 end;
 
+// обработка выбора группы команды
+
 procedure TwinMain.ComboBox1Change(Sender: TObject);
 
   var CI:TStrings;
@@ -107,20 +108,19 @@ procedure TwinMain.ComboBox1Change(Sender: TObject);
   s:string;
 begin
 
+  MyThr:=MyThread.Create(false); //Создаем поток чтения;
+  MyThr.FreeOnTerminate:=true; //Запускаем поток чтения;
+  MyThr.Priority:=tpNormal; //Устанавливаем приоритет;
+
   ListBox1.Visible:=False;
   ListBox2.Visible:=False;
-  ListBox3.Visible:=False;
-  ListBox4.Visible:=False;
 
   CI:=ComboBox1.Items;
   item_ind:=ComboBox1.ItemIndex;
 
   case item_ind of
-  0: ListBox1.Visible:=True;
-  1: ListBox2.Visible:=True;
-  2: ListBox3.Visible:=True;
-  3: ListBox4.Visible:=True;
-
+    0: ListBox1.Visible:=True;
+    1: ListBox2.Visible:=True;
   end;
 end;
 
@@ -138,40 +138,35 @@ end;
 }
 
 procedure TwinMain.ListBox1Click(Sender: TObject);
-  var LI:TStrings;
-  item_ind:integer;
-  s:string;
-begin
-  LI:=ListBox1.Items;
-  item_ind:=ListBox1.ItemIndex;
-
-  case item_ind of
-  0: ;
-  end;
-
-end;
-
-procedure TwinMain.ListBox3Click(Sender: TObject);
 var LI:TStrings;
   item_ind:integer;
   s:string;
 begin
 
-  LI:=ListBox3.Items;
-  item_ind:=ListBox3.ItemIndex;
+  LI:=ListBox1.Items;
+  item_ind:=ListBox1.ItemIndex;
   s:=LI[item_ind];
   FCom31:=TFCom31.Create(Self);
 
   case item_ind of
   0: FCom31.ShowModal;
+  { открытие чтения по нажатию
+
   1: //OutVoltageValue;
   begin
     MyThr:=MyThread.Create(false); //Создаем поток чтения;
     MyThr.FreeOnTerminate:=true; //Запускаем поток чтения;
     MyThr.Priority:=tpNormal; //Устанавливаем приоритет;
   end;
-
+   }
   end;
+
+end;
+
+
+
+procedure TwinMain.ListBox2Click(Sender: TObject);
+begin
 
 end;
 
@@ -216,6 +211,7 @@ begin
 
 procedure MyThread.OutVoltageValue;//Процедура вывода в Memo;
 begin
+SendMessage(winMain.Memo1.Handle, EM_LINESCROLL, 0,winMain.Memo1.Lines.Count);
 winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+String(RBuffer);//Загружаем в Memo содержимое буфера;
 RBuffer:='';//Очищаем переменную буфера;
 end;

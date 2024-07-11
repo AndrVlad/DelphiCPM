@@ -28,11 +28,12 @@ type
     procedure ListBox1Click(Sender: TObject);
     procedure ComboBox1Change(Sender: TObject);
     procedure configClick(Sender: TObject);
-    //procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Button1Click(Sender: TObject);
     procedure ListBox2Click(Sender: TObject);
-    //procedure OutVoltageValue;
+    procedure FilterReset;
+    procedure LiftExample;
+    procedure LowerExample;
   private
     { Private declarations }
   public
@@ -138,7 +139,8 @@ end;
 }
 
 procedure TwinMain.ListBox1Click(Sender: TObject);
-var LI:TStrings;
+var
+  LI:TStrings;
   item_ind:integer;
   s:string;
 begin
@@ -163,11 +165,50 @@ begin
 
 end;
 
-
-
 procedure TwinMain.ListBox2Click(Sender: TObject);
+var
+  LI:TStrings;
+  item_ind:integer;
+  s:string;
 begin
+  LI:=ListBox2.Items;
+  item_ind:=ListBox2.ItemIndex;
 
+  case item_ind of
+    0: WriteExampleNum; // запись номера образца
+    1: FilterReset; // сброс фильтров
+    2: ; // включить номер фильтра
+    3: LiftExample; // Подъем
+    4: LowerExample; // Сброс образца
+  end;
+
+end;
+
+procedure TwinMain.FilterReset;
+var
+  msg: string;
+begin
+  msg:= '00E0';
+  WriteCOM(msg,0);
+  ShowMessage('Сообщение отправлено');
+end;
+
+procedure TwinMain.LiftExample;
+var
+  msg: string;
+begin
+  msg:= '00B0';
+  WriteCOM(msg,0);
+  ShowMessage('Сообщение отправлено');
+end;
+
+procedure TwinMain.LowerExample;
+var
+  msg: string;
+begin
+  msg:= '00C0';
+  WriteCOM(msg,0);
+  ShowMessage('Сообщение отправлено');
 end;
 
 // процедура вывода напряжений ВВ-источников, считанных из СРМ

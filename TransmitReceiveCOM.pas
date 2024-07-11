@@ -56,8 +56,6 @@ var
   i: integer;
 begin
 
-
-
   case commandType of
     0: begin
           Wbuffer[0] := Ord(Chr(5));
