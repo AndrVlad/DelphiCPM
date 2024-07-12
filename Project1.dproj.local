@@ -1,26 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.607,=D:\Учеба\Практика\DelphiCPM\Unit3.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.247,=D:\Delphi Projects\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.041,D:\Delphi Projects\devStat.dfm=D:\Delphi Projects\Unit1.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.192,D:\Delphi Projects\pr1.dfm=D:\Delphi Projects\Unit1.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.500,=D:\Delphi Projects\Unit2.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.738,=D:\Delphi Projects\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.807,=D:\Учеба\Практика\DelphiCPM\Unit1.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.987,D:\Delphi Projects\commandTest.pas=D:\Delphi Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.119,C:\ava\Git\DelphiCPM\TurnOnFilter.pas=C:\ava\Git\DelphiCPM\WExample.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.500,=D:\Delphi Projects\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.041,D:\Delphi Projects\devStat.dfm=D:\Delphi Projects\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.607,=D:\Учеба\Практика\DelphiCPM\Unit3.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.807,=D:\Учеба\Практика\DelphiCPM\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.867,=D:\Delphi Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.025,=D:\Delphi Projects\Unit1.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.449,D:\Delphi Projects\Project1.dproj=D:\Delphi Projects\Project1.dproj</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.987,D:\Delphi Projects\commandTest.dfm=D:\Delphi Projects\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.037,C:\ava\Git\DelphiCPM\WriteSample.pas=C:\ava\Git\DelphiCPM\Unit4.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.247,=D:\Delphi Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.738,=D:\Delphi Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.037,C:\ava\Git\DelphiCPM\WriteSample.dfm=C:\ava\Git\DelphiCPM\Unit4.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.431,C:\ava\Git\DelphiCPM\WExample.dfm=C:\ava\Git\DelphiCPM\Unit3.dfm</Transaction>
     <Transaction>1899.12.30 00:00:00.000.041,D:\Delphi Projects\devStat.pas=D:\Delphi Projects\Unit1.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.192,D:\Delphi Projects\pr1.pas=D:\Delphi Projects\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.182,D:\Учеба\Практика\DelphiCPM\TransmitReceiveCOM.pas=D:\Учеба\Практика\DelphiCPM\Unit3.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.867,=D:\Delphi Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.431,C:\ava\Git\DelphiCPM\WExample.pas=C:\ava\Git\DelphiCPM\Unit3.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.987,D:\Delphi Projects\commandTest.dfm=D:\Delphi Projects\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.192,D:\Delphi Projects\pr1.dfm=D:\Delphi Projects\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.415,=C:\ava\Git\DelphiCPM\Unit3.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.016,=C:\ava\Git\DelphiCPM\Unit4.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.722,=D:\Учеба\Практика\DelphiCPM\Unit2.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.025,=D:\Delphi Projects\Unit1.pas</Transaction>
-    <Transaction>2024.07.11 16:48:08.415,=C:\ava\Git\DelphiCPM\Unit3.pas</Transaction>
-    <Transaction>2024.07.11 16:48:53.431,C:\ava\Git\DelphiCPM\WExample.pas=C:\ava\Git\DelphiCPM\Unit3.pas</Transaction>
-    <Transaction>2024.07.11 16:48:53.431,C:\ava\Git\DelphiCPM\WExample.dfm=C:\ava\Git\DelphiCPM\Unit3.dfm</Transaction>
-    <Transaction>2024.07.11 17:04:41.119,C:\ava\Git\DelphiCPM\TurnOnFilter.dfm=C:\ava\Git\DelphiCPM\WExample.dfm</Transaction>
-    <Transaction>2024.07.11 17:04:41.119,C:\ava\Git\DelphiCPM\TurnOnFilter.pas=C:\ava\Git\DelphiCPM\WExample.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.119,C:\ava\Git\DelphiCPM\TurnOnFilter.dfm=C:\ava\Git\DelphiCPM\WExample.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.182,D:\Учеба\Практика\DelphiCPM\TransmitReceiveCOM.pas=D:\Учеба\Практика\DelphiCPM\Unit3.pas</Transaction>
   </Transactions>
 </BorlandProject>

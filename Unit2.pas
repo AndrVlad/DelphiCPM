@@ -13,15 +13,21 @@ type
     Label1: TLabel;
     Button1: TButton;
     Button2: TButton;
+    GroupBox2: TGroupBox;
+    Label2: TLabel;
+    ComboBox2: TComboBox;
     procedure ComboBox1Change(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
+    procedure ComboBox2Change(Sender: TObject);
+    //procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
     Phndl: THandle;
     PortName: string;
     DCB: TDcb;
+    BaudRate: integer;
     procedure InquiryPort(Sender: TObject);
 
   end;
@@ -36,11 +42,11 @@ implementation
 uses TransmitReceiveCOM;
 
 // инициализаци€ выбранного порта из меню Ќастройки
-
 procedure TFControls.Button1Click(Sender: TObject);
 begin
   InitCOM(PortName);
   FControls.Close;
+  ComboBox2.Enabled := False;
 end;
 
 // закрытие(сброс) выбранного порта из меню Ќастройки
@@ -49,9 +55,10 @@ begin
   //ShowMessage('«акрытие порта');
   CloseHandle(getPhndl);
   InquiryPort(Self);
+  ComboBox2.Enabled := True;
 end;
 
-// обработка списка выбора порта
+// обработка списка доступных портов
 
 procedure TFControls.ComboBox1Change(Sender: TObject);
 var
@@ -62,6 +69,19 @@ begin
   item_ind:=ComboBox1.ItemIndex;
   PortName:=CI[item_ind];
 
+  if (item_ind <> -1) then
+  ComboBox2.Enabled := True;
+
+end;
+
+procedure TFControls.ComboBox2Change(Sender: TObject);
+var
+  CI: TStrings;
+  item_ind: integer;
+begin
+  CI:=ComboBox2.Items;
+  item_ind:=ComboBox2.ItemIndex;
+  BaudRate:=StrToInt(CI[item_ind]);
 end;
 
 // опрос доступных портов
@@ -70,6 +90,7 @@ procedure TFControls.InquiryPort(Sender: TObject);
 var
   i: integer;
 begin
+  ComboBox1.Clear;
   for i := 0 to 31 do
   begin
     {

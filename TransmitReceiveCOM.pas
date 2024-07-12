@@ -10,13 +10,12 @@ implementation
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Samples.Spin,Unit2,pr1;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Samples.Spin,Unit2,pr1, inifiles;
 
 var
   Phndl: THandle;
   DCB: TDcb;
   Rbuffer: array[0..255] of Byte;
-
 
 function getPhndl: THandle;
 begin
@@ -117,7 +116,8 @@ begin
   }
   GetCommState(Phndl, DCB);
 
-  DCB.BaudRate := 19200;
+  //DCB.BaudRate := 19200;
+  DCB.BaudRate := FControls.BaudRate;
   DCB.Parity := NOPARITY;
   DCB.ByteSize := 8;
   DCB.StopBits := ONESTOPBIT;

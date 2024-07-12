@@ -1,0 +1,65 @@
+unit WriteSample;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
+
+type
+  TForm4 = class(TForm)
+    Button1: TButton;
+    Button2: TButton;
+    Label1: TLabel;
+    ComboBox1: TComboBox;
+    procedure Button2Click(Sender: TObject);
+    procedure ComboBox1Change(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form4: TForm4;
+  SampleNum: integer;
+
+implementation
+{$R *.dfm}
+
+uses TransmitReceiveCOM;
+{$R *.dfm}
+
+// обработка выбора номера фильтра из списка
+procedure TForm4.ComboBox1Change(Sender: TObject);
+var
+  CI:TStrings;
+begin
+  CI := ComboBox1.Items;
+  SampleNum := ComboBox1.ItemIndex + 1;
+end;
+
+// обработка кнопки Отправить
+procedure TForm4.Button1Click(Sender: TObject);
+var
+  msg: string;
+begin
+  if not (SampleNum > 0) then
+  begin
+    ShowMessage('Ошибка! Ни один из образцов не выбран!');
+    Exit;
+  end;
+
+  msg:= '0'+IntToHex(SampleNum,2)+'05';
+  WriteCOM(msg,0);
+  SampleNum := 0;
+end;
+
+// обработка кнопки Отмена
+procedure TForm4.Button2Click(Sender: TObject);
+begin
+  Form4.Close;
+end;
+
+end.

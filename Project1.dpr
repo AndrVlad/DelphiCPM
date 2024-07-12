@@ -8,7 +8,8 @@ uses
   Unit1 in 'Unit1.pas' {FCom31},
   Unit2 in 'Unit2.pas' {FControls},
   TransmitReceiveCOM in 'TransmitReceiveCOM.pas',
-  TurnOnFilter in 'TurnOnFilter.pas' {Form3};
+  TurnOnFilter in 'TurnOnFilter.pas' {Form3},
+  WriteSample in 'WriteSample.pas' {Form4};
 
 {$R *.res}
 
@@ -17,5 +18,6 @@ begin
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TwinMain, winMain);
   Application.CreateForm(TForm3, Form3);
+  Application.CreateForm(TForm4, Form4);
   Application.Run;
 end.

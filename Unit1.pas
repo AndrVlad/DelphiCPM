@@ -76,6 +76,8 @@ begin
      msg := msg+IntToHex(voltageSourceVal,2)+IntToHex(voltageSource,1)+'E';
      WriteCOM(msg,0);
   end;
+  voltageSourceVal := 0;
+  voltageSource := 0;
   FCom31.Close;
 end;
 

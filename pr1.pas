@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.Menus,
-  System.UITypes,Vcl.DBCtrls;
+  System.UITypes,Vcl.DBCtrls,IniFiles;
 
 type
   TwinMain = class(TForm)
@@ -24,6 +24,7 @@ type
     GroupBox1: TGroupBox;
     Memo1: TMemo;
     Button1: TButton;
+    Button2: TButton;
 
     procedure ListBox1Click(Sender: TObject);
     procedure ComboBox1Change(Sender: TObject);
@@ -34,6 +35,9 @@ type
     procedure FilterReset;
     procedure LiftExample;
     procedure LowerExample;
+    procedure FormCreate(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+
   private
     { Private declarations }
   public
@@ -47,21 +51,50 @@ private
 protected
 procedure execute; override;
 procedure OutVoltageValue;
+procedure WriteChartFile;
 end;
-
 
 var
   winMain: TwinMain;
   MyThr: MyThread;
   ComStat:TComStat;
   Btr, Mask, Temp, Signal: DWORD;
-  Rbuffer: array[0..50] of AnsiChar;
+  //Rbuffer: array[0..50] of AnsiChar;
+  Rbuffer: array[0..255] of AnsiChar;
   Action: TCloseAction;
   OverRead:TOverlapped;
+  Ini: Tinifile;
+  var ChartFile: TextFile;
 implementation
 
 {$R *.dfm}
-uses Unit1,Unit2,TransmitReceiveCOM;
+uses Unit1,Unit2,TransmitReceiveCOM,TurnOnFilter,WriteSample;
+
+// Перед отображением главной формы
+
+procedure TwinMain.FormCreate(Sender: TObject);
+begin
+  // создание файла конфигурации на случай, если такового нет
+  // со стандартными настройками скорости 19200 бит/с
+  if not FileExists(extractfilepath(paramstr(0))+'config.ini') then
+    begin
+      Ini:=TiniFile.Create(extractfilepath(paramstr(0))+'config.ini');
+      Ini.WriteInteger('FControls','ComboBox2.ItemIndex',6);
+      Ini.WriteInteger('COM','BaudRate',19200);
+    end;
+
+  // инициализация существующего файла конфигурации
+
+  Ini:=TiniFile.Create(extractfilepath(paramstr(0))+'config.ini');
+  FControls:= TFControls.Create(Self);
+  FControls.ComboBox2.ItemIndex := Ini.ReadInteger('FControls','ComboBox2.ItemIndex',6);
+  FControls.BaudRate := Ini.ReadInteger('COM','BaudRate',19200);
+
+  AssignFile(ChartFile,extractfilepath(paramstr(0))+'chart.txt');
+  Rewrite(ChartFile);
+
+end;
+
 
 procedure MyThread.execute;
 begin
@@ -81,7 +114,9 @@ begin
      If Btr.Size<>0 then //Если байты присутствуют,
      begin
      ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);//Читаем порт;
-     Synchronize(OutVoltageValue);//Делаем синхроннй вызов загрузки буфера в Memo;
+     //Synchronize(OutVoltageValue);//Делаем синхроннй вызов загрузки буфера в Memo;
+     OutVoltageValue;
+     WriteChartFile;
      end;
      end;
     end
@@ -89,7 +124,6 @@ begin
   end;
  CloseHandle(OverRead.Hevent);
  end;
-
 
 // обработка кнопки Очистить окно вывода из COM-порта
 
@@ -101,6 +135,11 @@ Memo1.Lines.Clear;
 end;
 
 // обработка выбора группы команды
+
+procedure TwinMain.Button2Click(Sender: TObject);
+begin
+  CloseFile(ChartFile);
+end;
 
 procedure TwinMain.ComboBox1Change(Sender: TObject);
 
@@ -129,7 +168,8 @@ end;
 
 procedure TwinMain.configClick(Sender: TObject);
 begin
-  FControls:= TFControls.Create(Self);
+  //FControls:= TFControls.Create(Self);
+  //FControls.ComboBox2.ItemIndex := 6;
   FControls.InquiryPort(Sender); // опрос портов
   FControls.ShowModal;
 end;
@@ -175,9 +215,15 @@ begin
   item_ind:=ListBox2.ItemIndex;
 
   case item_ind of
-    0: WriteExampleNum; // запись номера образца
+    0: begin                        // запись номера образца
+        Form4:=TForm4.Create(Self);
+        Form4.ShowModal;
+        end;
     1: FilterReset; // сброс фильтров
-    2: ; // включить номер фильтра
+    2: begin                        // включить номер фильтра
+        Form3:=TForm3.Create(Self);
+        Form3.ShowModal;
+        end;
     3: LiftExample; // Подъем
     4: LowerExample; // Сброс образца
   end;
@@ -211,50 +257,17 @@ begin
   ShowMessage('Сообщение отправлено');
 end;
 
-// процедура вывода напряжений ВВ-источников, считанных из СРМ
-{
-procedure TwinMain.OutVoltageValue;
-var
-  i: integer;
-  SendMsg: string;
-  ReceivedMsg: string;
-
-begin
-  //PurgeComm(FControls.Phndl, Purge_TXabort or Purge_RXabort or Purge_TXclear or Purge_RXclear);
-  //Memo1.Clear;
-  Memo1.Lines.Add('ВВ-источник: '+ReceivedMsg+'В');
-{
-  for i := 1 to 3 do
-    begin
-      msg := '02'+IntToStr(i)+'F';
-      WriteCOM(msg,0);
-      sleep(1000);
-
-    end;
-  }
-  {
-  for i := 1 to 31 do
-    begin
-    if i <= 15 then
-      WriteCOM(msg,0)
-    else
-      WriteCom(msg,1);
-    end;
-    }
-  // вызов процедуры чтения
-  //ReadCOM;
-  // код получения считанных данных и вывод в memo
-
-  //ShowMessage('Ты тут');
-
-//end;
-
-
 procedure MyThread.OutVoltageValue;//Процедура вывода в Memo;
 begin
 SendMessage(winMain.Memo1.Handle, EM_LINESCROLL, 0,winMain.Memo1.Lines.Count);
 winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+String(RBuffer);//Загружаем в Memo содержимое буфера;
+//winMain.Memo1.Lines.Add(String(RBuffer));
 RBuffer:='';//Очищаем переменную буфера;
+end;
+
+procedure MyThread.WriteChartFile;//Процедура вывода в Memo;
+begin
+  Write(ChartFile,'1');
 end;
 
 {
