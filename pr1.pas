@@ -75,12 +75,12 @@ uses Unit1,Unit2,TransmitReceiveCOM,TurnOnFilter,WriteSample;
 procedure TwinMain.FormCreate(Sender: TObject);
 begin
   // создание файла конфигурации на случай, если такового нет
-  // со стандартными настройками скорости 19200 бит/с
+  // со стандартными настройками скорости 9600 бит/с
   if not FileExists(extractfilepath(paramstr(0))+'config.ini') then
     begin
       Ini:=TiniFile.Create(extractfilepath(paramstr(0))+'config.ini');
-      Ini.WriteInteger('FControls','ComboBox2.ItemIndex',6);
-      Ini.WriteInteger('COM','BaudRate',19200);
+      Ini.WriteInteger('FControls','ComboBox2.ItemIndex',4);
+      Ini.WriteInteger('COM','BaudRate',9600);
     end;
 
   // инициализация существующего файла конфигурации

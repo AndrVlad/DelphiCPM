@@ -44,7 +44,7 @@ procedure TForm4.Button1Click(Sender: TObject);
 var
   msg: string;
 begin
-  if (SampleNum = -1) then
+  if not (SampleNum > 0) then
   begin
     ShowMessage('Ошибка! Ни один из образцов не выбран!');
     Exit;
@@ -53,7 +53,6 @@ begin
   msg:= '0'+IntToHex(SampleNum,1)+'05';
   WriteCOM(msg,0);
   SampleNum := 0;
-  Form4.Close;
 end;
 
 // обработка кнопки Отмена

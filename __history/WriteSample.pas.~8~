@@ -53,7 +53,6 @@ begin
   msg:= '0'+IntToHex(SampleNum,1)+'05';
   WriteCOM(msg,0);
   SampleNum := 0;
-  Form4.Close;
 end;
 
 // обработка кнопки Отмена
