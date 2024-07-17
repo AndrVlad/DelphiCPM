@@ -126,6 +126,8 @@ object winMain: TwinMain
           Height = 169
           Lines.Strings = (
             'Memo1')
+          ReadOnly = True
+          ScrollBars = ssVertical
           TabOrder = 0
         end
       end
@@ -137,6 +139,15 @@ object winMain: TwinMain
         Caption = #1054#1095#1080#1089#1090#1080#1090#1100
         TabOrder = 5
         OnClick = Button1Click
+      end
+      object Button2: TButton
+        Left = 504
+        Top = 272
+        Width = 75
+        Height = 25
+        Caption = 'Button2'
+        TabOrder = 6
+        OnClick = Button2Click
       end
     end
   end

@@ -25,5 +25,21 @@
     <Transaction>1899.12.30 00:00:00.000.722,=D:\Учеба\Практика\DelphiCPM\Unit2.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.119,C:\ava\Git\DelphiCPM\TurnOnFilter.dfm=C:\ava\Git\DelphiCPM\WExample.dfm</Transaction>
     <Transaction>1899.12.30 00:00:00.000.182,D:\Учеба\Практика\DelphiCPM\TransmitReceiveCOM.pas=D:\Учеба\Практика\DelphiCPM\Unit3.pas</Transaction>
-  </Transactions>
+  </Transactions>  <ProjectSortOrder AutoSort="0" SortType="0">
+    <File Path="commandTest.pas"/>
+    <File Path="commandTest.dfm"/>
+    <File Path="devStat.pas"/>
+    <File Path="devStat.dfm"/>
+    <File Path="pr1.pas"/>
+    <File Path="pr1.dfm"/>
+    <File Path="TransmitReceiveCOM.pas"/>
+    <File Path="TurnOnFilter.pas"/>
+    <File Path="TurnOnFilter.dfm"/>
+    <File Path="Unit1.pas"/>
+    <File Path="Unit1.dfm"/>
+    <File Path="Unit2.pas"/>
+    <File Path="Unit2.dfm"/>
+    <File Path="WriteSample.pas"/>
+    <File Path="WriteSample.dfm"/>
+  </ProjectSortOrder>
 </BorlandProject>

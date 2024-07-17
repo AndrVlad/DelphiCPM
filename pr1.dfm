@@ -27,7 +27,7 @@ object winMain: TwinMain
     Top = 8
     Width = 793
     Height = 513
-    ActivePage = TabSheet1
+    ActivePage = Modbus
     TabOrder = 1
     object TabSheet1: TTabSheet
       Caption = #1050#1086#1084#1072#1085#1076#1099' '#1057#1056#1052
@@ -148,6 +148,137 @@ object winMain: TwinMain
         Caption = 'Button2'
         TabOrder = 6
         OnClick = Button2Click
+      end
+    end
+    object Modbus: TTabSheet
+      Caption = 'Modbus'
+      ImageIndex = 1
+      object Label4: TLabel
+        Left = 16
+        Top = 11
+        Width = 113
+        Height = 15
+        Caption = 'IP-'#1072#1076#1088#1077#1089' '#1091#1089#1090#1088#1086#1081#1089#1090#1074#1072':'
+      end
+      object Edit1: TEdit
+        Left = 16
+        Top = 32
+        Width = 121
+        Height = 23
+        TabOrder = 0
+      end
+      object GroupBox2: TGroupBox
+        Left = 16
+        Top = 80
+        Width = 233
+        Height = 169
+        Caption = #1047#1072#1087#1080#1089#1100' '#1074' '#1088#1077#1075#1080#1089#1090#1088#1099
+        TabOrder = 1
+        object Label5: TLabel
+          Left = 20
+          Top = 40
+          Width = 93
+          Height = 15
+          Caption = #1053#1086#1084#1077#1088' '#1088#1077#1075#1080#1089#1090#1088#1072':'
+        end
+        object Label6: TLabel
+          Left = 20
+          Top = 104
+          Width = 56
+          Height = 15
+          Caption = #1047#1085#1072#1095#1077#1085#1080#1077':'
+        end
+        object Label8: TLabel
+          Left = 20
+          Top = 69
+          Width = 56
+          Height = 15
+          Caption = #1044#1080#1072#1087#1072#1079#1086#1085':'
+        end
+        object Edit2: TEdit
+          Left = 128
+          Top = 37
+          Width = 89
+          Height = 23
+          TabOrder = 0
+        end
+        object Edit3: TEdit
+          Left = 128
+          Top = 95
+          Width = 89
+          Height = 23
+          TabOrder = 1
+        end
+        object Button3: TButton
+          Left = 142
+          Top = 133
+          Width = 75
+          Height = 25
+          Caption = #1054#1090#1087#1088#1072#1074#1080#1090#1100
+          TabOrder = 2
+        end
+        object Edit5: TEdit
+          Left = 128
+          Top = 66
+          Width = 89
+          Height = 23
+          TabOrder = 3
+          Text = '1'
+        end
+      end
+      object GroupBox3: TGroupBox
+        Left = 328
+        Top = 80
+        Width = 225
+        Height = 169
+        Caption = #1063#1090#1077#1085#1080#1077' '#1088#1077#1075#1080#1089#1090#1088#1086#1074
+        TabOrder = 2
+        object Label7: TLabel
+          Left = 12
+          Top = 42
+          Width = 93
+          Height = 15
+          Caption = #1053#1086#1084#1077#1088' '#1088#1077#1075#1080#1089#1090#1088#1072':'
+        end
+        object Label9: TLabel
+          Left = 12
+          Top = 77
+          Width = 56
+          Height = 15
+          Caption = #1044#1080#1072#1087#1072#1079#1086#1085':'
+        end
+        object Edit4: TEdit
+          Left = 120
+          Top = 39
+          Width = 89
+          Height = 23
+          TabOrder = 0
+          Text = 'Edit4'
+        end
+      end
+      object Button4: TButton
+        Left = 462
+        Top = 213
+        Width = 75
+        Height = 25
+        Caption = #1063#1080#1090#1072#1090#1100
+        TabOrder = 3
+      end
+      object Edit6: TEdit
+        Left = 448
+        Top = 157
+        Width = 89
+        Height = 23
+        TabOrder = 4
+        Text = 'Edit6'
+      end
+      object Button5: TButton
+        Left = 158
+        Top = 31
+        Width = 75
+        Height = 25
+        Caption = #1057#1086#1077#1076#1080#1085#1077#1085#1080#1077
+        TabOrder = 5
       end
     end
   end

@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.Menus,
-  System.UITypes,Vcl.DBCtrls,IniFiles;
+  System.UITypes,Vcl.DBCtrls,IniFiles, IdBaseComponent, IdComponent, IdTCPConnection,
+  IdTCPClient, IdModbusClient;
 
 type
   TwinMain = class(TForm)
@@ -25,6 +26,25 @@ type
     Memo1: TMemo;
     Button1: TButton;
     Button2: TButton;
+    Modbus: TTabSheet;
+    Edit1: TEdit;
+    Label4: TLabel;
+    GroupBox2: TGroupBox;
+    Label5: TLabel;
+    Label6: TLabel;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    Button3: TButton;
+    GroupBox3: TGroupBox;
+    Label7: TLabel;
+    Button4: TButton;
+    Label8: TLabel;
+    Edit4: TEdit;
+    Edit5: TEdit;
+    Label9: TLabel;
+    Edit6: TEdit;
+    Button5: TButton;
+    mctPLC: TIdModBusClient;
 
     procedure ListBox1Click(Sender: TObject);
     procedure ComboBox1Change(Sender: TObject);
