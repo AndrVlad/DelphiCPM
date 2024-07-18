@@ -166,7 +166,6 @@ object winMain: TwinMain
         Width = 121
         Height = 23
         TabOrder = 0
-        Text = 'Edit1'
       end
       object GroupBox2: TGroupBox
         Left = 16
@@ -202,7 +201,6 @@ object winMain: TwinMain
           Width = 89
           Height = 23
           TabOrder = 0
-          Text = 'Edit2'
         end
         object Edit3: TEdit
           Left = 128
@@ -210,7 +208,6 @@ object winMain: TwinMain
           Width = 89
           Height = 23
           TabOrder = 1
-          Text = 'Edit3'
         end
         object Button3: TButton
           Left = 142
@@ -226,7 +223,7 @@ object winMain: TwinMain
           Width = 89
           Height = 23
           TabOrder = 3
-          Text = 'Edit5'
+          Text = '1'
         end
       end
       object GroupBox3: TGroupBox
@@ -274,6 +271,14 @@ object winMain: TwinMain
         Height = 23
         TabOrder = 4
         Text = 'Edit6'
+      end
+      object Button5: TButton
+        Left = 158
+        Top = 31
+        Width = 75
+        Height = 25
+        Caption = #1057#1086#1077#1076#1080#1085#1077#1085#1080#1077
+        TabOrder = 5
       end
     end
   end

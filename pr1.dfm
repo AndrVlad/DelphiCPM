@@ -11,6 +11,7 @@ object winMain: TwinMain
   Font.Name = 'Segoe UI'
   Font.Style = []
   Menu = MainMenu
+  OnClose = FormClose
   OnCreate = FormCreate
   TextHeight = 15
   object StatusBar1: TStatusBar
@@ -183,17 +184,10 @@ object winMain: TwinMain
         end
         object Label6: TLabel
           Left = 20
-          Top = 104
+          Top = 80
           Width = 56
           Height = 15
           Caption = #1047#1085#1072#1095#1077#1085#1080#1077':'
-        end
-        object Label8: TLabel
-          Left = 20
-          Top = 69
-          Width = 56
-          Height = 15
-          Caption = #1044#1080#1072#1087#1072#1079#1086#1085':'
         end
         object Edit2: TEdit
           Left = 128
@@ -204,7 +198,7 @@ object winMain: TwinMain
         end
         object Edit3: TEdit
           Left = 128
-          Top = 95
+          Top = 79
           Width = 89
           Height = 23
           TabOrder = 1
@@ -215,15 +209,9 @@ object winMain: TwinMain
           Width = 75
           Height = 25
           Caption = #1054#1090#1087#1088#1072#1074#1080#1090#1100
+          Enabled = False
           TabOrder = 2
-        end
-        object Edit5: TEdit
-          Left = 128
-          Top = 66
-          Width = 89
-          Height = 23
-          TabOrder = 3
-          Text = '1'
+          OnClick = Button3Click
         end
       end
       object GroupBox3: TGroupBox
@@ -253,7 +241,6 @@ object winMain: TwinMain
           Width = 89
           Height = 23
           TabOrder = 0
-          Text = 'Edit4'
         end
       end
       object Button4: TButton
@@ -262,7 +249,9 @@ object winMain: TwinMain
         Width = 75
         Height = 25
         Caption = #1063#1080#1090#1072#1090#1100
+        Enabled = False
         TabOrder = 3
+        OnClick = Button4Click
       end
       object Edit6: TEdit
         Left = 448
@@ -270,7 +259,7 @@ object winMain: TwinMain
         Width = 89
         Height = 23
         TabOrder = 4
-        Text = 'Edit6'
+        Text = '1'
       end
       object Button5: TButton
         Left = 158
@@ -279,6 +268,7 @@ object winMain: TwinMain
         Height = 25
         Caption = #1057#1086#1077#1076#1080#1085#1077#1085#1080#1077
         TabOrder = 5
+        OnClick = Button5Click
       end
     end
   end

@@ -29,6 +29,20 @@ type
     Modbus: TTabSheet;
     Edit1: TEdit;
     Label4: TLabel;
+    GroupBox2: TGroupBox;
+    Label5: TLabel;
+    Label6: TLabel;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    Button3: TButton;
+    GroupBox3: TGroupBox;
+    Label7: TLabel;
+    Button4: TButton;
+    Edit4: TEdit;
+    Label9: TLabel;
+    Edit6: TEdit;
+    Button5: TButton;
+    //PLC: TIdTCPClient;
 
     procedure ListBox1Click(Sender: TObject);
     procedure ComboBox1Change(Sender: TObject);
@@ -41,6 +55,8 @@ type
     procedure LowerExample;
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -69,6 +85,7 @@ var
   OverRead:TOverlapped;
   Ini: Tinifile;
   var ChartFile: TextFile;
+  PLC: TIdModBusClient;
 implementation
 
 {$R *.dfm}
@@ -96,6 +113,8 @@ begin
 
   AssignFile(ChartFile,extractfilepath(paramstr(0))+'chart.txt');
   Rewrite(ChartFile);
+
+  PLC := TIdModBusClient.Create;
 
 end;
 
@@ -145,6 +164,19 @@ begin
   CloseFile(ChartFile);
 end;
 
+procedure TwinMain.Button3Click(Sender: TObject);
+begin
+  if PLC.WriteRegister(StrToInt(Edit2.Text), StrToInt(Edit3.Text)) then
+    MessageDlg('Успешная запись в регистр!', mtCustom, [mbOk], 0)
+  else
+    MessageDlg('Ошибка при записи в регистр', mtError, [mbOk], 0);
+end;
+
+procedure TwinMain.Button5Click(Sender: TObject);
+begin
+  PLC.Host := Edit1.Text;
+end;
+
 procedure TwinMain.ComboBox1Change(Sender: TObject);
 
   var CI:TStrings;
@@ -168,7 +200,7 @@ begin
   end;
 end;
 
-// обработка меню настроек
+
 
 procedure TwinMain.configClick(Sender: TObject);
 begin
@@ -274,19 +306,16 @@ begin
   Write(ChartFile,'1');
 end;
 
-{
-
-procedure TwinMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
-begin
-  if MessageDlg('Завершить работу приложения?', mtConfirmation, [mbOk, mbCancel], 0) = mrCancel
-  then CanClose:= False;
-end;
-   }
 procedure TwinMain.FormClose(Sender: TObject; var Action: TCloseAction); //Закрытие програмы;
 begin
 if  MyThr <> nil then //Если поток запущен;
 MyThr.Terminate; //Останавливаем его;
 CloseHandle(getPhndl); //Закрываем Порт;
+
+// очистка памяти созданных объектов
+
+PLC.Free;
+
 end;
 
 end.

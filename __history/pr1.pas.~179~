@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.Menus,
-  System.UITypes,Vcl.DBCtrls,IniFiles;
+  System.UITypes,Vcl.DBCtrls,IniFiles, IdBaseComponent, IdComponent, IdTCPConnection,
+  IdTCPClient, IdModbusClient;
 
 type
   TwinMain = class(TForm)
@@ -25,6 +26,23 @@ type
     Memo1: TMemo;
     Button1: TButton;
     Button2: TButton;
+    Modbus: TTabSheet;
+    Edit1: TEdit;
+    Label4: TLabel;
+    GroupBox2: TGroupBox;
+    Label5: TLabel;
+    Label6: TLabel;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    Button3: TButton;
+    GroupBox3: TGroupBox;
+    Label7: TLabel;
+    Button4: TButton;
+    Edit4: TEdit;
+    Label9: TLabel;
+    Edit6: TEdit;
+    Button5: TButton;
+    //PLC: TIdTCPClient;
 
     procedure ListBox1Click(Sender: TObject);
     procedure ComboBox1Change(Sender: TObject);
@@ -37,6 +55,9 @@ type
     procedure LowerExample;
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -65,17 +86,22 @@ var
   OverRead:TOverlapped;
   Ini: Tinifile;
   var ChartFile: TextFile;
+  PLC: TIdModBusClient;
 implementation
 
 {$R *.dfm}
 uses Unit1,Unit2,TransmitReceiveCOM,TurnOnFilter,WriteSample;
 
-// Перед отображением главной формы
+// Старт программы
 
 procedure TwinMain.FormCreate(Sender: TObject);
 begin
+
+  // создание объектов классов
+  PLC := TIdModBusClient.Create;
+
   // создание файла конфигурации на случай, если такового нет
-  // со стандартными настройками скорости 19200 бит/с
+  // со стандартными настройками скорости 9600 бит/с
   if not FileExists(extractfilepath(paramstr(0))+'config.ini') then
     begin
       Ini:=TiniFile.Create(extractfilepath(paramstr(0))+'config.ini');
@@ -87,11 +113,14 @@ begin
 
   Ini:=TiniFile.Create(extractfilepath(paramstr(0))+'config.ini');
   FControls:= TFControls.Create(Self);
-  FControls.ComboBox2.ItemIndex := Ini.ReadInteger('FControls','ComboBox2.ItemIndex',6);
-  FControls.BaudRate := Ini.ReadInteger('COM','BaudRate',19200);
+  FControls.ComboBox2.ItemIndex := Ini.ReadInteger('FControls','ComboBox2.ItemIndex',4);
+  FControls.BaudRate := Ini.ReadInteger('COM','BaudRate',9600);
+  Edit1.Text := Ini.ReadString('Modbus','SlaveAddr','192.168.1.111');
 
   AssignFile(ChartFile,extractfilepath(paramstr(0))+'chart.txt');
   Rewrite(ChartFile);
+
+
 
 end;
 
@@ -129,16 +158,55 @@ begin
 
 procedure TwinMain.Button1Click(Sender: TObject);
 begin
-PurgeComm(getPhndl, Purge_TXabort or Purge_RXabort or Purge_TXclear or Purge_RXclear);
-RBuffer:='';
-Memo1.Lines.Clear;
+  PurgeComm(getPhndl, Purge_TXabort or Purge_RXabort or Purge_TXclear or Purge_RXclear);
+  RBuffer:='';
+  Memo1.Lines.Clear;
 end;
 
-// обработка выбора группы команды
+// закрытие файла
 
 procedure TwinMain.Button2Click(Sender: TObject);
 begin
   CloseFile(ChartFile);
+end;
+
+procedure TwinMain.Button3Click(Sender: TObject);
+begin
+  if PLC.WriteRegister(StrToInt(Edit2.Text), StrToInt(Edit3.Text)) then
+    MessageDlg('Успешная запись в регистр!', mtCustom, [mbOk], 0)
+  else
+    MessageDlg('Ошибка при записи в регистр', mtError, [mbOk], 0);
+end;
+
+procedure TwinMain.Button4Click(Sender: TObject);
+var
+  Data: array[0..4096] of Word;
+  iAmount: Integer;
+  i: Integer;
+  sLine: String;
+begin
+  iAmount := StrToInt(Edit6.Text);
+  if (iAmount > 0) then
+  begin
+    if PLC.ReadHoldingRegisters(StrToInt(Edit4.Text), iAmount, Data) then
+    begin
+      sLine := 'Считанные значения регистров:';
+      for i := 0 to (iAmount - 1) do
+        sLine := sLine +
+                 #13#10'     ' +
+                 IntToStr(StrToInt(Edit4.Text) + i) +
+                 ': 0x'  +
+                 IntToHex(Data[i], 4);
+      ShowMessage(sLine);
+    end
+    else
+      ShowMessage('PLC read operation failed!');
+  end;
+end;
+
+procedure TwinMain.Button5Click(Sender: TObject);
+begin
+  PLC.Host := Edit1.Text;
 end;
 
 procedure TwinMain.ComboBox1Change(Sender: TObject);
@@ -164,7 +232,7 @@ begin
   end;
 end;
 
-// обработка меню настроек
+
 
 procedure TwinMain.configClick(Sender: TObject);
 begin
@@ -270,19 +338,16 @@ begin
   Write(ChartFile,'1');
 end;
 
-{
-
-procedure TwinMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
-begin
-  if MessageDlg('Завершить работу приложения?', mtConfirmation, [mbOk, mbCancel], 0) = mrCancel
-  then CanClose:= False;
-end;
-   }
 procedure TwinMain.FormClose(Sender: TObject; var Action: TCloseAction); //Закрытие програмы;
 begin
 if  MyThr <> nil then //Если поток запущен;
 MyThr.Terminate; //Останавливаем его;
 CloseHandle(getPhndl); //Закрываем Порт;
+
+// очистка памяти созданных объектов
+
+PLC.Free;
+
 end;
 
 end.
