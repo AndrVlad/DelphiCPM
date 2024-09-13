@@ -28,7 +28,7 @@ object winMain: TwinMain
     Top = 8
     Width = 793
     Height = 513
-    ActivePage = Modbus
+    ActivePage = TabSheet1
     TabOrder = 1
     object TabSheet1: TTabSheet
       Caption = #1050#1086#1084#1072#1085#1076#1099' '#1057#1056#1052
@@ -98,7 +98,7 @@ object winMain: TwinMain
           '7. '#1054#1087#1088#1086#1089' '#1050'-'#1057#1040#1059'1 4000'
           '8. '#1054#1087#1088#1086#1089' '#1050'-'#1057#1040#1059'2 02A0'
           '9. '#1054#1087#1088#1086#1089' '#1050'-'#1057#1040#1059'2 40A0'
-          '10. '#1054#1087#1088#1086#1089' '#1050'-'#1057#1040#1059'3 00F0')
+          '')
         TabOrder = 2
         Visible = False
         OnClick = ListBox2Click

@@ -124,10 +124,14 @@ begin
   AssignFile(ChartFile,extractfilepath(paramstr(0))+'chart.txt');
   Rewrite(ChartFile);
 
+  var str, str1: string;
+  var num: integer;
   var num_w: Word;
-  var str: string;
-
-  {
+  //str := IntToStr(Ord('0'))+IntToStr(Ord(Chr(5)));
+  //str1 := IntToHex(StrToInt(str),1);
+  //num_w := HexToInt(str1);
+  //num_w := Ord('0') Shl 8;
+  //num_w := num_w + Ord(Chr(5));
   num_w := Ord('0') Shl 8;
   num_w := num_w + Ord(Chr(5));
   RegisterData[0]:=num_w;
@@ -136,15 +140,9 @@ begin
   num_w := num_w + Ord('0');
   RegisterData[1]:=num_w;
 
+  //num_w := Ord('B') Shl 8;
   num_w := Ord('0');
   RegisterData[2]:=num_w;
-  }
-  str := '00B0';
-  RegisterData[0] := Ord(str[1]) Shl 8;
-  RegisterData[0] := RegisterData[0] + Ord(Chr(5));
-  RegisterData[1] := Ord(str[3]) Shl 8;
-  RegisterData[1] := RegisterData[1] + Ord(str[2]);
-  RegisterData[2] := RegisterData[2] + Ord(str[4]);
 
 end;
 
