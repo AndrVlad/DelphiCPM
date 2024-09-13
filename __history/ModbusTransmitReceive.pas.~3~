@@ -1,0 +1,31 @@
+unit ModbusTransmitReceive;
+
+interface
+
+procedure WriteEthernet(msg: string; commandType: Byte);
+
+implementation
+
+procedure WriteEthernet(msg: string; commandType: Byte);
+var
+  RegisterData: array[0..2] of Word;
+  FirstByte: Byte;
+begin
+
+    case commandType of
+    0: FirstByte := 5;
+    1: FirstByte := 7;
+    2: begin
+            // логика на случай отсылки для ** (шлем 2 раза посылку сначала с 5,
+            // затем с 7 первым байтом)
+        end;
+  end;
+
+  RegisterData[0] := Ord(msg[1]) Shl 8;
+  RegisterData[0] := RegisterData[0] + Ord(Chr(Byte));
+  RegisterData[1] := Ord(msg[3]) Shl 8;
+  RegisterData[1] := RegisterData[1] + Ord(msg[2]);
+  RegisterData[2] := RegisterData[2] + Ord(msg[4]);
+end;
+
+end.

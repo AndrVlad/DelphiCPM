@@ -9,8 +9,7 @@ uses
   Unit2 in 'Unit2.pas' {FControls},
   TransmitReceiveCOM in 'TransmitReceiveCOM.pas',
   TurnOnFilter in 'TurnOnFilter.pas' {Form3},
-  WriteSample in 'WriteSample.pas' {Form4},
-  ModbusTransmitReceive in 'ModbusTransmitReceive.pas';
+  WriteSample in 'WriteSample.pas' {Form4};
 
 {$R *.res}
 

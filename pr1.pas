@@ -29,12 +29,6 @@ type
     Modbus: TTabSheet;
     Edit1: TEdit;
     Label4: TLabel;
-    GroupBox2: TGroupBox;
-    Label5: TLabel;
-    Label6: TLabel;
-    Edit2: TEdit;
-    Edit3: TEdit;
-    Button3: TButton;
     GroupBox3: TGroupBox;
     Label7: TLabel;
     Button4: TButton;
@@ -42,6 +36,12 @@ type
     Label9: TLabel;
     Edit6: TEdit;
     Button5: TButton;
+    GroupBox2: TGroupBox;
+    Button3: TButton;
+    ListBox4: TListBox;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    RadioButton3: TRadioButton;
     //PLC: TIdTCPClient;
 
     procedure ListBox1Click(Sender: TObject);
@@ -60,6 +60,9 @@ type
     procedure Button5Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
     procedure Edit3Change(Sender: TObject);
+    procedure RadioButton1Click(Sender: TObject);
+    procedure RadioButton2Click(Sender: TObject);
+    procedure RadioButton3Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -90,11 +93,12 @@ var
   var ChartFile: TextFile;
   PLC: TIdModBusClient;
   RegisterData: array[0..2] of Word;
+  ConnectionType: Byte = 1;
 implementation
 
 
 {$R *.dfm}
-uses Unit1,Unit2,TransmitReceiveCOM,TurnOnFilter,WriteSample;
+uses Unit1,Unit2,TransmitReceiveCOM,TurnOnFilter,WriteSample,ModbusTransmitReceive;
 
 // Старт программы
 
@@ -139,13 +143,15 @@ begin
   num_w := Ord('0');
   RegisterData[2]:=num_w;
   }
+
+  {
   str := '00B0';
   RegisterData[0] := Ord(str[1]) Shl 8;
   RegisterData[0] := RegisterData[0] + Ord(Chr(5));
   RegisterData[1] := Ord(str[3]) Shl 8;
   RegisterData[1] := RegisterData[1] + Ord(str[2]);
   RegisterData[2] := RegisterData[2] + Ord(str[4]);
-
+  }
 end;
 
 
@@ -329,7 +335,7 @@ begin
         end;
     3: LiftExample; // Подъем
     4: LowerExample; // Сброс образца
-    5: PollSAU(1, 1);
+    5: PollSAU(1, 1);  // Опросы САУ 1-3
     6: PollSAU(1, 2);
     7: PollSAU(2, 1);
     8: PollSAU(2, 2);
@@ -343,7 +349,11 @@ var
   msg: string;
 begin
   msg:= '00E0';
-  WriteCOM(msg,0);
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
   ShowMessage('Сообщение отправлено');
 end;
 
@@ -388,6 +398,21 @@ begin
         
   WriteCOM(msg,0);
   ShowMessage('Сообщение отправлено');
+end;
+
+procedure TwinMain.RadioButton1Click(Sender: TObject);
+begin
+  ConnectionType := 1;
+end;
+
+procedure TwinMain.RadioButton2Click(Sender: TObject);
+begin
+  ConnectionType := 2;
+end;
+
+procedure TwinMain.RadioButton3Click(Sender: TObject);
+begin
+  ConnectionType := 3;
 end;
 
 procedure MyThread.OutVoltageValue;//Процедура вывода в Memo;

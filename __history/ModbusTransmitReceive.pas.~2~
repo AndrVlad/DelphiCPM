@@ -1,0 +1,14 @@
+unit ModbusTransmitReceive;
+
+interface
+
+procedure WriteEthernet(msg: string; commandType: Byte);
+
+implementation
+
+procedure WriteEthernet(msg: string; commandType: Byte);
+begin
+
+end;
+
+end.
