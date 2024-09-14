@@ -15,7 +15,6 @@ type
     config: TMenuItem;
     PageControl1: TPageControl;
     TabSheet1: TTabSheet;
-    Label1: TLabel;
     ListBox1: TListBox;
     ComboBox1: TComboBox;
     ListBox2: TListBox;
@@ -42,6 +41,11 @@ type
     RadioButton1: TRadioButton;
     RadioButton2: TRadioButton;
     RadioButton3: TRadioButton;
+    Label5: TLabel;
+    Button6: TButton;
+    GroupBox4: TGroupBox;
+    Edit2: TEdit;
+    Button7: TButton;
     //PLC: TIdTCPClient;
 
     procedure ListBox1Click(Sender: TObject);
@@ -63,6 +67,8 @@ type
     procedure RadioButton1Click(Sender: TObject);
     procedure RadioButton2Click(Sender: TObject);
     procedure RadioButton3Click(Sender: TObject);
+    procedure Button6Click(Sender: TObject);
+    procedure Button7Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -124,6 +130,7 @@ begin
   FControls.ComboBox2.ItemIndex := Ini.ReadInteger('FControls','ComboBox2.ItemIndex',4);
   FControls.BaudRate := Ini.ReadInteger('COM','BaudRate',9600);
   Edit1.Text := Ini.ReadString('Modbus','SlaveAddr','192.168.1.111');
+  Edit2.Text := Ini.ReadString('Modbus','SlaveAddr','192.168.1.111');
 
   AssignFile(ChartFile,extractfilepath(paramstr(0))+'chart.txt');
   Rewrite(ChartFile);
@@ -243,6 +250,24 @@ begin
   PLC.Host := Edit1.Text;
   Button3.Enabled := True;
   Button4.Enabled := True;
+end;
+
+// кнопка "Настроить" в COM-подключении
+
+procedure TwinMain.Button6Click(Sender: TObject);
+begin
+  FControls.InquiryPort(Sender); // опрос портов
+  FControls.ShowModal;
+end;
+
+// кнопка "Соединение" в IP-адресе ПЛК
+
+procedure TwinMain.Button7Click(Sender: TObject);
+begin
+  //PLC.Host := Edit2.Text;
+  InitPLC(Edit2.Text);
+  RadioButton2.Enabled := True;
+  RadioButton3.Enabled := True;
 end;
 
 procedure TwinMain.ComboBox1Change(Sender: TObject);
@@ -408,6 +433,7 @@ end;
 procedure TwinMain.RadioButton2Click(Sender: TObject);
 begin
   ConnectionType := 2;
+
 end;
 
 procedure TwinMain.RadioButton3Click(Sender: TObject);

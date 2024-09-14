@@ -1,7 +1,0 @@
-unit ModbusTransmitReceive;
-
-interface
-
-implementation
-
-end.

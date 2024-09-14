@@ -3,7 +3,7 @@ unit ModbusTransmitReceive;
 interface
 
 procedure WriteEthernet(msg: string; commandType: Byte);
-procedure SendMsgEthernet(var msg: array of Word);
+procedure SendMsgEthernet(msg: array of Word);
 procedure InitPLC(addr: string);
 
 implementation
@@ -13,7 +13,6 @@ uses
 
 var
   PLC: TIdModBusClient;
-
 
 procedure WriteEthernet(msg: string; commandType: Byte);
 var
@@ -32,17 +31,16 @@ begin
   RegisterData[1] := RegisterData[1] + Ord(msg[2]);
   RegisterData[2] := RegisterData[2] + Ord(msg[4]);
 
-  {
   if PLC.WriteRegisters(5, RegisterData) then
     MessageDlg('Успешная запись в регистры!', mtCustom, [mbOk], 0)
   else
     MessageDlg('Ошибка при записи в регистры', mtError, [mbOk], 0);
-   }
-  SendMsgEthernet(RegisterData);
+
+  //SendMsgEthernet(RegisterData);
 
 end;
 
-procedure SendMsgEthernet(var msg: array of Word);
+procedure SendMsgEthernet(msg: array of Word);
 begin
 if PLC.WriteRegisters(5, msg) then
     MessageDlg('Успешная запись в регистры!', mtCustom, [mbOk], 0)
@@ -53,7 +51,7 @@ end;
 procedure InitPLC(addr: string);
 begin
   PLC := TIdModBusClient.Create;
-  PLC.Host := '127.0.0.1';
+  PLC.Host := addr;
 end;
 
 end.

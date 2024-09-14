@@ -2,8 +2,8 @@ object FControls: TFControls
   Left = 0
   Top = 0
   Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080
-  ClientHeight = 252
-  ClientWidth = 274
+  ClientHeight = 275
+  ClientWidth = 267
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -42,8 +42,8 @@ object FControls: TFControls
     end
   end
   object Button1: TButton
-    Left = 169
-    Top = 219
+    Left = 158
+    Top = 227
     Width = 75
     Height = 25
     Caption = #1055#1086#1076#1090#1074#1077#1088#1076#1080#1090#1100
@@ -51,8 +51,8 @@ object FControls: TFControls
     OnClick = Button1Click
   end
   object Button2: TButton
-    Left = 80
-    Top = 219
+    Left = 64
+    Top = 227
     Width = 75
     Height = 25
     Caption = #1057#1073#1088#1086#1089
