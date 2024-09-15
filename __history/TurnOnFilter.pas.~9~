@@ -27,7 +27,7 @@ var
 
 implementation
 
-uses TransmitReceiveCOM,pr1,ModbusTransmitReceive;
+uses TransmitReceiveCOM;
 {$R *.dfm}
 
 // обработка выбора номера фильтра из списка
@@ -51,12 +51,7 @@ begin
   end;
 
   msg:= '00'+IntToHex(FilterNum,1)+'0';
-
-  case ConnectionType of
-  1: WriteCOM(msg,0);
-  2: WriteEthernet(msg,0);
-  end;
-
+  WriteCOM(msg,0);
   FilterNum := 0;
 end;
 

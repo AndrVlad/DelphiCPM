@@ -379,6 +379,7 @@ begin
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
+
   ShowMessage('Сообщение отправлено');
 end;
 
@@ -387,7 +388,12 @@ var
   msg: string;
 begin
   msg:= '00B0';
-  WriteCOM(msg,0);
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
   ShowMessage('Сообщение отправлено');
 end;
 
@@ -396,7 +402,12 @@ var
   msg: string;
 begin
   msg:= '00C0';
-  WriteCOM(msg,0);
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
   ShowMessage('Сообщение отправлено');
 end;
 
@@ -421,7 +432,11 @@ begin
   if (NumSAU = 3) then
         msg := '00F0';
         
-  WriteCOM(msg,0);
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
   ShowMessage('Сообщение отправлено');
 end;
 

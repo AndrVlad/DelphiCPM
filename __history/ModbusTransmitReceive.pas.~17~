@@ -26,8 +26,6 @@ begin
     1: FirstByte := 7;
   end;
 
-  RegisterData[2] := 0;
-
   RegisterData[0] := Ord(msg[1]) Shl 8;
   RegisterData[0] := RegisterData[0] + Ord(Chr(FirstByte));
   RegisterData[1] := Ord(msg[3]) Shl 8;

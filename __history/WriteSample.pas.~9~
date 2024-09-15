@@ -1,4 +1,4 @@
-unit TurnOnFilter;
+unit WriteSample;
 
 interface
 
@@ -7,11 +7,11 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
 
 type
-  TForm3 = class(TForm)
-    ComboBox1: TComboBox;
-    Label1: TLabel;
+  TForm4 = class(TForm)
     Button1: TButton;
     Button2: TButton;
+    Label1: TLabel;
+    ComboBox1: TComboBox;
     procedure Button2Click(Sender: TObject);
     procedure ComboBox1Change(Sender: TObject);
     procedure Button1Click(Sender: TObject);
@@ -22,48 +22,44 @@ type
   end;
 
 var
-  Form3: TForm3;
-  FilterNum: integer;
+  Form4: TForm4;
+  SampleNum: integer;
 
 implementation
-
-uses TransmitReceiveCOM,pr1,ModbusTransmitReceive;
 {$R *.dfm}
 
+uses TransmitReceiveCOM;
+
 // обработка выбора номера фильтра из списка
-procedure TForm3.ComboBox1Change(Sender: TObject);
+procedure TForm4.ComboBox1Change(Sender: TObject);
 var
   CI:TStrings;
 begin
   CI := ComboBox1.Items;
-  FilterNum := ComboBox1.ItemIndex + 1;
+  SampleNum := ComboBox1.ItemIndex;
 end;
 
 // обработка кнопки Отправить
-procedure TForm3.Button1Click(Sender: TObject);
+procedure TForm4.Button1Click(Sender: TObject);
 var
   msg: string;
 begin
-  if not (FilterNum > 0) then
+  if (SampleNum = -1) then
   begin
-    ShowMessage('Ошибка! Ни один из фильтров не выбран!');
+    ShowMessage('Ошибка! Ни один из образцов не выбран!');
     Exit;
   end;
 
-  msg:= '00'+IntToHex(FilterNum,1)+'0';
-
-  case ConnectionType of
-  1: WriteCOM(msg,0);
-  2: WriteEthernet(msg,0);
-  end;
-
-  FilterNum := 0;
+  msg:= '0'+IntToHex(SampleNum,1)+'05';
+  WriteCOM(msg,0);
+  SampleNum := 0;
+  Form4.Close;
 end;
 
 // обработка кнопки Отмена
-procedure TForm3.Button2Click(Sender: TObject);
+procedure TForm4.Button2Click(Sender: TObject);
 begin
-  Form3.Close;
+  Form4.Close;
 end;
 
 end.

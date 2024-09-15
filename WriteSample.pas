@@ -28,7 +28,7 @@ var
 implementation
 {$R *.dfm}
 
-uses TransmitReceiveCOM;
+uses TransmitReceiveCOM,pr1,ModbusTransmitReceive;
 
 // обработка выбора номера фильтра из списка
 procedure TForm4.ComboBox1Change(Sender: TObject);
@@ -51,7 +51,12 @@ begin
   end;
 
   msg:= '0'+IntToHex(SampleNum,1)+'05';
-  WriteCOM(msg,0);
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
   SampleNum := 0;
   Form4.Close;
 end;

@@ -26,18 +26,19 @@ begin
     1: FirstByte := 7;
   end;
 
-  RegisterData[2] := 0;
-
   RegisterData[0] := Ord(msg[1]) Shl 8;
   RegisterData[0] := RegisterData[0] + Ord(Chr(FirstByte));
   RegisterData[1] := Ord(msg[3]) Shl 8;
   RegisterData[1] := RegisterData[1] + Ord(msg[2]);
   RegisterData[2] := RegisterData[2] + Ord(msg[4]);
 
+  {
   if PLC.WriteRegisters(5, RegisterData) then
     MessageDlg('Успешная запись в регистры!', mtCustom, [mbOk], 0)
   else
     MessageDlg('Ошибка при записи в регистры', mtError, [mbOk], 0);
+   }
+  SendMsgEthernet(RegisterData);
 
 end;
 

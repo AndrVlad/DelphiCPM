@@ -3,8 +3,8 @@ object Form4: TForm4
   Top = 0
   BorderIcons = [biSystemMenu]
   Caption = #1042#1099#1073#1086#1088' '#1086#1073#1088#1072#1079#1094#1072' '#1076#1083#1103' '#1079#1072#1087#1080#1089#1080
-  ClientHeight = 139
-  ClientWidth = 306
+  ClientHeight = 138
+  ClientWidth = 302
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
