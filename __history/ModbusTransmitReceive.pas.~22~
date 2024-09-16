@@ -3,16 +3,17 @@ unit ModbusTransmitReceive;
 interface
 
 procedure WriteEthernet(msg: string; commandType: Byte);
-procedure SendMsgEthernet(msg: array of Word);
+procedure SendMsgEthernet(var msg: array of Word);
 procedure InitPLC(addr: string);
 
 implementation
 
 uses
-  IdModbusClient,Vcl.Dialogs;
+  IdModbusClient,Vcl.Dialogs, pr1;
 
 var
   PLC: TIdModBusClient;
+
 
 procedure WriteEthernet(msg: string; commandType: Byte);
 var
@@ -25,24 +26,24 @@ begin
     1: FirstByte := 7;
   end;
 
+  RegisterData[2] := 0;
+
   RegisterData[0] := Ord(msg[1]) Shl 8;
   RegisterData[0] := RegisterData[0] + Ord(Chr(FirstByte));
   RegisterData[1] := Ord(msg[3]) Shl 8;
   RegisterData[1] := RegisterData[1] + Ord(msg[2]);
   RegisterData[2] := RegisterData[2] + Ord(msg[4]);
 
-  if PLC.WriteRegisters(5, RegisterData) then
+  if PLC.WriteRegisters(518, RegisterData) then
     MessageDlg('Успешная запись в регистры!', mtCustom, [mbOk], 0)
   else
     MessageDlg('Ошибка при записи в регистры', mtError, [mbOk], 0);
 
-  //SendMsgEthernet(RegisterData);
-
 end;
 
-procedure SendMsgEthernet(msg: array of Word);
+procedure SendMsgEthernet(var msg: array of Word);
 begin
-if PLC.WriteRegisters(5, msg) then
+if PLC.WriteRegisters(513, msg) then
     MessageDlg('Успешная запись в регистры!', mtCustom, [mbOk], 0)
   else
     MessageDlg('Ошибка при записи в регистры', mtError, [mbOk], 0);
@@ -51,7 +52,7 @@ end;
 procedure InitPLC(addr: string);
 begin
   PLC := TIdModBusClient.Create;
-  PLC.Host := addr;
+  PLC.Host := Edit2.Text;
 end;
 
 end.

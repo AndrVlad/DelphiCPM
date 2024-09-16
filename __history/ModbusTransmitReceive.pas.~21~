@@ -9,7 +9,7 @@ procedure InitPLC(addr: string);
 implementation
 
 uses
-  IdModbusClient,Vcl.Dialogs, pr1;
+  IdModbusClient,Vcl.Dialogs;
 
 var
   PLC: TIdModBusClient;
@@ -34,7 +34,7 @@ begin
   RegisterData[1] := RegisterData[1] + Ord(msg[2]);
   RegisterData[2] := RegisterData[2] + Ord(msg[4]);
 
-  if PLC.WriteRegisters(518, RegisterData) then
+  if PLC.WriteRegisters(513, RegisterData) then
     MessageDlg('Успешная запись в регистры!', mtCustom, [mbOk], 0)
   else
     MessageDlg('Ошибка при записи в регистры', mtError, [mbOk], 0);
@@ -52,7 +52,7 @@ end;
 procedure InitPLC(addr: string);
 begin
   PLC := TIdModBusClient.Create;
-  PLC.Host := addr;
+  PLC.Host := '192.168.1.111';
 end;
 
 end.
