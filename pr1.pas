@@ -46,6 +46,9 @@ type
     GroupBox4: TGroupBox;
     Edit2: TEdit;
     Button7: TButton;
+    Button8: TButton;
+    Edit3: TEdit;
+    Label1: TLabel;
     //PLC: TIdTCPClient;
 
     procedure ListBox1Click(Sender: TObject);
@@ -58,6 +61,7 @@ type
     procedure LiftExample;
     procedure LowerExample;
     procedure PollSAU(NumSAU: integer; command_type: integer);
+    procedure LoadDisk;
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -69,6 +73,7 @@ type
     procedure RadioButton3Click(Sender: TObject);
     procedure Button6Click(Sender: TObject);
     procedure Button7Click(Sender: TObject);
+    procedure Button8Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -131,6 +136,7 @@ begin
   FControls.BaudRate := Ini.ReadInteger('COM','BaudRate',9600);
   Edit1.Text := Ini.ReadString('Modbus','SlaveAddr','192.168.1.111');
   Edit2.Text := Ini.ReadString('Modbus','SlaveAddr','192.168.1.111');
+  Edit3.Text := Ini.ReadString('Modbus','RegNum','5');
 
   AssignFile(ChartFile,extractfilepath(paramstr(0))+'chart.txt');
   Rewrite(ChartFile);
@@ -268,6 +274,15 @@ begin
   InitPLC(Edit2.Text);
   RadioButton2.Enabled := True;
   RadioButton3.Enabled := True;
+  Button8.Enabled := True;
+end;
+
+procedure TwinMain.Button8Click(Sender: TObject);
+var
+  reg: Word;
+begin
+  reg := StrToInt(Edit3.Text);
+  SetRegNum(reg);
 end;
 
 procedure TwinMain.ComboBox1Change(Sender: TObject);
@@ -360,11 +375,12 @@ begin
         end;
     3: LiftExample; // Подъем
     4: LowerExample; // Сброс образца
-    5: PollSAU(1, 1);  // Опросы САУ 1-3
-    6: PollSAU(1, 2);
-    7: PollSAU(2, 1);
-    8: PollSAU(2, 2);
-    9: PollSAU(3, 1);
+    5: LoadDisk;
+    6: PollSAU(1, 1);  // Опросы САУ 1-3
+    7: PollSAU(1, 2);
+    8: PollSAU(2, 1);
+    9: PollSAU(2, 2);
+    10: PollSAU(3, 1);
   end;
 
 end;
@@ -438,6 +454,18 @@ begin
   end;
 
   ShowMessage('Сообщение отправлено');
+end;
+
+procedure TwinMain.LoadDisk;
+var
+  msg: string;
+begin
+  msg:= '00F1';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
 end;
 
 procedure TwinMain.RadioButton1Click(Sender: TObject);

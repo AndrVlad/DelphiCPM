@@ -20,8 +20,8 @@ object winMain: TwinMain
     Width = 904
     Height = 19
     Panels = <>
-    ExplicitTop = 536
-    ExplicitWidth = 894
+    ExplicitTop = 553
+    ExplicitWidth = 900
   end
   object PageControl1: TPageControl
     Left = 0
@@ -55,11 +55,18 @@ object winMain: TwinMain
       end
       object GroupBox4: TGroupBox
         Left = 16
-        Top = 3
+        Top = 0
         Width = 865
         Height = 94
         Caption = #1057#1087#1086#1089#1086#1073' '#1087#1077#1088#1077#1076#1072#1095#1080' '#1076#1072#1085#1085#1099#1093':'
         TabOrder = 11
+        object Label1: TLabel
+          Left = 287
+          Top = 58
+          Width = 109
+          Height = 15
+          Caption = #1057#1090#1072#1088#1090#1086#1074#1099#1081' '#1088#1077#1075#1080#1089#1090#1088':'
+        end
         object Edit2: TEdit
           Left = 408
           Top = 25
@@ -67,6 +74,14 @@ object winMain: TwinMain
           Height = 23
           TabOrder = 0
           Text = 'Edit2'
+        end
+        object Edit3: TEdit
+          Left = 408
+          Top = 54
+          Width = 121
+          Height = 27
+          TabOrder = 1
+          Text = 'Edit3'
         end
       end
       object ListBox1: TListBox
@@ -110,11 +125,12 @@ object winMain: TwinMain
           '3. '#1042#1082#1083#1102#1095#1080#1090#1100' '#8470' '#1092#1080#1083#1100#1090#1088#1072'(1-10)'
           '4. '#1055#1091#1089#1082' '#8593' '#1086#1073#1088#1072#1079#1094#1072' ('#1087#1086#1076#1098#1105#1084')'
           '5. '#1057#1073#1088#1086#1089' '#8595' '#1086#1073#1088#1072#1079#1094#1072' ('#1086#1087#1091#1089#1082#1072#1085#1080#1077')'
-          '6. '#1054#1087#1088#1086#1089' '#1050'-'#1057#1040#1059'1 0200'
-          '7. '#1054#1087#1088#1086#1089' '#1050'-'#1057#1040#1059'1 4000'
-          '8. '#1054#1087#1088#1086#1089' '#1050'-'#1057#1040#1059'2 02A0'
-          '9. '#1054#1087#1088#1086#1089' '#1050'-'#1057#1040#1059'2 40A0'
-          '10. '#1054#1087#1088#1086#1089' '#1050'-'#1057#1040#1059'3 00F0')
+          '6. '#1047#1072#1075#1088#1091#1079#1082#1072' '#1076#1080#1089#1082#1072
+          '7. '#1054#1087#1088#1086#1089' '#1050'-'#1057#1040#1059'1 0200'
+          '8. '#1054#1087#1088#1086#1089' '#1050'-'#1057#1040#1059'1 4000'
+          '9. '#1054#1087#1088#1086#1089' '#1050'-'#1057#1040#1059'2 02A0'
+          '10. '#1054#1087#1088#1086#1089' '#1050'-'#1057#1040#1059'2 40A0'
+          '11. '#1054#1087#1088#1086#1089' '#1050'-'#1057#1040#1059'3 00F0')
         TabOrder = 2
         Visible = False
         OnClick = ListBox2Click
@@ -182,7 +198,7 @@ object winMain: TwinMain
         OnClick = RadioButton1Click
       end
       object RadioButton2: TRadioButton
-        Left = 568
+        Left = 656
         Top = 31
         Width = 153
         Height = 17
@@ -192,8 +208,8 @@ object winMain: TwinMain
         OnClick = RadioButton2Click
       end
       object RadioButton3: TRadioButton
-        Left = 568
-        Top = 61
+        Left = 656
+        Top = 54
         Width = 113
         Height = 17
         Caption = 'Modbus ASCII'
@@ -211,13 +227,22 @@ object winMain: TwinMain
         OnClick = Button6Click
       end
       object Button7: TButton
-        Left = 470
-        Top = 57
+        Left = 558
+        Top = 24
         Width = 75
         Height = 25
         Caption = #1057#1086#1077#1076#1080#1085#1077#1085#1080#1077
         TabOrder = 12
         OnClick = Button7Click
+      end
+      object Button8: TButton
+        Left = 558
+        Top = 58
+        Width = 75
+        Height = 25
+        Caption = #1055#1088#1080#1084#1077#1085#1080#1090#1100
+        TabOrder = 13
+        OnClick = Button8Click
       end
     end
     object Modbus: TTabSheet

@@ -15,7 +15,6 @@ type
     config: TMenuItem;
     PageControl1: TPageControl;
     TabSheet1: TTabSheet;
-    Label1: TLabel;
     ListBox1: TListBox;
     ComboBox1: TComboBox;
     ListBox2: TListBox;
@@ -38,6 +37,18 @@ type
     Button5: TButton;
     GroupBox2: TGroupBox;
     Button3: TButton;
+    ListBox4: TListBox;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    RadioButton3: TRadioButton;
+    Label5: TLabel;
+    Button6: TButton;
+    GroupBox4: TGroupBox;
+    Edit2: TEdit;
+    Button7: TButton;
+    Button8: TButton;
+    Edit3: TEdit;
+    Label1: TLabel;
     //PLC: TIdTCPClient;
 
     procedure ListBox1Click(Sender: TObject);
@@ -50,12 +61,18 @@ type
     procedure LiftExample;
     procedure LowerExample;
     procedure PollSAU(NumSAU: integer; command_type: integer);
+    procedure LoadDisk;
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
     procedure Button5Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
     procedure Edit3Change(Sender: TObject);
+    procedure RadioButton1Click(Sender: TObject);
+    procedure RadioButton2Click(Sender: TObject);
+    procedure RadioButton3Click(Sender: TObject);
+    procedure Button6Click(Sender: TObject);
+    procedure Button7Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -86,11 +103,12 @@ var
   var ChartFile: TextFile;
   PLC: TIdModBusClient;
   RegisterData: array[0..2] of Word;
+  ConnectionType: Byte = 1;
 implementation
 
 
 {$R *.dfm}
-uses Unit1,Unit2,TransmitReceiveCOM,TurnOnFilter,WriteSample;
+uses Unit1,Unit2,TransmitReceiveCOM,TurnOnFilter,WriteSample,ModbusTransmitReceive;
 
 // Старт программы
 
@@ -116,6 +134,8 @@ begin
   FControls.ComboBox2.ItemIndex := Ini.ReadInteger('FControls','ComboBox2.ItemIndex',4);
   FControls.BaudRate := Ini.ReadInteger('COM','BaudRate',9600);
   Edit1.Text := Ini.ReadString('Modbus','SlaveAddr','192.168.1.111');
+  Edit2.Text := Ini.ReadString('Modbus','SlaveAddr','192.168.1.111');
+  Edit3.Text := Ini.ReadString('Modbus','RegNum','518');
 
   AssignFile(ChartFile,extractfilepath(paramstr(0))+'chart.txt');
   Rewrite(ChartFile);
@@ -135,13 +155,15 @@ begin
   num_w := Ord('0');
   RegisterData[2]:=num_w;
   }
+
+  {
   str := '00B0';
   RegisterData[0] := Ord(str[1]) Shl 8;
   RegisterData[0] := RegisterData[0] + Ord(Chr(5));
   RegisterData[1] := Ord(str[3]) Shl 8;
   RegisterData[1] := RegisterData[1] + Ord(str[2]);
   RegisterData[2] := RegisterData[2] + Ord(str[4]);
-
+  }
 end;
 
 
@@ -235,6 +257,25 @@ begin
   Button4.Enabled := True;
 end;
 
+// кнопка "Настроить" в COM-подключении
+
+procedure TwinMain.Button6Click(Sender: TObject);
+begin
+  FControls.InquiryPort(Sender); // опрос портов
+  FControls.ShowModal;
+end;
+
+// кнопка "Соединение" в IP-адресе ПЛК
+
+procedure TwinMain.Button7Click(Sender: TObject);
+begin
+  //PLC.Host := Edit2.Text;
+  InitPLC(Edit2.Text);
+  RadioButton2.Enabled := True;
+  RadioButton3.Enabled := True;
+  Button8.Enabled := True;
+end;
+
 procedure TwinMain.ComboBox1Change(Sender: TObject);
 
   var CI:TStrings;
@@ -325,11 +366,12 @@ begin
         end;
     3: LiftExample; // Подъем
     4: LowerExample; // Сброс образца
-    5: PollSAU(1, 1);  // Опросы САУ 1-3
-    6: PollSAU(1, 2);
-    7: PollSAU(2, 1);
-    8: PollSAU(2, 2);
-    9: PollSAU(3, 1);
+    5: LoadDisk;
+    6: PollSAU(1, 1);  // Опросы САУ 1-3
+    7: PollSAU(1, 2);
+    8: PollSAU(2, 1);
+    9: PollSAU(2, 2);
+    10: PollSAU(3, 1);
   end;
 
 end;
@@ -339,7 +381,12 @@ var
   msg: string;
 begin
   msg:= '00E0';
-  WriteCOM(msg,0);
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
   ShowMessage('Сообщение отправлено');
 end;
 
@@ -348,7 +395,12 @@ var
   msg: string;
 begin
   msg:= '00B0';
-  WriteCOM(msg,0);
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
   ShowMessage('Сообщение отправлено');
 end;
 
@@ -357,7 +409,12 @@ var
   msg: string;
 begin
   msg:= '00C0';
-  WriteCOM(msg,0);
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
   ShowMessage('Сообщение отправлено');
 end;
 
@@ -382,8 +439,40 @@ begin
   if (NumSAU = 3) then
         msg := '00F0';
         
-  WriteCOM(msg,0);
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
   ShowMessage('Сообщение отправлено');
+end;
+
+procedure TwinMain.LoadDisk;
+var
+  msg: string;
+begin
+  msg:= '00F1';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+end;
+
+procedure TwinMain.RadioButton1Click(Sender: TObject);
+begin
+  ConnectionType := 1;
+end;
+
+procedure TwinMain.RadioButton2Click(Sender: TObject);
+begin
+  ConnectionType := 2;
+
+end;
+
+procedure TwinMain.RadioButton3Click(Sender: TObject);
+begin
+  ConnectionType := 3;
 end;
 
 procedure MyThread.OutVoltageValue;//Процедура вывода в Memo;
