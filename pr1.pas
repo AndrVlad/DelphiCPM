@@ -144,27 +144,6 @@ begin
   var num_w: Word;
   var str: string;
 
-  {
-  num_w := Ord('0') Shl 8;
-  num_w := num_w + Ord(Chr(5));
-  RegisterData[0]:=num_w;
-
-  num_w := Ord('B') Shl 8;
-  num_w := num_w + Ord('0');
-  RegisterData[1]:=num_w;
-
-  num_w := Ord('0');
-  RegisterData[2]:=num_w;
-  }
-
-  {
-  str := '00B0';
-  RegisterData[0] := Ord(str[1]) Shl 8;
-  RegisterData[0] := RegisterData[0] + Ord(Chr(5));
-  RegisterData[1] := Ord(str[3]) Shl 8;
-  RegisterData[1] := RegisterData[1] + Ord(str[2]);
-  RegisterData[2] := RegisterData[2] + Ord(str[4]);
-  }
 end;
 
 
@@ -396,7 +375,7 @@ begin
   2: WriteEthernet(msg,0);
   end;
 
-  ShowMessage('Сообщение отправлено');
+  //ShowMessage('Сообщение отправлено');
 end;
 
 procedure TwinMain.LiftExample;
@@ -410,7 +389,7 @@ begin
   2: WriteEthernet(msg,0);
   end;
 
-  ShowMessage('Сообщение отправлено');
+  //ShowMessage('Сообщение отправлено');
 end;
 
 procedure TwinMain.LowerExample;
@@ -424,7 +403,7 @@ begin
   2: WriteEthernet(msg,0);
   end;
 
-  ShowMessage('Сообщение отправлено');
+  //ShowMessage('Сообщение отправлено');
 end;
 
 procedure TwinMain.PollSAU(NumSAU: integer; command_type: integer);
@@ -453,7 +432,7 @@ begin
   2: WriteEthernet(msg,0);
   end;
 
-  ShowMessage('Сообщение отправлено');
+  //ShowMessage('Сообщение отправлено');
 end;
 
 procedure TwinMain.LoadDisk;

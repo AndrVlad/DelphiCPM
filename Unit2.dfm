@@ -10,6 +10,7 @@ object FControls: TFControls
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
+  Position = poMainFormCenter
   TextHeight = 15
   object GroupBox1: TGroupBox
     Left = 8

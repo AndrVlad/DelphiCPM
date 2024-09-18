@@ -79,7 +79,7 @@ object winMain: TwinMain
           Left = 408
           Top = 54
           Width = 121
-          Height = 27
+          Height = 23
           TabOrder = 1
           Text = 'Edit3'
         end
@@ -169,8 +169,8 @@ object winMain: TwinMain
         end
       end
       object Button1: TButton
-        Left = 408
-        Top = 376
+        Left = 464
+        Top = 343
         Width = 75
         Height = 25
         Caption = #1054#1095#1080#1089#1090#1080#1090#1100
@@ -178,12 +178,13 @@ object winMain: TwinMain
         OnClick = Button1Click
       end
       object Button2: TButton
-        Left = 504
-        Top = 376
+        Left = 558
+        Top = 343
         Width = 75
         Height = 25
         Caption = 'Button2'
         TabOrder = 6
+        Visible = False
         OnClick = Button2Click
       end
       object RadioButton1: TRadioButton
