@@ -184,7 +184,6 @@ object winMain: TwinMain
         Height = 25
         Caption = 'Button2'
         TabOrder = 6
-        Visible = False
         OnClick = Button2Click
       end
       object RadioButton1: TRadioButton
