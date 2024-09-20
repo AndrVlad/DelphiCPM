@@ -105,6 +105,7 @@ var
   PLC: TIdModBusClient;
   RegisterData: array[0..2] of Word;
   ConnectionType: Byte = 1;
+  str: string = '';
 implementation
 
 
@@ -164,10 +165,11 @@ begin
      Btr:=ComStat.cbInQue; //Получаем из структуры количество байт;
      If Btr.Size<>0 then //Если байты присутствуют,
      begin
-     ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);//Читаем порт;
+     //ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);//Читаем порт;
+     ReadFile(getPhndl, RBuffer, 1, Temp, @OverRead);
      //Synchronize(OutVoltageValue);//Делаем синхроннй вызов загрузки буфера в Memo;
      OutVoltageValue;
-     WriteChartFile;
+     //WriteChartFile;
      end;
      end;
     end
@@ -463,17 +465,42 @@ begin
   ConnectionType := 3;
 end;
 
-procedure MyThread.OutVoltageValue;//Процедура вывода в Memo;
+function ConvertVVIVal : Integer;
+var
+  res: integer;
 begin
-SendMessage(winMain.Memo1.Handle, EM_LINESCROLL, 0,winMain.Memo1.Lines.Count);
-winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+String(RBuffer);//Загружаем в Memo содержимое буфера;
+  //res := StrToInt(RBuffer);
+  Result := 0
+end;
+
+procedure MyThread.OutVoltageValue;//Процедура вывода в Memo;
+var
+  res: integer;
+  i: integer;
+
+begin
+  i := 0;
+  SendMessage(winMain.Memo1.Handle, EM_LINESCROLL, 0,winMain.Memo1.Lines.Count);
+
+  if (RBuffer[0] = ' ') then
+    begin
+     winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+str;
+     str := '';
+    end
+  else
+    begin
+      str := str + RBuffer[0];
+    end;
+
+  //res := StrToInt(String(RBuffer));
+  //Write(ChartFile,ConvertVVIVal);
 //winMain.Memo1.Lines.Add(String(RBuffer));
 RBuffer:='';//Очищаем переменную буфера;
 end;
 
-procedure MyThread.WriteChartFile;//Процедура вывода в Memo;
+procedure MyThread.WriteChartFile;//Процедура записи в файл
 begin
-  Write(ChartFile,'1');
+  Write(ChartFile,RBuffer);
 end;
 
 procedure TwinMain.FormClose(Sender: TObject; var Action: TCloseAction); //Закрытие програмы;

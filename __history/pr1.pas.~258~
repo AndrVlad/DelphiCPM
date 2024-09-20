@@ -105,6 +105,7 @@ var
   PLC: TIdModBusClient;
   RegisterData: array[0..2] of Word;
   ConnectionType: Byte = 1;
+  str: string = '';
 implementation
 
 
@@ -144,27 +145,6 @@ begin
   var num_w: Word;
   var str: string;
 
-  {
-  num_w := Ord('0') Shl 8;
-  num_w := num_w + Ord(Chr(5));
-  RegisterData[0]:=num_w;
-
-  num_w := Ord('B') Shl 8;
-  num_w := num_w + Ord('0');
-  RegisterData[1]:=num_w;
-
-  num_w := Ord('0');
-  RegisterData[2]:=num_w;
-  }
-
-  {
-  str := '00B0';
-  RegisterData[0] := Ord(str[1]) Shl 8;
-  RegisterData[0] := RegisterData[0] + Ord(Chr(5));
-  RegisterData[1] := Ord(str[3]) Shl 8;
-  RegisterData[1] := RegisterData[1] + Ord(str[2]);
-  RegisterData[2] := RegisterData[2] + Ord(str[4]);
-  }
 end;
 
 
@@ -185,10 +165,11 @@ begin
      Btr:=ComStat.cbInQue; //Получаем из структуры количество байт;
      If Btr.Size<>0 then //Если байты присутствуют,
      begin
-     ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);//Читаем порт;
+     //ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);//Читаем порт;
+     ReadFile(getPhndl, RBuffer, 1, Temp, @OverRead);
      //Synchronize(OutVoltageValue);//Делаем синхроннй вызов загрузки буфера в Memo;
      OutVoltageValue;
-     WriteChartFile;
+     //WriteChartFile;
      end;
      end;
     end
@@ -341,15 +322,6 @@ begin
 
   case item_ind of
   0: FCom31.ShowModal;
-  { открытие чтения по нажатию
-
-  1: //OutVoltageValue;
-  begin
-    MyThr:=MyThread.Create(false); //Создаем поток чтения;
-    MyThr.FreeOnTerminate:=true; //Запускаем поток чтения;
-    MyThr.Priority:=tpNormal; //Устанавливаем приоритет;
-  end;
-   }
   end;
 
 end;
@@ -396,7 +368,7 @@ begin
   2: WriteEthernet(msg,0);
   end;
 
-  ShowMessage('Сообщение отправлено');
+  //ShowMessage('Сообщение отправлено');
 end;
 
 procedure TwinMain.LiftExample;
@@ -410,7 +382,7 @@ begin
   2: WriteEthernet(msg,0);
   end;
 
-  ShowMessage('Сообщение отправлено');
+  //ShowMessage('Сообщение отправлено');
 end;
 
 procedure TwinMain.LowerExample;
@@ -424,7 +396,7 @@ begin
   2: WriteEthernet(msg,0);
   end;
 
-  ShowMessage('Сообщение отправлено');
+  //ShowMessage('Сообщение отправлено');
 end;
 
 procedure TwinMain.PollSAU(NumSAU: integer; command_type: integer);
@@ -453,7 +425,7 @@ begin
   2: WriteEthernet(msg,0);
   end;
 
-  ShowMessage('Сообщение отправлено');
+  //ShowMessage('Сообщение отправлено');
 end;
 
 procedure TwinMain.LoadDisk;
@@ -484,17 +456,42 @@ begin
   ConnectionType := 3;
 end;
 
-procedure MyThread.OutVoltageValue;//Процедура вывода в Memo;
+function ConvertVVIVal : Integer;
+var
+  res: integer;
 begin
-SendMessage(winMain.Memo1.Handle, EM_LINESCROLL, 0,winMain.Memo1.Lines.Count);
-winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+String(RBuffer);//Загружаем в Memo содержимое буфера;
+  //res := StrToInt(RBuffer);
+  Result := 0
+end;
+
+procedure MyThread.OutVoltageValue;//Процедура вывода в Memo;
+var
+  res: integer;
+  i: integer;
+
+begin
+  i := 0;
+  SendMessage(winMain.Memo1.Handle, EM_LINESCROLL, 0,winMain.Memo1.Lines.Count);
+
+  if (RBuffer[0] = ' ') then
+    begin
+     winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+str;
+     str := '';
+    end
+  else
+    begin
+      str := str + RBuffer[0];
+    end;
+
+  //res := StrToInt(String(RBuffer));
+  //Write(ChartFile,ConvertVVIVal);
 //winMain.Memo1.Lines.Add(String(RBuffer));
 RBuffer:='';//Очищаем переменную буфера;
 end;
 
-procedure MyThread.WriteChartFile;//Процедура вывода в Memo;
+procedure MyThread.WriteChartFile;//Процедура записи в файл
 begin
-  Write(ChartFile,'1');
+  Write(ChartFile,RBuffer);
 end;
 
 procedure TwinMain.FormClose(Sender: TObject; var Action: TCloseAction); //Закрытие програмы;

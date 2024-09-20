@@ -105,6 +105,8 @@ var
   PLC: TIdModBusClient;
   RegisterData: array[0..2] of Word;
   ConnectionType: Byte = 1;
+  COMConnectionState: boolean = false;
+  str: string = '';
 implementation
 
 
@@ -164,7 +166,8 @@ begin
      Btr:=ComStat.cbInQue; //Получаем из структуры количество байт;
      If Btr.Size<>0 then //Если байты присутствуют,
      begin
-     ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);//Читаем порт;
+     //ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);//Читаем порт;
+     ReadFile(getPhndl, RBuffer, 1, Temp, @OverRead);
      //Synchronize(OutVoltageValue);//Делаем синхроннй вызов загрузки буфера в Memo;
      OutVoltageValue;
      //WriteChartFile;
@@ -271,10 +274,6 @@ procedure TwinMain.ComboBox1Change(Sender: TObject);
   s:string;
 begin
 
-  MyThr:=MyThread.Create(false); //Создаем поток чтения;
-  MyThr.FreeOnTerminate:=true; //Запускаем поток чтения;
-  MyThr.Priority:=tpNormal; //Устанавливаем приоритет;
-
   ListBox1.Visible:=False;
   ListBox2.Visible:=False;
 
@@ -320,15 +319,15 @@ begin
 
   case item_ind of
   0: FCom31.ShowModal;
-  { открытие чтения по нажатию
+  1: begin
+      if  MyThr = nil then //Если поток не запущен;
+      begin
+        MyThr:=MyThread.Create(false); //Создаем поток чтения;
+        MyThr.FreeOnTerminate:=true; //Запускаем поток чтения;
+        MyThr.Priority:=tpNormal; //Устанавливаем приоритет;
+      end
+    end;
 
-  1: //OutVoltageValue;
-  begin
-    MyThr:=MyThread.Create(false); //Создаем поток чтения;
-    MyThr.FreeOnTerminate:=true; //Запускаем поток чтения;
-    MyThr.Priority:=tpNormal; //Устанавливаем приоритет;
-  end;
-   }
   end;
 
 end;
@@ -467,15 +466,30 @@ function ConvertVVIVal : Integer;
 var
   res: integer;
 begin
-  res := StrToInt(RBuffer);
-  Result := res;
+  //res := StrToInt(RBuffer);
+  Result := 0
 end;
 
 procedure MyThread.OutVoltageValue;//Процедура вывода в Memo;
+var
+  res: integer;
+  i: integer;
+
 begin
+  i := 0;
   SendMessage(winMain.Memo1.Handle, EM_LINESCROLL, 0,winMain.Memo1.Lines.Count);
-  //ConvertVVIVal();
-  winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+String(RBuffer);//Загружаем в Memo содержимое буфера;
+
+  if (RBuffer[0] = ' ') then
+    begin
+     winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+str;
+     str := '';
+    end
+  else
+    begin
+      str := str + RBuffer[0];
+    end;
+
+  //res := StrToInt(String(RBuffer));
   //Write(ChartFile,ConvertVVIVal);
 //winMain.Memo1.Lines.Add(String(RBuffer));
 RBuffer:='';//Очищаем переменную буфера;

@@ -1,6 +1,9 @@
 unit TransmitReceiveCOM;
 
 interface
+
+var COMConnectionState: boolean = False;
+
 function getPhndl: THandle;
 function ReadCOM: string;
 procedure InitCOM(PortName: string);
@@ -123,7 +126,11 @@ begin
   DCB.StopBits := ONESTOPBIT;
 
   if (SetCommState(Phndl, DCB)) then
+  begin
     ShowMessage('Настройки заданы');
+    COMConnectionState := true;
+  end;
+
 
   if not SetCommMask(Phndl, EV_RXchar) then
   ShowMessage('Маска не задалась');

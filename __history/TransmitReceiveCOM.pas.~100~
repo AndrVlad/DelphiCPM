@@ -1,6 +1,7 @@
 unit TransmitReceiveCOM;
 
 interface
+function getPhndl: THandle;
 function ReadCOM: string;
 procedure InitCOM(PortName: string);
 procedure WriteCOM(msg: string; commandType: integer);
@@ -9,12 +10,17 @@ implementation
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Samples.Spin,Unit2;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Samples.Spin,Unit2,pr1, inifiles;
 
 var
   Phndl: THandle;
   DCB: TDcb;
   Rbuffer: array[0..255] of Byte;
+
+function getPhndl: THandle;
+begin
+  Result := Phndl;
+end;
 
 // функция преобразования байта посылки в строку
 
@@ -73,14 +79,20 @@ begin
   if Phndl = INVALID_HANDLE_VALUE then
   ShowMessage('Ошибка дескриптора порта');
 
+  {
   if(not WriteFile(Phndl, Wbuffer, SizeOf(Wbuffer), bytesWritten, nil))
   and (GetLastError <> ERROR_IO_PENDING) then
     ShowMessage('Ошибка в функции отправки');
+  }
 
+  if(not WriteFile(Phndl, Wbuffer, SizeOf(Wbuffer), bytesWritten, @winMain.OverRead))
+  and (GetLastError <> ERROR_IO_PENDING) then
+    ShowMessage('Ошибка в функции отправки');
+  {
   if bytesWritten > 0 then
       ShowMessage('Данные отправлены')
     else
-      ShowMessage('Ошибка отправки');
+      ShowMessage('Ошибка отправки'); }
 end;
 
 // инициализация COM-порта
@@ -98,13 +110,14 @@ begin
 
   if Phndl = INVALID_HANDLE_VALUE then
     ShowMessage('Порт не удалось открыть');
-
+  {
   PurgeComm(Phndl, Purge_TXabort or Purge_RXabort
   or Purge_TXclear or Purge_RXclear);
-
+  }
   GetCommState(Phndl, DCB);
 
-  DCB.BaudRate := 9600;
+  //DCB.BaudRate := 19200;
+  DCB.BaudRate := FControls.BaudRate;
   DCB.Parity := NOPARITY;
   DCB.ByteSize := 8;
   DCB.StopBits := ONESTOPBIT;

@@ -49,6 +49,7 @@ type
     Button8: TButton;
     Edit3: TEdit;
     Label1: TLabel;
+    ListBox5: TListBox;
     //PLC: TIdTCPClient;
 
     procedure ListBox1Click(Sender: TObject);
@@ -105,6 +106,7 @@ var
   PLC: TIdModBusClient;
   RegisterData: array[0..2] of Word;
   ConnectionType: Byte = 1;
+  //COMConnectionState: boolean = false;
   str: string = '';
 implementation
 
@@ -273,10 +275,6 @@ procedure TwinMain.ComboBox1Change(Sender: TObject);
   s:string;
 begin
 
-  MyThr:=MyThread.Create(false); //Создаем поток чтения;
-  MyThr.FreeOnTerminate:=true; //Запускаем поток чтения;
-  MyThr.Priority:=tpNormal; //Устанавливаем приоритет;
-
   ListBox1.Visible:=False;
   ListBox2.Visible:=False;
 
@@ -322,15 +320,18 @@ begin
 
   case item_ind of
   0: FCom31.ShowModal;
-  { открытие чтения по нажатию
+  1: begin
+      if MyThr = nil then //Если поток не запущен;
+      begin
+        if COMConnectionState then
+          begin
+            MyThr:=MyThread.Create(false); //Создаем поток чтения;
+            MyThr.FreeOnTerminate:=true; //Запускаем поток чтения;
+            MyThr.Priority:=tpNormal; //Устанавливаем приоритет;
+          end;
+      end
+    end;
 
-  1: //OutVoltageValue;
-  begin
-    MyThr:=MyThread.Create(false); //Создаем поток чтения;
-    MyThr.FreeOnTerminate:=true; //Запускаем поток чтения;
-    MyThr.Priority:=tpNormal; //Устанавливаем приоритет;
-  end;
-   }
   end;
 
 end;
@@ -477,7 +478,6 @@ procedure MyThread.OutVoltageValue;//Процедура вывода в Memo;
 var
   res: integer;
   i: integer;
-
 begin
   i := 0;
   SendMessage(winMain.Memo1.Handle, EM_LINESCROLL, 0,winMain.Memo1.Lines.Count);
@@ -495,7 +495,7 @@ begin
   //res := StrToInt(String(RBuffer));
   //Write(ChartFile,ConvertVVIVal);
 //winMain.Memo1.Lines.Add(String(RBuffer));
-RBuffer:='';//Очищаем переменную буфера;
+  RBuffer:='';//Очищаем переменную буфера;
 end;
 
 procedure MyThread.WriteChartFile;//Процедура записи в файл

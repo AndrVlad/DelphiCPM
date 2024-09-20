@@ -39,7 +39,7 @@ implementation
 
 {$R *.dfm}
 
-uses TransmitReceiveCOM;
+uses TransmitReceiveCOM, pr1;
 
 // инициализация выбранного порта из меню Настройки
 procedure TFControls.Button1Click(Sender: TObject);
@@ -52,10 +52,15 @@ end;
 // закрытие(сброс) выбранного порта из меню Настройки
 procedure TFControls.Button2Click(Sender: TObject);
 begin
-  //ShowMessage('Закрытие порта');
+
+  if  MyThr <> nil then //Если поток запущен;
+  MyThr.Terminate; //Останавливаем его;
+  MyThr := nil;
+
   CloseHandle(getPhndl);
   InquiryPort(Self);
   ComboBox2.Enabled := True;
+  COMConnectionState := False;
 end;
 
 // обработка списка доступных портов
