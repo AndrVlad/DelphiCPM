@@ -49,6 +49,7 @@ type
     Button8: TButton;
     Edit3: TEdit;
     Label1: TLabel;
+    ListBox5: TListBox;
     //PLC: TIdTCPClient;
 
     procedure ListBox1Click(Sender: TObject);
@@ -62,6 +63,7 @@ type
     procedure LowerExample;
     procedure PollSAU(NumSAU: integer; command_type: integer);
     procedure LoadDisk;
+    procedure WriteThreshold(tresh_type: integer);
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -74,6 +76,7 @@ type
     procedure Button6Click(Sender: TObject);
     procedure Button7Click(Sender: TObject);
     procedure Button8Click(Sender: TObject);
+    procedure ListBox5Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -105,6 +108,8 @@ var
   PLC: TIdModBusClient;
   RegisterData: array[0..2] of Word;
   ConnectionType: Byte = 1;
+  //COMConnectionState: boolean = false;
+  str: string = '';
 implementation
 
 
@@ -272,10 +277,6 @@ procedure TwinMain.ComboBox1Change(Sender: TObject);
   s:string;
 begin
 
-  MyThr:=MyThread.Create(false); //Создаем поток чтения;
-  MyThr.FreeOnTerminate:=true; //Запускаем поток чтения;
-  MyThr.Priority:=tpNormal; //Устанавливаем приоритет;
-
   ListBox1.Visible:=False;
   ListBox2.Visible:=False;
 
@@ -321,15 +322,18 @@ begin
 
   case item_ind of
   0: FCom31.ShowModal;
-  { открытие чтения по нажатию
+  1: begin
+      if MyThr = nil then //Если поток не запущен;
+      begin
+        if COMConnectionState then
+          begin
+            MyThr:=MyThread.Create(false); //Создаем поток чтения;
+            MyThr.FreeOnTerminate:=true; //Запускаем поток чтения;
+            MyThr.Priority:=tpNormal; //Устанавливаем приоритет;
+          end;
+      end
+    end;
 
-  1: //OutVoltageValue;
-  begin
-    MyThr:=MyThread.Create(false); //Создаем поток чтения;
-    MyThr.FreeOnTerminate:=true; //Запускаем поток чтения;
-    MyThr.Priority:=tpNormal; //Устанавливаем приоритет;
-  end;
-   }
   end;
 
 end;
@@ -363,6 +367,23 @@ begin
     10: PollSAU(3, 1);
   end;
 
+end;
+
+procedure TwinMain.ListBox5Click(Sender: TObject);
+var
+  LI:TStrings;
+  item_ind:integer;
+  s:string;
+begin
+   LI:=ListBox2.Items;
+  item_ind:=ListBox2.ItemIndex;
+
+  case item_ind of
+    0: WriteThreshold(1);
+    1: WriteThreshold(0);
+    2: RepeatTexp;
+    5: OutputTexp;
+  end;
 end;
 
 procedure TwinMain.FilterReset;
@@ -448,6 +469,24 @@ begin
   end;
 end;
 
+procedure WriteThreshold(thresh_type: integer);
+var
+  msg: string;
+begin
+  if (thresh_type = 1) then
+  begin
+    msg:= 'A31C';
+  end
+  else if (thresh_type = 0) then
+  begin
+    msg:= '411C';
+  end;
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+end;
+
 procedure TwinMain.RadioButton1Click(Sender: TObject);
 begin
   ConnectionType := 1;
@@ -476,7 +515,6 @@ procedure MyThread.OutVoltageValue;//Процедура вывода в Memo;
 var
   res: integer;
   i: integer;
-  str: string;
 begin
   i := 0;
   SendMessage(winMain.Memo1.Handle, EM_LINESCROLL, 0,winMain.Memo1.Lines.Count);
@@ -494,7 +532,7 @@ begin
   //res := StrToInt(String(RBuffer));
   //Write(ChartFile,ConvertVVIVal);
 //winMain.Memo1.Lines.Add(String(RBuffer));
-RBuffer:='';//Очищаем переменную буфера;
+  RBuffer:='';//Очищаем переменную буфера;
 end;
 
 procedure MyThread.WriteChartFile;//Процедура записи в файл

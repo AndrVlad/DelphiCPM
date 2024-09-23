@@ -130,6 +130,10 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModbusTransmitReceive.pas"/>
+        <DCCReference Include="LowThreshold.pas">
+            <Form>LowThresholdW</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

@@ -10,8 +10,7 @@ uses
   TransmitReceiveCOM in 'TransmitReceiveCOM.pas',
   TurnOnFilter in 'TurnOnFilter.pas' {Form3},
   WriteSample in 'WriteSample.pas' {Form4},
-  ModbusTransmitReceive in 'ModbusTransmitReceive.pas',
-  LowThreshold in 'LowThreshold.pas' {LowThresholdW};
+  ModbusTransmitReceive in 'ModbusTransmitReceive.pas';
 
 {$R *.res}
 
@@ -21,6 +20,5 @@ begin
   Application.CreateForm(TwinMain, winMain);
   Application.CreateForm(TForm3, Form3);
   Application.CreateForm(TForm4, Form4);
-  Application.CreateForm(TLowThresholdW, LowThresholdW);
   Application.Run;
 end.
