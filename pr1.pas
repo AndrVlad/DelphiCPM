@@ -172,7 +172,7 @@ begin
      If Btr.Size<>0 then //Если байты присутствуют,
      begin
      //ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);//Читаем порт;
-     ReadFile(getPhndl, RBuffer, 10, Temp, @OverRead);
+     ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);
      //Synchronize(OutVoltageValue);//Делаем синхроннй вызов загрузки буфера в Memo;
      OutVoltageValue;
      //WriteChartFile;
