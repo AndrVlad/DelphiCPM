@@ -172,7 +172,7 @@ begin
      If Btr.Size<>0 then //Если байты присутствуют,
      begin
      //ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);//Читаем порт;
-     ReadFile(getPhndl, RBuffer, 1, Temp, @OverRead);
+     ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);
      //Synchronize(OutVoltageValue);//Делаем синхроннй вызов загрузки буфера в Memo;
      OutVoltageValue;
      //WriteChartFile;
@@ -565,7 +565,8 @@ begin
   //res := StrToInt(String(RBuffer));
   //Write(ChartFile,ConvertVVIVal);
 winMain.Memo1.Lines.Add(String(RBuffer));
-  RBuffer:='';//Очищаем переменную буфера;
+//winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+String(RBuffer);
+RBuffer:='';//Очищаем переменную буфера;
 end;
 
 procedure MyThread.WriteChartFile;//Процедура записи в файл

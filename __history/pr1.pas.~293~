@@ -172,9 +172,9 @@ begin
      If Btr.Size<>0 then //Если байты присутствуют,
      begin
      //ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);//Читаем порт;
-     ReadFile(getPhndl, RBuffer, 1, Temp, @OverRead);
-     //Synchronize(OutVoltageValue);//Делаем синхроннй вызов загрузки буфера в Memo;
-     OutVoltageValue;
+     ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);
+     Synchronize(OutVoltageValue);//Делаем синхроннй вызов загрузки буфера в Memo;
+     //OutVoltageValue;
      //WriteChartFile;
      end;
      end;
@@ -281,6 +281,7 @@ begin
 
   ListBox1.Visible:=False;
   ListBox2.Visible:=False;
+  ListBox5.Visible:=False;
 
   CI:=ComboBox1.Items;
   item_ind:=ComboBox1.ItemIndex;
@@ -288,6 +289,7 @@ begin
   case item_ind of
     0: ListBox1.Visible:=True;
     1: ListBox2.Visible:=True;
+    2: ListBox5.Visible:=True;
   end;
 end;
 
@@ -377,14 +379,14 @@ var
   item_ind:integer;
   s:string;
 begin
-   LI:=ListBox2.Items;
-  item_ind:=ListBox2.ItemIndex;
+  LI:=ListBox5.Items;
+  item_ind:=ListBox5.ItemIndex;
 
   case item_ind of
     0: WriteThreshold(1);
     1: WriteThreshold(0);
     2: RepeatTexp;
-    5: OutputTexp;
+    4: OutputTexp;
   end;
 end;
 
@@ -471,7 +473,7 @@ begin
   end;
 end;
 
-procedure WriteThreshold(thresh_type: integer);
+procedure TwinMain.WriteThreshold(thresh_type: integer);
 var
   msg: string;
 begin
@@ -507,7 +509,7 @@ procedure TwinMain.OutputTexp;
 var
   msg: string;
 begin
-  msg:= '000A';
+  msg:= '020F';
 
   case ConnectionType of
   1: WriteCOM(msg,0);
@@ -549,6 +551,7 @@ begin
   i := 0;
   SendMessage(winMain.Memo1.Handle, EM_LINESCROLL, 0,winMain.Memo1.Lines.Count);
 
+  {
   if (RBuffer[0] = ' ') then
     begin
      winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+str;
@@ -558,11 +561,12 @@ begin
     begin
       str := str + RBuffer[0];
     end;
-
+   }
   //res := StrToInt(String(RBuffer));
   //Write(ChartFile,ConvertVVIVal);
 //winMain.Memo1.Lines.Add(String(RBuffer));
-  RBuffer:='';//Очищаем переменную буфера;
+winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+String(RBuffer);
+RBuffer:='';//Очищаем переменную буфера;
 end;
 
 procedure MyThread.WriteChartFile;//Процедура записи в файл
