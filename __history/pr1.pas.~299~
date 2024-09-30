@@ -64,6 +64,7 @@ type
     procedure PollSAU(NumSAU: integer; command_type: integer);
     procedure LoadDisk;
     procedure WriteThreshold(thresh_type: integer);
+    procedure SetTexp;
     procedure OutputTexp;
     procedure RepeatTexp;
     procedure FormCreate(Sender: TObject);
@@ -172,7 +173,7 @@ begin
      If Btr.Size<>0 then //Если байты присутствуют,
      begin
      //ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);//Читаем порт;
-     ReadFile(getPhndl, RBuffer, 200, Temp, @OverRead);
+     ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);
      //Synchronize(OutVoltageValue);//Делаем синхроннй вызов загрузки буфера в Memo;
      OutVoltageValue;
      //WriteChartFile;
@@ -386,6 +387,7 @@ begin
     0: WriteThreshold(1);
     1: WriteThreshold(0);
     2: RepeatTexp;
+    3: SetTexp;
     4: OutputTexp;
   end;
 end;
@@ -505,6 +507,20 @@ begin
   //ShowMessage('Сообщение отправлено');
 end;
 
+procedure TwinMain.SetTexp;
+var
+  msg: string;
+begin
+  msg:= '0109';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+  //ShowMessage('Сообщение отправлено');
+end;
+
 procedure TwinMain.OutputTexp;
 var
   msg: string;
@@ -564,7 +580,8 @@ begin
    }
   //res := StrToInt(String(RBuffer));
   //Write(ChartFile,ConvertVVIVal);
-winMain.Memo1.Lines.Add(String(RBuffer));
+//winMain.Memo1.Lines.Add(String(RBuffer));
+  winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+String(RBuffer);
   RBuffer:='';//Очищаем переменную буфера;
 end;
 

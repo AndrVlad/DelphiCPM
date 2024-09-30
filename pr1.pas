@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.Menus,
   System.UITypes,Vcl.DBCtrls,IniFiles, IdBaseComponent, IdComponent, IdTCPConnection,
-  IdTCPClient, IdModbusClient;
+  IdTCPClient, IdModbusClient, SetTexp;
 
 type
   TwinMain = class(TForm)
@@ -387,7 +387,11 @@ begin
     0: WriteThreshold(1);
     1: WriteThreshold(0);
     2: RepeatTexp;
-    3: SetTexp;
+    3: begin
+        WriteTexp:=TWriteTexp.Create(Self);
+        WriteTexp.ShowModal;
+        end;
+
     4: OutputTexp;
   end;
 end;
@@ -564,8 +568,12 @@ var
   res: integer;
   i: integer;
 begin
-  i := 0;
-  SendMessage(winMain.Memo1.Handle, EM_LINESCROLL, 0,winMain.Memo1.Lines.Count);
+
+SendMessage(winMain.Memo1.Handle, EM_LINESCROLL, 0,winMain.Memo1.Lines.Count);
+winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+String(RBuffer);//Загружаем в Memo содержимое буфера;
+//winMain.Memo1.Lines.Add(String(RBuffer));
+RBuffer:='';
+
 
   {
   if (RBuffer[0] = ' ') then
@@ -581,8 +589,7 @@ begin
   //res := StrToInt(String(RBuffer));
   //Write(ChartFile,ConvertVVIVal);
 //winMain.Memo1.Lines.Add(String(RBuffer));
-  winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+String(RBuffer);
-  RBuffer:='';//Очищаем переменную буфера;
+
 end;
 
 procedure MyThread.WriteChartFile;//Процедура записи в файл

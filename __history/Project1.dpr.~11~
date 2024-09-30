@@ -11,8 +11,7 @@ uses
   TurnOnFilter in 'TurnOnFilter.pas' {Form3},
   WriteSample in 'WriteSample.pas' {Form4},
   ModbusTransmitReceive in 'ModbusTransmitReceive.pas',
-  LowThreshold in 'LowThreshold.pas' {LowThresholdW},
-  SetTexp in 'SetTexp.pas' {WriteTexp};
+  LowThreshold in 'LowThreshold.pas' {LowThresholdW};
 
 {$R *.res}
 
@@ -23,6 +22,5 @@ begin
   Application.CreateForm(TForm3, Form3);
   Application.CreateForm(TForm4, Form4);
   Application.CreateForm(TLowThresholdW, LowThresholdW);
-  Application.CreateForm(TWriteTexp, WriteTexp);
   Application.Run;
 end.

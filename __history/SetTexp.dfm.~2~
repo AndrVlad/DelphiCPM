@@ -1,0 +1,14 @@
+object WriteTexp: TWriteTexp
+  Left = 0
+  Top = 0
+  Caption = #1047#1072#1087#1080#1089#1100' '#1074#1088#1077#1084#1077#1085#1080' '#1101#1089#1087#1086#1079#1080#1094#1080#1080
+  ClientHeight = 193
+  ClientWidth = 311
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
+  Font.Style = []
+  TextHeight = 15
+end

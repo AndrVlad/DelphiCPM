@@ -49,7 +49,9 @@ object FCom31: TFCom31
     Width = 102
     Height = 23
     Style = csDropDownList
+    ItemIndex = 0
     TabOrder = 2
+    Text = '1'
     OnChange = ComboBox1Change
     Items.Strings = (
       '1'
