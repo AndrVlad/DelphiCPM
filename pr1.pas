@@ -529,7 +529,7 @@ procedure TwinMain.OutputTexp;
 var
   msg: string;
 begin
-  msg:= '020F';
+  msg:= '021B';
 
   case ConnectionType of
   1: WriteCOM(msg,0);
