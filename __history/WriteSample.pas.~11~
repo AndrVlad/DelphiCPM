@@ -44,22 +44,13 @@ procedure TForm4.Button1Click(Sender: TObject);
 var
   msg: string;
 begin
-
   if (SampleNum = -1) then
   begin
     ShowMessage('Ошибка! Ни один из образцов не выбран!');
     Exit;
   end;
 
-  // если был выбран 16-й образец, то ему необходимо сопоставить код 0
-  if (SampleNum = 15) then
-  begin
-    msg:= '0'+IntToHex(0,1)+'05';
-  end
-  else
-  begin
-    msg:= '0'+IntToHex(SampleNum + 1,1)+'05';
-  end;
+  msg:= '0'+IntToHex(SampleNum,1)+'05';
 
   case ConnectionType of
   1: WriteCOM(msg,0);
