@@ -157,30 +157,30 @@ end;
 
 procedure MyThread.execute;
 begin
- OverRead.Hevent:=CreateEvent(Nil, True, True, Nil);//Сигнальный объект событие для ассинхронных операций;
- While not MyThr.Terminated do//Пока поток не остановлен;
- begin
-  WaitCommEvent(getPhndl, Mask, @OverRead);//Ожидаем события (поступление байта);
-  Signal:=WaitForSingleObject(OverRead.hEvent, Infinite);//Приостанавливаем поток до тех пор пока байт не поступит;
-  if (Signal=Wait_Object_0) then //Если байт поступил;
+  OverRead.Hevent:=CreateEvent(Nil, True, True, Nil);//Сигнальный объект событие для ассинхронных операций;
+  While not MyThr.Terminated do//Пока поток не остановлен;
   begin
-   if GetOverlappedResult(getPhndl, OverRead, Temp, true) then //Проверяем успешность завершения операции;
-   begin
-    if ((Mask and EV_RXchar)<>0) then
+    WaitCommEvent(getPhndl, Mask, @OverRead);//Ожидаем события (поступление байта);
+    Signal:=WaitForSingleObject(OverRead.hEvent, Infinite);//Приостанавливаем поток до тех пор пока байт не поступит;
+    if (Signal=Wait_Object_0) then //Если байт поступил;
     begin
-     ClearCommError(getPhndl, Temp, @ComStat); //Заполняем структуру COMSTAT;
-     Btr:=ComStat.cbInQue; //Получаем из структуры количество байт;
-     If Btr.Size<>0 then //Если байты присутствуют,
-     begin
-     //ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);//Читаем порт;
-     ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);
-     //Synchronize(OutVoltageValue);//Делаем синхроннй вызов загрузки буфера в Memo;
-     OutVoltageValue;
-     //WriteChartFile;
-     end;
-     end;
-    end
-   end;
+      if GetOverlappedResult(getPhndl, OverRead, Temp, true) then //Проверяем успешность завершения операции;
+      begin
+        if ((Mask and EV_RXchar)<>0) then
+        begin
+          ClearCommError(getPhndl, Temp, @ComStat); //Заполняем структуру COMSTAT;
+          Btr:=ComStat.cbInQue; //Получаем из структуры количество байт;
+
+          If Btr.Size<>0 then //Если байты присутствуют,
+          begin
+            ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);
+            //Synchronize(OutVoltageValue);//Делаем синхроннй вызов загрузки буфера в Memo;
+            OutVoltageValue;
+            //WriteChartFile;
+          end;
+        end;
+      end
+    end;
   end;
  CloseHandle(OverRead.Hevent);
  end;
@@ -571,6 +571,9 @@ begin
 
 SendMessage(winMain.Memo1.Handle, EM_LINESCROLL, 0,winMain.Memo1.Lines.Count);
 winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+String(RBuffer);//Загружаем в Memo содержимое буфера;
+//winMain.Memo1.Lines.Text := String(Btr);
+//  i:= Random(100);
+//winMain.Memo1.Lines.Text := IntToStr(i);
 //winMain.Memo1.Lines.Add(String(RBuffer));
 RBuffer:='';
 
