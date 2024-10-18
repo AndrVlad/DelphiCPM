@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.Menus,
   System.UITypes,Vcl.DBCtrls,IniFiles, IdBaseComponent, IdComponent, IdTCPConnection,
-  IdTCPClient, IdModbusClient;
+  IdTCPClient, IdModbusClient, SetTexp;
 
 type
   TwinMain = class(TForm)
@@ -64,6 +64,7 @@ type
     procedure PollSAU(NumSAU: integer; command_type: integer);
     procedure LoadDisk;
     procedure WriteThreshold(thresh_type: integer);
+    procedure SetTexp;
     procedure OutputTexp;
     procedure RepeatTexp;
     procedure FormCreate(Sender: TObject);
@@ -156,30 +157,30 @@ end;
 
 procedure MyThread.execute;
 begin
- OverRead.Hevent:=CreateEvent(Nil, True, True, Nil);//Сигнальный объект событие для ассинхронных операций;
- While not MyThr.Terminated do//Пока поток не остановлен;
- begin
-  WaitCommEvent(getPhndl, Mask, @OverRead);//Ожидаем события (поступление байта);
-  Signal:=WaitForSingleObject(OverRead.hEvent, Infinite);//Приостанавливаем поток до тех пор пока байт не поступит;
-  if (Signal=Wait_Object_0) then //Если байт поступил;
+  OverRead.Hevent:=CreateEvent(Nil, True, True, Nil);//Сигнальный объект событие для ассинхронных операций;
+  While not MyThr.Terminated do//Пока поток не остановлен;
   begin
-   if GetOverlappedResult(getPhndl, OverRead, Temp, true) then //Проверяем успешность завершения операции;
-   begin
-    if ((Mask and EV_RXchar)<>0) then
+    WaitCommEvent(getPhndl, Mask, @OverRead);//Ожидаем события (поступление байта);
+    Signal:=WaitForSingleObject(OverRead.hEvent, Infinite);//Приостанавливаем поток до тех пор пока байт не поступит;
+    if (Signal=Wait_Object_0) then //Если байт поступил;
     begin
-     ClearCommError(getPhndl, Temp, @ComStat); //Заполняем структуру COMSTAT;
-     Btr:=ComStat.cbInQue; //Получаем из структуры количество байт;
-     If Btr.Size<>0 then //Если байты присутствуют,
-     begin
-     //ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);//Читаем порт;
-     ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);
-     //Synchronize(OutVoltageValue);//Делаем синхроннй вызов загрузки буфера в Memo;
-     OutVoltageValue;
-     //WriteChartFile;
-     end;
-     end;
-    end
-   end;
+      if GetOverlappedResult(getPhndl, OverRead, Temp, true) then //Проверяем успешность завершения операции;
+      begin
+        if ((Mask and EV_RXchar)<>0) then
+        begin
+          ClearCommError(getPhndl, Temp, @ComStat); //Заполняем структуру COMSTAT;
+          Btr:=ComStat.cbInQue; //Получаем из структуры количество байт;
+          winMain.Memo1.Lines.Text := String(Btr);
+          If Btr.Size<>0 then //Если байты присутствуют,
+          begin
+            ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);
+            //Synchronize(OutVoltageValue);//Делаем синхроннй вызов загрузки буфера в Memo;
+            OutVoltageValue;
+            //WriteChartFile;
+          end;
+        end;
+      end
+    end;
   end;
  CloseHandle(OverRead.Hevent);
  end;
@@ -386,6 +387,11 @@ begin
     0: WriteThreshold(1);
     1: WriteThreshold(0);
     2: RepeatTexp;
+    3: begin
+        WriteTexp:=TWriteTexp.Create(Self);
+        WriteTexp.ShowModal;
+        end;
+
     4: OutputTexp;
   end;
 end;
@@ -505,11 +511,25 @@ begin
   //ShowMessage('Сообщение отправлено');
 end;
 
+procedure TwinMain.SetTexp;
+var
+  msg: string;
+begin
+  msg:= '0109';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+  //ShowMessage('Сообщение отправлено');
+end;
+
 procedure TwinMain.OutputTexp;
 var
   msg: string;
 begin
-  msg:= '020F';
+  msg:= '021B';
 
   case ConnectionType of
   1: WriteCOM(msg,0);
@@ -548,8 +568,14 @@ var
   res: integer;
   i: integer;
 begin
-  i := 0;
-  SendMessage(winMain.Memo1.Handle, EM_LINESCROLL, 0,winMain.Memo1.Lines.Count);
+
+SendMessage(winMain.Memo1.Handle, EM_LINESCROLL, 0,winMain.Memo1.Lines.Count);
+winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+String(RBuffer);//Загружаем в Memo содержимое буфера;
+//  i:= Random(100);
+//winMain.Memo1.Lines.Text := IntToStr(i);
+//winMain.Memo1.Lines.Add(String(RBuffer));
+RBuffer:='';
+
 
   {
   if (RBuffer[0] = ' ') then
@@ -565,8 +591,7 @@ begin
   //res := StrToInt(String(RBuffer));
   //Write(ChartFile,ConvertVVIVal);
 //winMain.Memo1.Lines.Add(String(RBuffer));
-winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+String(RBuffer);
-  RBuffer:='';//Очищаем переменную буфера;
+
 end;
 
 procedure MyThread.WriteChartFile;//Процедура записи в файл
