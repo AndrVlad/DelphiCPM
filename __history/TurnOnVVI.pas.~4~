@@ -1,0 +1,65 @@
+unit TurnOnVVI;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
+
+type
+  TForm5 = class(TForm)
+    ComboBox1: TComboBox;
+    Label1: TLabel;
+    Button1: TButton;
+    procedure ComboBox1Change(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form5: TForm5;
+  VVINum: Byte;
+
+implementation
+
+uses TransmitReceiveCOM,pr1,ModbusTransmitReceive;
+
+// обработка выбора номера ВВИ из списка
+procedure TForm5.ComboBox1Change(Sender: TObject);
+begin
+  VVINum := ComboBox1.ItemIndex;
+end;
+
+// обработка кнопки Отправить
+procedure TForm3.Button1Click(Sender: TObject);
+var
+  msg: string;
+begin
+  if (VVINum = - 1) then
+  begin
+    ShowMessage('Ошибка! Ни один из источников не выбран!');
+    Exit;
+  end;
+
+  msg:= '00'+IntToHex(VVINum,1)+'0';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+  VVINum := -1;
+end;
+
+// обработка кнопки Отмена
+procedure TForm3.Button2Click(Sender: TObject);
+begin
+  Form3.Close;
+end;
+end.
+
+{$R *.dfm}
+
+end.

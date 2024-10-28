@@ -135,7 +135,7 @@ begin
   if not SetCommMask(Phndl, EV_RXchar) then
   ShowMessage('Маска не задалась');
 
-  PurgeComm(Phndl, PURGE_RXCLEAR or PURGE_TXCLEAR);
+  PurgeComm(Phndl, PURGE_RXCLEAR or PURGE_TXCLEAR or Purge_TXabort or Purge_RXabort);
 
 end;
 

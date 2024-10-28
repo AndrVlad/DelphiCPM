@@ -106,11 +106,11 @@ begin
   GENERIC_READ or GENERIC_WRITE, 0, nil,
   OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
   }
-
+  {
   Phndl := CreateFile(PChar(PortName),
   Generic_Read+Generic_Write, 0,nil,
   Open_Existing,File_Flag_Overlapped,0);
-
+      }
   if Phndl = INVALID_HANDLE_VALUE then
     ShowMessage('Порт не удалось открыть');
   {
@@ -135,7 +135,7 @@ begin
   if not SetCommMask(Phndl, EV_RXchar) then
   ShowMessage('Маска не задалась');
 
-  PurgeComm(Phndl, PURGE_RXCLEAR or PURGE_TXCLEAR);
+  PurgeComm(Phndl, Purge_TXabort or Purge_RXabort or Purge_TXclear or Purge_RXclear);
 
 end;
 
