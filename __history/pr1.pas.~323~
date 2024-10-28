@@ -117,8 +117,7 @@ implementation
 
 
 {$R *.dfm}
-uses Unit1,Unit2,TransmitReceiveCOM,TurnOnFilter,WriteSample,ModbusTransmitReceive,
-TurnOnVVI;
+uses Unit1,Unit2,TransmitReceiveCOM,TurnOnFilter,WriteSample,ModbusTransmitReceive;
 
 // Старт программы
 
@@ -325,7 +324,6 @@ begin
   item_ind:=ListBox1.ItemIndex;
   s:=LI[item_ind];
   FCom31:=TFCom31.Create(Self);
-  Form5 := TForm5.Create(Self);
 
   case item_ind of
   0: FCom31.ShowModal;
@@ -340,7 +338,7 @@ begin
           end;
       end
     end;
-  2: Form5.ShowModal;
+
   end;
 
 end;

@@ -117,8 +117,7 @@ implementation
 
 
 {$R *.dfm}
-uses Unit1,Unit2,TransmitReceiveCOM,TurnOnFilter,WriteSample,ModbusTransmitReceive,
-TurnOnVVI;
+uses Unit1,Unit2,TransmitReceiveCOM,TurnOnFilter,WriteSample,ModbusTransmitReceive;
 
 // Старт программы
 
@@ -325,7 +324,6 @@ begin
   item_ind:=ListBox1.ItemIndex;
   s:=LI[item_ind];
   FCom31:=TFCom31.Create(Self);
-  Form5 := TForm5.Create(Self);
 
   case item_ind of
   0: FCom31.ShowModal;
@@ -340,7 +338,7 @@ begin
           end;
       end
     end;
-  2: Form5.ShowModal;
+
   end;
 
 end;
@@ -571,15 +569,22 @@ var
   i: integer;
 begin
 
-SendMessage(winMain.Memo1.Handle, EM_LINESCROLL, 0,winMain.Memo1.Lines.Count);
-winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+String(RBuffer);//Загружаем в Memo содержимое буфера;
+TThread.Synchronize(nil,
+    procedure
+    begin
+      SendMessage(winMain.Memo1.Handle, EM_LINESCROLL, 0, winMain.Memo1.Lines.Count);
+      winMain.Memo1.Lines.Add(String(RBuffer));
+      RBuffer := ''; // Обнуляем буфер после добавления, если это необходимо
+    end
+  );
 
-  //i:= Random(100);
+//SendMessage(winMain.Memo1.Handle, EM_LINESCROLL, 0,winMain.Memo1.Lines.Count);
+//winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+String(RBuffer);//Загружаем в Memo содержимое буфера;
+//winMain.Memo1.Lines.Text := String(Btr);
+//  i:= Random(100);
 //winMain.Memo1.Lines.Text := IntToStr(i);
-//winMain.Memo1.Lines.Text := IntToStr(SizeOf(String(RBuffer)));
 //winMain.Memo1.Lines.Add(String(RBuffer));
-RBuffer := '';
-
+RBuffer:='';
 end;
 
 procedure MyThread.WriteChartFile;//Процедура записи в файл
