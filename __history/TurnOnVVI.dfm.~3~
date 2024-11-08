@@ -2,7 +2,7 @@ object Form5: TForm5
   Left = 0
   Top = 0
   Caption = #1048#1089#1090#1086#1095#1085#1080#1082' '#1042#1042#1048
-  ClientHeight = 111
+  ClientHeight = 79
   ClientWidth = 321
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -39,41 +39,21 @@ object Form5: TForm5
       '8')
   end
   object Button1: TButton
-    Left = 238
-    Top = 78
+    Left = 152
+    Top = 31
     Width = 75
     Height = 25
-    Caption = #1054#1090#1087#1088#1072#1074#1080#1090#1100
+    Caption = #1042#1082#1083#1102#1095#1080#1090#1100
     TabOrder = 1
     OnClick = Button1Click
   end
   object Button2: TButton
-    Left = 140
-    Top = 78
+    Left = 238
+    Top = 31
     Width = 75
     Height = 25
     Caption = #1054#1090#1084#1077#1085#1072
     TabOrder = 2
     OnClick = Button2Click
-  end
-  object RadioButton1: TRadioButton
-    Left = 140
-    Top = 35
-    Width = 113
-    Height = 17
-    Caption = #1042#1082#1083#1102#1095#1080#1090#1100
-    Enabled = False
-    TabOrder = 3
-    OnClick = RadioButton1Click
-  end
-  object RadioButton2: TRadioButton
-    Left = 224
-    Top = 35
-    Width = 113
-    Height = 17
-    Caption = #1042#1099#1082#1083#1102#1095#1080#1090#1100
-    Enabled = False
-    TabOrder = 4
-    OnClick = RadioButton2Click
   end
 end

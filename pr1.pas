@@ -67,6 +67,7 @@ type
     procedure SetTexp;
     procedure OutputTexp;
     procedure RepeatTexp;
+    procedure ReadDACPorogOkno;
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -295,8 +296,6 @@ begin
   end;
 end;
 
-
-
 procedure TwinMain.configClick(Sender: TObject);
 begin
   //FControls:= TFControls.Create(Self);
@@ -395,7 +394,22 @@ begin
         end;
 
     4: OutputTexp;
+    5: ReadDACPorogOkno;
   end;
+end;
+
+procedure TwinMain.ReadDACPorogOkno;
+var
+  msg: string;
+begin
+  msg:= '0102';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+  //ShowMessage('Сообщение отправлено');
 end;
 
 procedure TwinMain.FilterReset;

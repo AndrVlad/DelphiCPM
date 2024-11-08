@@ -23,18 +23,13 @@ type
 
 var
   Form5: TForm5;
-  VVINum: Byte;
+  VVINum: Shortint;
 
 implementation
 
 uses TransmitReceiveCOM,pr1,ModbusTransmitReceive;
 
 // обработка выбора номера ВВИ из списка
-procedure TForm5.Button1Click(Sender: TObject);
-begin
-
-end;
-
 procedure TForm5.ComboBox1Change(Sender: TObject);
 begin
   VVINum := ComboBox1.ItemIndex;
@@ -45,13 +40,13 @@ procedure TForm5.Button1Click(Sender: TObject);
 var
   msg: string;
 begin
-  if (VVINum = - 1) then
+  if (VVINum = -1) then
   begin
     ShowMessage('Ошибка! Ни один из источников не выбран!');
     Exit;
   end;
 
-  msg:= '00'+IntToHex(VVINum,1)+'0';
+  msg:= '00'+IntToHex(VVINum+1,1)+'8';
 
   case ConnectionType of
   1: WriteCOM(msg,0);
@@ -59,7 +54,9 @@ begin
   end;
 
   VVINum := -1;
+  Form5.Close;
 end;
+
 // обработка кнопки Отмена
 procedure TForm5.Button2Click(Sender: TObject);
 begin
