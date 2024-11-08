@@ -12,9 +12,13 @@ type
     Label1: TLabel;
     Button1: TButton;
     Button2: TButton;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
     procedure ComboBox1Change(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
+    procedure RadioButton1Click(Sender: TObject);
+    procedure RadioButton2Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -24,6 +28,7 @@ type
 var
   Form5: TForm5;
   VVINum: Shortint;
+  switch_on: Boolean = False;
 
 implementation
 
@@ -33,6 +38,19 @@ uses TransmitReceiveCOM,pr1,ModbusTransmitReceive;
 procedure TForm5.ComboBox1Change(Sender: TObject);
 begin
   VVINum := ComboBox1.ItemIndex;
+  RadioButton1.Enabled := True;
+  RadioButton2.Enabled := True;
+end;
+
+// обработка кнопки включение ВВИ
+procedure TForm5.RadioButton1Click(Sender: TObject);
+begin
+  switch_on := True;
+end;
+
+procedure TForm5.RadioButton2Click(Sender: TObject);
+begin
+  switch_on := False;
 end;
 
 // обработка кнопки Отправить
@@ -46,7 +64,10 @@ begin
     Exit;
   end;
 
-  msg:= '00'+IntToHex(VVINum+1,1)+'8';
+  if (switch_on) then
+    msg:='00'+IntToHex(VVINum+1,1)+'8'
+  else
+    msg:='01'+IntToHex(VVINum+1,1)+'8';
 
   case ConnectionType of
   1: WriteCOM(msg,0);

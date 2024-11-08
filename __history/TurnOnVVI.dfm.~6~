@@ -62,7 +62,6 @@ object Form5: TForm5
     Width = 113
     Height = 17
     Caption = #1042#1082#1083#1102#1095#1080#1090#1100
-    Enabled = False
     TabOrder = 3
     OnClick = RadioButton1Click
   end
@@ -72,8 +71,6 @@ object Form5: TForm5
     Width = 113
     Height = 17
     Caption = #1042#1099#1082#1083#1102#1095#1080#1090#1100
-    Enabled = False
     TabOrder = 4
-    OnClick = RadioButton2Click
   end
 end
