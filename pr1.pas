@@ -63,11 +63,13 @@ type
     procedure LowerExample;
     procedure PollSAU(NumSAU: integer; command_type: integer);
     procedure LoadDisk;
+    procedure LoadDiskReverse;
     procedure WriteThreshold(thresh_type: integer);
     procedure SetTexp;
     procedure OutputTexp;
     procedure RepeatTexp;
     procedure ReadDACPorogOkno;
+    procedure ReadVVI;
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -313,6 +315,8 @@ end;
   ListBox(1-4) - обработчики выбора команд из соответствующей выбранной группы
 }
 
+//    Команды управления ВВИ
+
 procedure TwinMain.ListBox1Click(Sender: TObject);
 var
   LI:TStrings;
@@ -329,6 +333,7 @@ begin
   case item_ind of
   0: FCom31.ShowModal;
   1: begin
+       ReadVVI();
       if MyThr = nil then //Если поток не запущен;
       begin
         if COMConnectionState then
@@ -344,6 +349,19 @@ begin
 
 end;
 
+procedure TwinMain.ReadVVI;
+var
+  msg: string;
+begin
+  msg:= '021F';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+end;
+
+// Команды управления САУ
 procedure TwinMain.ListBox2Click(Sender: TObject);
 var
   LI:TStrings;
@@ -371,6 +389,7 @@ begin
     8: PollSAU(2, 1);
     9: PollSAU(2, 2);
     10: PollSAU(3, 1);
+    11: LoadDiskReverse;
   end;
 
 end;
@@ -408,8 +427,6 @@ begin
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
-
-  //ShowMessage('Сообщение отправлено');
 end;
 
 procedure TwinMain.FilterReset;
@@ -488,6 +505,18 @@ var
   msg: string;
 begin
   msg:= '00F1';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+end;
+
+procedure TwinMain.LoadDiskReverse;
+var
+  msg: string;
+begin
+  msg:= '00F2';
 
   case ConnectionType of
   1: WriteCOM(msg,0);
