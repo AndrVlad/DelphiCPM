@@ -3,13 +3,13 @@
 	<Transactions>
     <Transaction>1899.12.30 00:00:00.000.716,C:\ava\Git\DelphiCPM\Unit5.dfm=C:\ava\Git\DelphiCPM\SetTexp.dfm</Transaction>
     <Transaction>1899.12.30 00:00:00.000.807,=D:\Учеба\Практика\DelphiCPM\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.500,=D:\Delphi Projects\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.462,C:\Users\vlado\Documents\GitHub\TestCPM\DelphiCPM\Unit5.pas=C:\Users\vlado\Documents\GitHub\TestCPM\DelphiCPM\TurnOnVVI.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.387,=C:\Users\vlado\Documents\GitHub\TestCPM\DelphiCPM\Unit5.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.716,C:\ava\Git\DelphiCPM\Unit5.pas=C:\ava\Git\DelphiCPM\SetTexp.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.833,C:\ava\Git\DelphiCPM\LowThreshold.dfm=C:\ava\Git\DelphiCPM\Unit5.dfm</Transaction>
     <Transaction>1899.12.30 00:00:00.000.182,D:\Учеба\Практика\DelphiCPM\Unit3.pas=D:\Учеба\Практика\DelphiCPM\TransmitReceiveCOM.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.607,=D:\Учеба\Практика\DelphiCPM\Unit3.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.462,C:\Users\vlado\Documents\GitHub\TestCPM\DelphiCPM\Unit5.pas=C:\Users\vlado\Documents\GitHub\TestCPM\DelphiCPM\TurnOnVVI.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.500,=D:\Delphi Projects\Unit2.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.192,D:\Delphi Projects\Unit1.pas=D:\Delphi Projects\pr1.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.041,D:\Delphi Projects\Unit1.pas=D:\Delphi Projects\devStat.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.987,D:\Delphi Projects\Unit1.pas=D:\Delphi Projects\commandTest.pas</Transaction>
@@ -18,7 +18,7 @@
     <Transaction>1899.12.30 00:00:00.000.867,=D:\Delphi Projects\Unit1.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.247,=D:\Delphi Projects\Unit1.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.738,=D:\Delphi Projects\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.590,=C:\ava\Git\DelphiCPM\Unit5.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.724,=C:\ava\Git\DelphiCPM\Unit5.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.722,=D:\Учеба\Практика\DelphiCPM\Unit2.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.041,D:\Delphi Projects\Unit1.dfm=D:\Delphi Projects\devStat.dfm</Transaction>
     <Transaction>1899.12.30 00:00:00.000.987,D:\Delphi Projects\Unit1.dfm=D:\Delphi Projects\commandTest.dfm</Transaction>
@@ -31,7 +31,7 @@
     <Transaction>1899.12.30 00:00:00.000.016,=C:\ava\Git\DelphiCPM\Unit4.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.037,C:\ava\Git\DelphiCPM\Unit4.pas=C:\ava\Git\DelphiCPM\WriteSample.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.833,C:\ava\Git\DelphiCPM\LowThreshold.pas=C:\ava\Git\DelphiCPM\Unit5.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.724,=C:\ava\Git\DelphiCPM\Unit5.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.590,=C:\ava\Git\DelphiCPM\Unit5.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.431,C:\ava\Git\DelphiCPM\Unit3.pas=C:\ava\Git\DelphiCPM\WExample.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.415,=C:\ava\Git\DelphiCPM\Unit3.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.004,=C:\ava\Git\DelphiCPM\Unit3.pas</Transaction>
