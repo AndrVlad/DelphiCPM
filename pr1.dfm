@@ -1,6 +1,6 @@
 object winMain: TwinMain
-  Left = 0
-  Top = 0
+  Left = 374
+  Top = 138
   Caption = 'TestCPM'
   ClientHeight = 573
   ClientWidth = 904
@@ -11,6 +11,7 @@ object winMain: TwinMain
   Font.Name = 'Segoe UI'
   Font.Style = []
   Menu = MainMenu
+  Position = poDesigned
   OnClose = FormClose
   OnCreate = FormCreate
   TextHeight = 15

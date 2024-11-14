@@ -46,7 +46,7 @@ var
   temp: Integer;
 begin
 
-  if (Val = -1) or (ChannelNum = -1) then
+  if (Val = 0) or (ChannelNum = 0) then
   begin
     ShowMessage('Ошибка! Ничего не задано');
     Exit;

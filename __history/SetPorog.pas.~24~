@@ -26,12 +26,12 @@ type
 
 var
   PorogSet: TPorogSet;
-  ChannelNum: Integer;
-  Val: Integer;
+  ChannelNum: Byte;
+  Val: Byte;
 
 implementation
 
-uses TransmitReceiveCOM,pr1;
+uses TransmitReceiveCOM,pr1,ModbusTransmitReceive;
 
 {$R *.dfm}
 
@@ -43,20 +43,33 @@ end;
 procedure TPorogSet.Button2Click(Sender: TObject);
 var
   msg: string;
+  temp: Integer;
 begin
+
+  if (Val = 0) or (ChannelNum = -1) then
+  begin
+    ShowMessage('Ошибка! Ничего не задано');
+    Exit;
+  end;
+
+  temp := 127 + Val;
 
   if (ChannelNum > 15) then
   begin
-     msg := msg+'1'+IntToHex(Val,2)+IntToHex(ChannelNum-16,1)+'C';
-     WriteCOM(msg,1);
+     msg := msg+IntToHex(temp,1)+IntToHex(ChannelNum-16,1)+'C';
   end
   else
   begin
-     msg := msg+'1'+IntToHex(Val,2)+IntToHex(ChannelNum,1)+'C';
-     WriteCOM(msg,0);
+     msg := msg+IntToHex(temp,1)+IntToHex(ChannelNum,1)+'C';
   end;
   Val := 0;
   ChannelNum := 0;
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
   PorogSet.Close;
 end;
 
@@ -69,10 +82,8 @@ begin
 end;
 
 procedure TPorogSet.SpinEdit1Change(Sender: TObject);
-var
-  Val: Byte;
 begin
-  Val := SpinEdit1.Value;
+  Val := SpinEdit1.Value+1;
 end;
 
 end.
