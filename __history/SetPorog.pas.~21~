@@ -45,13 +45,6 @@ var
   msg: string;
   temp: Integer;
 begin
-
-  if (Val = -1) or (ChannelNum = -1) then
-  begin
-    ShowMessage('Ошибка! Ничего не задано');
-    Exit;
-  end;
-
   temp := 127 + Val;
 
   if (ChannelNum > 15) then

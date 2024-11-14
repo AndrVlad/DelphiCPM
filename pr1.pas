@@ -425,17 +425,14 @@ var
 begin
   if (thresh_type = 1) then
   begin
-    Porog:=TPorogSet.Create(Self);
-    Porog.ShowModal;
+    PorogSet:=TPorogSet.Create(Self);
+    PorogSet.ShowModal;
   end
   else if (thresh_type = 0) then
   begin
     msg:= '411C';
   end;
-  case ConnectionType of
-  1: WriteCOM(msg,0);
-  2: WriteEthernet(msg,0);
-  end;
+
 end;
 
 procedure TwinMain.RepeatTexp;

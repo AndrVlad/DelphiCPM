@@ -60,6 +60,7 @@ object PorogSet: TPorogSet
     Width = 97
     Height = 23
     TabOrder = 3
+    Text = 'ComboBox1'
     OnChange = ComboBox1Change
     Items.Strings = (
       '1'
