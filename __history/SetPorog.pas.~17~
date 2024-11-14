@@ -26,8 +26,8 @@ type
 
 var
   PorogSet: TPorogSet;
-  ChannelNum: Byte;
-  Val: Byte;
+  ChannelNum: Integer;
+  Val: Integer;
 
 implementation
 
@@ -43,24 +43,15 @@ end;
 procedure TPorogSet.Button2Click(Sender: TObject);
 var
   msg: string;
-  temp: Integer;
 begin
-
-  if (Val = -1) or (ChannelNum = -1) then
-  begin
-    ShowMessage('Ошибка! Ничего не задано');
-    Exit;
-  end;
-
-  temp := 127 + Val;
 
   if (ChannelNum > 15) then
   begin
-     msg := msg+IntToHex(temp,1)+IntToHex(ChannelNum-16,1)+'C';
+     msg := msg+'1'+IntToHex(Val,1)+IntToHex(ChannelNum-16,1)+'C';
   end
   else
   begin
-     msg := msg+IntToHex(temp,1)+IntToHex(ChannelNum,1)+'C';
+     msg := msg+'1'+IntToHex(Val,1)+IntToHex(ChannelNum,1)+'C';
   end;
   Val := 0;
   ChannelNum := 0;
@@ -83,7 +74,7 @@ end;
 
 procedure TPorogSet.SpinEdit1Change(Sender: TObject);
 begin
-  Val := SpinEdit1.Value+1;
+  Val := SpinEdit1.Value;
 end;
 
 end.

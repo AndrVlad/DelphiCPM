@@ -16,6 +16,8 @@ type
     ComboBox1: TComboBox;
     procedure SpinEdit1Change(Sender: TObject);
     procedure ComboBox1Change(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -24,12 +26,46 @@ type
 
 var
   PorogSet: TPorogSet;
-  ChannelNum: Byte;
-  Val: Byte;
+  ChannelNum: Integer;
+  Val: Integer;
 
 implementation
 
+uses TransmitReceiveCOM,pr1,ModbusTransmitReceive;
+
 {$R *.dfm}
+
+procedure TPorogSet.Button1Click(Sender: TObject);
+begin
+  PorogSet.Close;
+end;
+
+procedure TPorogSet.Button2Click(Sender: TObject);
+var
+  msg: string;
+  temp: Integer;
+begin
+temp := 127 + Val;
+
+  if (ChannelNum > 15) then
+  begin
+     msg := msg+IntToHex(temp,1)+IntToHex(ChannelNum-16,1)+'C';
+  end
+  else
+  begin
+     temp := 127 + Val;
+     msg := msg+IntToHex(temp,1)+IntToHex(ChannelNum,1)+'C';
+  end;
+  Val := 0;
+  ChannelNum := 0;
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+  PorogSet.Close;
+end;
 
 procedure TPorogSet.ComboBox1Change(Sender: TObject);
 var
@@ -40,8 +76,6 @@ begin
 end;
 
 procedure TPorogSet.SpinEdit1Change(Sender: TObject);
-var
-  Val: Byte;
 begin
   Val := SpinEdit1.Value;
 end;

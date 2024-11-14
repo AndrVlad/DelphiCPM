@@ -17,6 +17,7 @@ type
     procedure SpinEdit1Change(Sender: TObject);
     procedure ComboBox1Change(Sender: TObject);
     procedure Button2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -30,18 +31,19 @@ var
 
 implementation
 
+uses TransmitReceiveCOM,pr1;
+
 {$R *.dfm}
+
+procedure TPorogSet.Button1Click(Sender: TObject);
+begin
+  PorogSet.Close;
+end;
 
 procedure TPorogSet.Button2Click(Sender: TObject);
 var
   msg: string;
 begin
-
-  if (Val = 0) or (ChannelNum = 0) then
-  begin
-    ShowMessage('Ошибка! Не задано значение счета или не выбран номер канала!');
-    Exit;
-  end;
 
   if (ChannelNum > 15) then
   begin
@@ -50,7 +52,7 @@ begin
   end
   else
   begin
-     msg := msg+'0'+IntToHex(Val,2)+IntToHex(ChannelNum,1)+'C';
+     msg := msg+'1'+IntToHex(Val,2)+IntToHex(ChannelNum,1)+'C';
      WriteCOM(msg,0);
   end;
   Val := 0;
