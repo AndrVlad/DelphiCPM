@@ -1,0 +1,78 @@
+unit SetPorog;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Samples.Spin;
+
+type
+  TPorogSet = class(TForm)
+    Button1: TButton;
+    Button2: TButton;
+    Label1: TLabel;
+    Label2: TLabel;
+    SpinEdit1: TSpinEdit;
+    ComboBox1: TComboBox;
+    procedure SpinEdit1Change(Sender: TObject);
+    procedure ComboBox1Change(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  PorogSet: TPorogSet;
+  ChannelNum: Byte;
+  Val: Byte;
+
+implementation
+
+uses TransmitReceiveCOM;
+
+{$R *.dfm}
+
+procedure TPorogSet.Button1Click(Sender: TObject);
+begin
+  PorogSet.Close;
+end;
+
+procedure TPorogSet.Button2Click(Sender: TObject);
+var
+  msg: string;
+begin
+
+  if (ChannelNum > 15) then
+  begin
+     msg := msg+'1'+IntToHex(Val,2)+IntToHex(ChannelNum-16,1)+'C';
+     WriteCOM(msg,1);
+  end
+  else
+  begin
+     msg := msg+'0'+IntToHex(Val,2)+IntToHex(ChannelNum,1)+'C';
+     WriteCOM(msg,0);
+  end;
+  Val := 0;
+  ChannelNum := 0;
+  PorogSet.Close;
+end;
+
+procedure TPorogSet.ComboBox1Change(Sender: TObject);
+var
+  CI:TStrings;
+begin
+  CI := ComboBox1.Items;
+  ChannelNum := ComboBox1.ItemIndex + 1;
+end;
+
+procedure TPorogSet.SpinEdit1Change(Sender: TObject);
+var
+  Val: Byte;
+begin
+  Val := SpinEdit1.Value;
+end;
+
+end.

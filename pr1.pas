@@ -121,7 +121,7 @@ implementation
 
 {$R *.dfm}
 uses Unit1,Unit2,TransmitReceiveCOM,TurnOnFilter,WriteSample,ModbusTransmitReceive,
-TurnOnVVI;
+TurnOnVVI, SetPorog;
 
 // Старт программы
 
@@ -394,6 +394,8 @@ begin
 
 end;
 
+// Команды управления БУД
+
 procedure TwinMain.ListBox5Click(Sender: TObject);
 var
   LI:TStrings;
@@ -415,6 +417,67 @@ begin
     4: OutputTexp;
     5: ReadDACPorogOkno;
   end;
+end;
+
+procedure TwinMain.WriteThreshold(thresh_type: integer);
+var
+  msg: string;
+begin
+  if (thresh_type = 1) then
+  begin
+    Porog:=TPorogSet.Create(Self);
+    Porog.ShowModal;
+  end
+  else if (thresh_type = 0) then
+  begin
+    msg:= '411C';
+  end;
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+end;
+
+procedure TwinMain.RepeatTexp;
+var
+  msg: string;
+begin
+  msg:= '000A';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+  //ShowMessage('Сообщение отправлено');
+end;
+
+procedure TwinMain.SetTexp;
+var
+  msg: string;
+begin
+  msg:= '0109';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+  //ShowMessage('Сообщение отправлено');
+end;
+
+procedure TwinMain.OutputTexp;
+var
+  msg: string;
+begin
+  msg:= '021B';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+  //ShowMessage('Сообщение отправлено');
 end;
 
 procedure TwinMain.ReadDACPorogOkno;
@@ -522,66 +585,6 @@ begin
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
-end;
-
-procedure TwinMain.WriteThreshold(thresh_type: integer);
-var
-  msg: string;
-begin
-  if (thresh_type = 1) then
-  begin
-    msg:= 'A31C';
-  end
-  else if (thresh_type = 0) then
-  begin
-    msg:= '411C';
-  end;
-  case ConnectionType of
-  1: WriteCOM(msg,0);
-  2: WriteEthernet(msg,0);
-  end;
-end;
-
-procedure TwinMain.RepeatTexp;
-var
-  msg: string;
-begin
-  msg:= '000A';
-
-  case ConnectionType of
-  1: WriteCOM(msg,0);
-  2: WriteEthernet(msg,0);
-  end;
-
-  //ShowMessage('Сообщение отправлено');
-end;
-
-procedure TwinMain.SetTexp;
-var
-  msg: string;
-begin
-  msg:= '0109';
-
-  case ConnectionType of
-  1: WriteCOM(msg,0);
-  2: WriteEthernet(msg,0);
-  end;
-
-  //ShowMessage('Сообщение отправлено');
-end;
-
-procedure TwinMain.OutputTexp;
-var
-  msg: string;
-begin
-  msg:= '021B';
-
-  case ConnectionType of
-  1: WriteCOM(msg,0);
-  2: WriteEthernet(msg,0);
-  end;
-
-  //ShowMessage('Сообщение отправлено');
 end;
 
 procedure TwinMain.RadioButton1Click(Sender: TObject);
