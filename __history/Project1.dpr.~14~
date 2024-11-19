@@ -14,8 +14,7 @@ uses
   LowThreshold in 'LowThreshold.pas' {LowThresholdW},
   SetTexp in 'SetTexp.pas' {WriteTexp},
   TurnOnVVI in 'TurnOnVVI.pas' {Form5},
-  SetPorog in 'SetPorog.pas' {PorogSet},
-  SetOkno in 'SetOkno.pas' {OknoSet};
+  SetPorog in 'SetPorog.pas' {PorogSet};
 
 {$R *.res}
 
@@ -29,6 +28,5 @@ begin
   Application.CreateForm(TWriteTexp, WriteTexp);
   Application.CreateForm(TForm5, Form5);
   Application.CreateForm(TPorogSet, PorogSet);
-  Application.CreateForm(TOknoSet, OknoSet);
   Application.Run;
 end.

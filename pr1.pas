@@ -121,7 +121,7 @@ implementation
 
 {$R *.dfm}
 uses Unit1,Unit2,TransmitReceiveCOM,TurnOnFilter,WriteSample,ModbusTransmitReceive,
-TurnOnVVI, SetPorog;
+TurnOnVVI, SetPorog, SetOkno;
 
 // Старт программы
 
@@ -430,7 +430,8 @@ begin
   end
   else if (thresh_type = 0) then
   begin
-    msg:= '411C';
+    OknoSet:=TOknoSet.Create(Self);
+    OknoSet.ShowModal;
   end;
 
 end;

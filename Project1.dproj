@@ -146,6 +146,10 @@
             <Form>PorogSet</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="SetOkno.pas">
+            <Form>OknoSet</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

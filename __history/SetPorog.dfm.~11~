@@ -49,7 +49,7 @@ object PorogSet: TPorogSet
     Width = 99
     Height = 24
     MaxValue = 127
-    MinValue = 1
+    MinValue = 0
     ParentShowHint = False
     ShowHint = False
     TabOrder = 2

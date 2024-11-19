@@ -48,12 +48,11 @@ object PorogSet: TPorogSet
     Top = 13
     Width = 99
     Height = 24
+    EditorEnabled = False
     MaxValue = 127
-    MinValue = 1
-    ParentShowHint = False
-    ShowHint = False
+    MinValue = 0
     TabOrder = 2
-    Value = 0
+    Value = 1
     OnChange = SpinEdit1Change
   end
   object ComboBox1: TComboBox

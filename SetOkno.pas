@@ -1,0 +1,86 @@
+unit SetOkno;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Samples.Spin;
+
+type
+  TOknoSet = class(TForm)
+    Button1: TButton;
+    Button2: TButton;
+    Label1: TLabel;
+    Label2: TLabel;
+    ComboBox1: TComboBox;
+    SpinEdit1: TSpinEdit;
+    procedure Button2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure SpinEdit1Change(Sender: TObject);
+    procedure ComboBox1Change(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  OknoSet: TOknoSet;
+  ChannelNum: Byte;
+  Val: Byte;
+
+implementation
+
+uses TransmitReceiveCOM, pr1, ModbusTransmitReceive;
+
+{$R *.dfm}
+
+procedure TOknoSet.Button1Click(Sender: TObject);
+var
+  msg: string;
+begin
+
+  if (Val = 0) or (ChannelNum = 0) then
+  begin
+    ShowMessage('Ошибка! Ничего не задано');
+    Exit;
+  end;
+
+  if (ChannelNum > 15) then
+  begin
+     msg := msg+IntToHex(Val,1)+IntToHex(ChannelNum-16,1)+'C';
+  end
+  else
+  begin
+     msg := msg+IntToHex(Val,1)+IntToHex(ChannelNum,1)+'C';
+  end;
+  Val := 0;
+  ChannelNum := 0;
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+  OknoSet.Close;
+end;
+
+procedure TOknoSet.Button2Click(Sender: TObject);
+begin
+  OknoSet.Close;
+end;
+
+procedure TOknoSet.ComboBox1Change(Sender: TObject);
+var
+  CI:TStrings;
+begin
+  CI := ComboBox1.Items;
+  ChannelNum := ComboBox1.ItemIndex + 1;
+end;
+
+procedure TOknoSet.SpinEdit1Change(Sender: TObject);
+begin
+  Val := SpinEdit1.Value;
+end;
+
+end.
