@@ -69,7 +69,7 @@ object OknoSet: TOknoSet
     Top = 16
     Width = 97
     Height = 24
-    MaxValue = 0
+    MaxValue = 127
     MinValue = 0
     TabOrder = 3
     Value = 1

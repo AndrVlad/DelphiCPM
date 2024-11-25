@@ -69,8 +69,8 @@ object OknoSet: TOknoSet
     Top = 16
     Width = 97
     Height = 24
-    MaxValue = 0
-    MinValue = 0
+    MaxValue = 127
+    MinValue = 1
     TabOrder = 3
     Value = 1
     OnChange = SpinEdit1Change
