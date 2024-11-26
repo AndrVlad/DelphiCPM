@@ -1,0 +1,60 @@
+unit TurnOffFilter;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
+
+type
+  TForm6 = class(TForm)
+    Label1: TLabel;
+    ComboBox1: TComboBox;
+    Button1: TButton;
+    Button2: TButton;
+    procedure Button2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form6: TForm6;
+  FilterNum: Byte;
+
+implementation
+
+uses TransmitReceiveCOM,pr1,ModbusTransmitReceive;
+{$R *.dfm}
+
+
+procedure TForm6.Button1Click(Sender: TObject);
+begin
+  var
+  msg: string;
+begin
+  if not (FilterNum > 0) then
+  begin
+    ShowMessage('Ошибка! Ни один из фильтров не выбран!');
+    Exit;
+  end;
+
+  msg:= '00'+IntToHex(FilterNum,1)+'0';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+  FilterNum := 0;
+end;
+end;
+
+procedure TForm6.Button2Click(Sender: TObject);
+begin
+  Form6.Close;
+end;
+
+end.

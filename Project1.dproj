@@ -4,7 +4,7 @@
         <ProjectVersion>19.5</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>1</TargetedPlatforms>
         <AppType>Application</AppType>
@@ -148,6 +148,10 @@
         </DCCReference>
         <DCCReference Include="SetOkno.pas">
             <Form>OknoSet</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="TurnOffFilter.pas">
+            <Form>Form6</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Base">

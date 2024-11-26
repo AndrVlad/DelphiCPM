@@ -64,6 +64,8 @@ type
     procedure PollSAU(NumSAU: integer; command_type: integer);
     procedure LoadDisk;
     procedure LoadDiskReverse;
+    procedure StopLoadDisk;
+    procedure AbortMeasurement;
     procedure WriteThreshold(thresh_type: integer);
     procedure SetTexp;
     procedure OutputTexp;
@@ -121,7 +123,7 @@ implementation
 
 {$R *.dfm}
 uses Unit1,Unit2,TransmitReceiveCOM,TurnOnFilter,WriteSample,ModbusTransmitReceive,
-TurnOnVVI, SetPorog, SetOkno;
+TurnOnVVI, SetPorog, SetOkno, TurnOffFilter;
 
 // Старт программы
 
@@ -381,17 +383,142 @@ begin
         Form3:=TForm3.Create(Self);
         Form3.ShowModal;
         end;
-    3: LiftExample; // Подъем
+    3: LiftExample; // Подъем образца
     4: LowerExample; // Сброс образца
-    5: LoadDisk;
+    5: LoadDisk;     // загрузка диска
     6: PollSAU(1, 1);  // Опросы САУ 1-3
     7: PollSAU(1, 2);
     8: PollSAU(2, 1);
     9: PollSAU(2, 2);
     10: PollSAU(3, 1);
     11: LoadDiskReverse;
+    12: StopLoadDisk;
+    13: begin                        // включить номер фильтра
+          Form6:=TForm6.Create(Self);
+          Form6.ShowModal;
+        end;
+    15: AbortMeasurement;
   end;
 
+end;
+
+procedure TwinMain.FilterReset;
+var
+  msg: string;
+begin
+  msg:= '00E0';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+  //ShowMessage('Сообщение отправлено');
+end;
+
+procedure TwinMain.LiftExample;
+var
+  msg: string;
+begin
+  msg:= '00B0';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+  //ShowMessage('Сообщение отправлено');
+end;
+
+procedure TwinMain.LowerExample;
+var
+  msg: string;
+begin
+  msg:= '00C0';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+  //ShowMessage('Сообщение отправлено');
+end;
+
+procedure TwinMain.PollSAU(NumSAU: integer; command_type: integer);
+var
+  msg: string;
+begin
+  if (NumSAU = 1) then
+  begin
+     if (command_type = 1) then
+        msg := '0200';
+     if (command_type = 2) then
+        msg := '4000';
+  end;
+  if (NumSAU = 2) then
+  begin
+     if (command_type = 1) then
+        msg := '02A0';
+     if (command_type = 2) then
+        msg := '40A0';
+  end;
+  if (NumSAU = 3) then
+        msg := '00F0';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+  //ShowMessage('Сообщение отправлено');
+end;
+
+procedure TwinMain.LoadDisk;
+var
+  msg: string;
+begin
+  msg:= '00F1';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+end;
+
+procedure TwinMain.LoadDiskReverse;
+var
+  msg: string;
+begin
+  msg:= '00F2';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+end;
+
+procedure TwinMain.StopLoadDisk;
+var
+  msg: string;
+begin
+  msg:= '00F3';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+end;
+
+procedure TwinMain.AbortMeasurement;
+var
+  msg: string;
+begin
+  msg:= '00F4';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
 end;
 
 // Команды управления БУД
@@ -483,101 +610,6 @@ var
   msg: string;
 begin
   msg:= '0102';
-
-  case ConnectionType of
-  1: WriteCOM(msg,0);
-  2: WriteEthernet(msg,0);
-  end;
-end;
-
-procedure TwinMain.FilterReset;
-var
-  msg: string;
-begin
-  msg:= '00E0';
-
-  case ConnectionType of
-  1: WriteCOM(msg,0);
-  2: WriteEthernet(msg,0);
-  end;
-
-  //ShowMessage('Сообщение отправлено');
-end;
-
-procedure TwinMain.LiftExample;
-var
-  msg: string;
-begin
-  msg:= '00B0';
-
-  case ConnectionType of
-  1: WriteCOM(msg,0);
-  2: WriteEthernet(msg,0);
-  end;
-
-  //ShowMessage('Сообщение отправлено');
-end;
-
-procedure TwinMain.LowerExample;
-var
-  msg: string;
-begin
-  msg:= '00C0';
-
-  case ConnectionType of
-  1: WriteCOM(msg,0);
-  2: WriteEthernet(msg,0);
-  end;
-
-  //ShowMessage('Сообщение отправлено');
-end;
-
-procedure TwinMain.PollSAU(NumSAU: integer; command_type: integer);
-var
-  msg: string;
-begin
-  if (NumSAU = 1) then
-  begin
-     if (command_type = 1) then
-        msg := '0200';
-     if (command_type = 2) then
-        msg := '4000';
-  end;
-  if (NumSAU = 2) then
-  begin
-     if (command_type = 1) then
-        msg := '02A0';
-     if (command_type = 2) then
-        msg := '40A0';
-  end;
-  if (NumSAU = 3) then
-        msg := '00F0';
-        
-  case ConnectionType of
-  1: WriteCOM(msg,0);
-  2: WriteEthernet(msg,0);
-  end;
-
-  //ShowMessage('Сообщение отправлено');
-end;
-
-procedure TwinMain.LoadDisk;
-var
-  msg: string;
-begin
-  msg:= '00F1';
-
-  case ConnectionType of
-  1: WriteCOM(msg,0);
-  2: WriteEthernet(msg,0);
-  end;
-end;
-
-procedure TwinMain.LoadDiskReverse;
-var
-  msg: string;
-begin
-  msg:= '00F2';
 
   case ConnectionType of
   1: WriteCOM(msg,0);

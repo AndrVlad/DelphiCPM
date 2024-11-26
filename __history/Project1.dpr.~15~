@@ -15,8 +15,7 @@ uses
   SetTexp in 'SetTexp.pas' {WriteTexp},
   TurnOnVVI in 'TurnOnVVI.pas' {Form5},
   SetPorog in 'SetPorog.pas' {PorogSet},
-  SetOkno in 'SetOkno.pas' {OknoSet},
-  TurnOffFilter in 'TurnOffFilter.pas' {Form6};
+  SetOkno in 'SetOkno.pas' {OknoSet};
 
 {$R *.res}
 
@@ -31,6 +30,5 @@ begin
   Application.CreateForm(TForm5, Form5);
   Application.CreateForm(TPorogSet, PorogSet);
   Application.CreateForm(TOknoSet, OknoSet);
-  Application.CreateForm(TForm6, Form6);
   Application.Run;
 end.

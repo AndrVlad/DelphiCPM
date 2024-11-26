@@ -63,10 +63,15 @@ type
     procedure LowerExample;
     procedure PollSAU(NumSAU: integer; command_type: integer);
     procedure LoadDisk;
+    procedure LoadDiskReverse;
+    procedure StopLoadDisk;
+    procedure AbortMeasurement;
     procedure WriteThreshold(thresh_type: integer);
     procedure SetTexp;
     procedure OutputTexp;
     procedure RepeatTexp;
+    procedure ReadDACPorogOkno;
+    procedure ReadVVI;
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -118,7 +123,7 @@ implementation
 
 {$R *.dfm}
 uses Unit1,Unit2,TransmitReceiveCOM,TurnOnFilter,WriteSample,ModbusTransmitReceive,
-TurnOnVVI;
+TurnOnVVI, SetPorog, SetOkno, TurnOffFilter;
 
 // Старт программы
 
@@ -295,8 +300,6 @@ begin
   end;
 end;
 
-
-
 procedure TwinMain.configClick(Sender: TObject);
 begin
   //FControls:= TFControls.Create(Self);
@@ -314,6 +317,8 @@ end;
   ListBox(1-4) - обработчики выбора команд из соответствующей выбранной группы
 }
 
+//    Команды управления ВВИ
+
 procedure TwinMain.ListBox1Click(Sender: TObject);
 var
   LI:TStrings;
@@ -330,6 +335,7 @@ begin
   case item_ind of
   0: FCom31.ShowModal;
   1: begin
+       ReadVVI();
       if MyThr = nil then //Если поток не запущен;
       begin
         if COMConnectionState then
@@ -345,6 +351,19 @@ begin
 
 end;
 
+procedure TwinMain.ReadVVI;
+var
+  msg: string;
+begin
+  msg:= '021F';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+end;
+
+// Команды управления САУ
 procedure TwinMain.ListBox2Click(Sender: TObject);
 var
   LI:TStrings;
@@ -364,38 +383,20 @@ begin
         Form3:=TForm3.Create(Self);
         Form3.ShowModal;
         end;
-    3: LiftExample; // Подъем
+    3: LiftExample; // Подъем образца
     4: LowerExample; // Сброс образца
-    5: LoadDisk;
+    5: LoadDisk;     // загрузка диска
     6: PollSAU(1, 1);  // Опросы САУ 1-3
     7: PollSAU(1, 2);
     8: PollSAU(2, 1);
     9: PollSAU(2, 2);
     10: PollSAU(3, 1);
+    11: LoadDiskReverse;
+    12: StopLoadDisk;
+    13:
+    15: AbortMeasurement;
   end;
 
-end;
-
-procedure TwinMain.ListBox5Click(Sender: TObject);
-var
-  LI:TStrings;
-  item_ind:integer;
-  s:string;
-begin
-  LI:=ListBox5.Items;
-  item_ind:=ListBox5.ItemIndex;
-
-  case item_ind of
-    0: WriteThreshold(1);
-    1: WriteThreshold(0);
-    2: RepeatTexp;
-    3: begin
-        WriteTexp:=TWriteTexp.Create(Self);
-        WriteTexp.ShowModal;
-        end;
-
-    4: OutputTexp;
-  end;
 end;
 
 procedure TwinMain.FilterReset;
@@ -460,7 +461,7 @@ begin
   end;
   if (NumSAU = 3) then
         msg := '00F0';
-        
+
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
@@ -481,22 +482,82 @@ begin
   end;
 end;
 
+procedure TwinMain.LoadDiskReverse;
+var
+  msg: string;
+begin
+  msg:= '00F2';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+end;
+
+procedure TwinMain.StopLoadDisk;
+var
+  msg: string;
+begin
+  msg:= '00F3';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+end;
+
+procedure TwinMain.AbortMeasurement;
+var
+  msg: string;
+begin
+  msg:= '00F4';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+end;
+
+// Команды управления БУД
+
+procedure TwinMain.ListBox5Click(Sender: TObject);
+var
+  LI:TStrings;
+  item_ind:integer;
+  s:string;
+begin
+  LI:=ListBox5.Items;
+  item_ind:=ListBox5.ItemIndex;
+
+  case item_ind of
+    0: WriteThreshold(1);
+    1: WriteThreshold(0);
+    2: RepeatTexp;
+    3: begin
+        WriteTexp:=TWriteTexp.Create(Self);
+        WriteTexp.ShowModal;
+        end;
+
+    4: OutputTexp;
+    5: ReadDACPorogOkno;
+  end;
+end;
+
 procedure TwinMain.WriteThreshold(thresh_type: integer);
 var
   msg: string;
 begin
   if (thresh_type = 1) then
   begin
-    msg:= 'A31C';
+    PorogSet:=TPorogSet.Create(Self);
+    PorogSet.ShowModal;
   end
   else if (thresh_type = 0) then
   begin
-    msg:= '411C';
+    OknoSet:=TOknoSet.Create(Self);
+    OknoSet.ShowModal;
   end;
-  case ConnectionType of
-  1: WriteCOM(msg,0);
-  2: WriteEthernet(msg,0);
-  end;
+
 end;
 
 procedure TwinMain.RepeatTexp;
@@ -539,6 +600,18 @@ begin
   end;
 
   //ShowMessage('Сообщение отправлено');
+end;
+
+procedure TwinMain.ReadDACPorogOkno;
+var
+  msg: string;
+begin
+  msg:= '0102';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
 end;
 
 procedure TwinMain.RadioButton1Click(Sender: TObject);

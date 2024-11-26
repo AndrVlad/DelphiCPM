@@ -1,10 +1,9 @@
-object Form3: TForm3
-  Left = 698
+object Form6: TForm6
+  Left = 732
   Top = 398
-  BorderIcons = [biSystemMenu]
-  Caption = #1042#1082#1083#1102#1095#1077#1085#1080#1077' '#1092#1080#1083#1100#1090#1088#1072
-  ClientHeight = 99
-  ClientWidth = 266
+  Caption = #1042#1099#1082#1083#1102#1095#1077#1085#1080#1077' '#1092#1080#1083#1100#1090#1088#1072
+  ClientHeight = 94
+  ClientWidth = 218
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -15,15 +14,15 @@ object Form3: TForm3
   TextHeight = 15
   object Label1: TLabel
     Left = 8
-    Top = 24
-    Width = 146
+    Top = 16
+    Width = 94
     Height = 15
-    Caption = #1042#1099#1073#1077#1088#1080#1090#1077' '#1085#1086#1084#1077#1088' '#1092#1080#1083#1100#1090#1088#1072':'
+    Caption = #1053#1086#1084#1077#1088' '#1092#1080#1083#1100#1090#1088#1072': '
   end
   object ComboBox1: TComboBox
-    Left = 165
-    Top = 21
-    Width = 96
+    Left = 120
+    Top = 13
+    Width = 89
     Height = 23
     Style = csDropDownList
     TabOrder = 0
@@ -36,13 +35,11 @@ object Form3: TForm3
       '5'
       '6'
       '7'
-      '8'
-      '9'
-      '10')
+      '8')
   end
   object Button1: TButton
-    Left = 105
-    Top = 60
+    Left = 48
+    Top = 61
     Width = 75
     Height = 25
     Caption = #1054#1090#1087#1088#1072#1074#1080#1090#1100
@@ -50,8 +47,8 @@ object Form3: TForm3
     OnClick = Button1Click
   end
   object Button2: TButton
-    Left = 186
-    Top = 60
+    Left = 129
+    Top = 61
     Width = 75
     Height = 25
     Caption = #1054#1090#1084#1077#1085#1072
