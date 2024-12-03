@@ -16,6 +16,8 @@ type
     SpinEdit1: TSpinEdit;
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure SpinEdit1Change(Sender: TObject);
+    procedure ComboBox1Change(Sender: TObject);
   private
     { Private declarations }
   public
@@ -32,7 +34,7 @@ implementation
 uses TransmitReceiveCOM, pr1, ModbusTransmitReceive;
 
 {$R *.dfm}
-
+// Обработка кнопки "Отправить"
 procedure TOknoSet.Button1Click(Sender: TObject);
 var
   msg: string;
@@ -52,20 +54,35 @@ begin
   begin
      msg := msg+IntToHex(Val,1)+IntToHex(ChannelNum,1)+'C';
   end;
-  Val := 0;
-  ChannelNum := 0;
+
 
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
 
+  Val := 0;
+  ChannelNum := 0;
   OknoSet.Close;
 end;
 
+// Обработка кнопки "Отмена"
 procedure TOknoSet.Button2Click(Sender: TObject);
 begin
   OknoSet.Close;
+end;
+
+procedure TOknoSet.ComboBox1Change(Sender: TObject);
+var
+  CI:TStrings;
+begin
+  CI := ComboBox1.Items;
+  ChannelNum := ComboBox1.ItemIndex + 1;
+end;
+
+procedure TOknoSet.SpinEdit1Change(Sender: TObject);
+begin
+  Val := SpinEdit1.Value + 1;
 end;
 
 end.

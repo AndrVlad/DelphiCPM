@@ -71,6 +71,7 @@ type
     procedure OutputTexp;
     procedure RepeatTexp;
     procedure ReadDACPorogOkno;
+    procedure ReadStateBUD;
     procedure ReadVVI;
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
@@ -543,6 +544,7 @@ begin
 
     4: OutputTexp;
     5: ReadDACPorogOkno;
+    6: ReadStateBUD;
   end;
 end;
 
@@ -615,6 +617,20 @@ begin
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
+end;
+
+procedure TwinMain.ReadStateBUD;
+var
+  msg: string;
+begin
+  msg:= '020F';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+  //ShowMessage('Сообщение отправлено');
 end;
 
 procedure TwinMain.RadioButton1Click(Sender: TObject);

@@ -72,7 +72,7 @@ begin
   OknoSet.Close;
 end;
 
-// Обработка установки номера канала
+// Обработка номера канала
 procedure TOknoSet.ComboBox1Change(Sender: TObject);
 var
   CI:TStrings;

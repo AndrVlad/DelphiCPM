@@ -80,7 +80,7 @@ end;
 
 procedure TOknoSet.SpinEdit1Change(Sender: TObject);
 begin
-  Val := SpinEdit1.Value+1;
+  Val := SpinEdit1.Value + 1;
 end;
 
 end.

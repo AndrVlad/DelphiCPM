@@ -72,7 +72,7 @@ begin
   OknoSet.Close;
 end;
 
-// Обработка установки номера канала
+// Обработка номера канала
 procedure TOknoSet.ComboBox1Change(Sender: TObject);
 var
   CI:TStrings;
@@ -81,7 +81,7 @@ begin
   ChannelNum := ComboBox1.ItemIndex + 1;
 end;
 
-// Обработка установки значения Окна
+// Обработка значения Окна
 procedure TOknoSet.SpinEdit1Change(Sender: TObject);
 begin
   Val := SpinEdit1.Value;
