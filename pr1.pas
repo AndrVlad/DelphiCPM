@@ -50,6 +50,7 @@ type
     Edit3: TEdit;
     Label1: TLabel;
     ListBox5: TListBox;
+    ListBox6: TListBox;
     //PLC: TIdTCPClient;
 
     procedure ListBox1Click(Sender: TObject);
@@ -73,6 +74,19 @@ type
     procedure ReadDACPorogOkno;
     procedure ReadStateBUD;
     procedure ReadVVI;
+    procedure PollStateSC;
+    procedure Run_M;
+    procedure UpwardDirection;
+    procedure DownwardDirection;
+    procedure WriteAngleLSB;
+    procedure WriteAngleMSB;
+    procedure WriteSpeed;
+    procedure ShowCurrentAngle;
+    procedure Stop_M;
+    procedure Write_Ncr;
+    procedure TurnOff_B1;
+    procedure TurnOff_B2;
+    procedure StartAngle;
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -86,6 +100,7 @@ type
     procedure Button7Click(Sender: TObject);
     procedure Button8Click(Sender: TObject);
     procedure ListBox5Click(Sender: TObject);
+    procedure ListBox6Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -290,6 +305,7 @@ begin
   ListBox1.Visible:=False;
   ListBox2.Visible:=False;
   ListBox5.Visible:=False;
+  ListBox6.Visible:=False;
 
   CI:=ComboBox1.Items;
   item_ind:=ComboBox1.ItemIndex;
@@ -298,6 +314,7 @@ begin
     0: ListBox1.Visible:=True;
     1: ListBox2.Visible:=True;
     2: ListBox5.Visible:=True;
+    3: ListBox6.Visible:=True;
   end;
 end;
 
@@ -546,6 +563,208 @@ begin
     5: ReadDACPorogOkno;
     6: ReadStateBUD;
   end;
+end;
+
+// Команды управления вакуумным СК
+
+procedure TwinMain.ListBox6Click(Sender: TObject);
+var
+  LI:TStrings;
+  item_ind:integer;
+  s:string;
+begin
+  LI:=ListBox6.Items;
+  item_ind:=ListBox6.ItemIndex;
+
+  case item_ind of
+    0: PollStateSC;
+    1: Run_M;
+    2: UpwardDirection;
+    3: DownwardDirection;
+    4: WriteAngleLSB;
+    5: WriteAngleMSB;
+    6: WriteSpeed;
+    7: ShowCurrentAngle;
+    8: Stop_M;
+    9: Write_Ncr;
+    10: TurnOff_B1;
+    11: TurnOff_B2;
+    12: StartAngle;
+  end;
+end;
+
+procedure TwinMain.PollStateSC;
+var
+  msg: string;
+begin
+  msg:= '4001';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+end;
+
+procedure TwinMain.Run_M;
+var
+  msg: string;
+begin
+  msg:= '0011';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+end;
+
+procedure TwinMain.UpwardDirection;
+var
+  msg: string;
+begin
+  msg:= '0021';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+end;
+
+procedure TwinMain.DownwardDirection;
+var
+  msg: string;
+begin
+  msg:= '0031';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+end;
+
+procedure TwinMain.WriteAngleLSB;
+var
+  msg: string;
+begin
+  msg:= '0041';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+end;
+
+procedure TwinMain.WriteAngleMSB;
+var
+  msg: string;
+begin
+  msg:= '0051';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+end;
+
+procedure TwinMain.WriteSpeed;
+var
+  msg: string;
+begin
+  msg:= '0061';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+end;
+
+procedure TwinMain.ShowCurrentAngle;
+var
+  msg: string;
+begin
+  msg:= '0271';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+  msg:= '4071';
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+end;
+
+procedure TwinMain.Stop_M;
+var
+  msg: string;
+begin
+  msg:= '0081';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+end;
+
+procedure TwinMain.Write_Ncr;
+var
+  msg: string;
+begin
+  msg:= '0091';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+end;
+
+procedure TwinMain.TurnOff_B1;
+var
+  msg: string;
+begin
+  msg:= '00A1';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+end;
+procedure TwinMain.TurnOff_B2;
+var
+  msg: string;
+begin
+  msg:= '00B1';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+end;
+
+procedure TwinMain.StartAngle;
+var
+  msg: string;
+begin
+  msg:= '00C1';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
 end;
 
 procedure TwinMain.WriteThreshold(thresh_type: integer);

@@ -16,8 +16,7 @@ uses
   TurnOnVVI in 'TurnOnVVI.pas' {Form5},
   SetPorog in 'SetPorog.pas' {PorogSet},
   SetOkno in 'SetOkno.pas' {OknoSet},
-  TurnOffFilter in 'TurnOffFilter.pas' {Form6},
-  WriteAngleLSB in 'WriteAngleLSB.pas' {Form7};
+  TurnOffFilter in 'TurnOffFilter.pas' {Form6};
 
 {$R *.res}
 
@@ -33,6 +32,5 @@ begin
   Application.CreateForm(TPorogSet, PorogSet);
   Application.CreateForm(TOknoSet, OknoSet);
   Application.CreateForm(TForm6, Form6);
-  Application.CreateForm(TForm7, Form7);
   Application.Run;
 end.
