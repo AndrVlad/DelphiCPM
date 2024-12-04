@@ -1,0 +1,35 @@
+unit WriteAngleLSB;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Samples.Spin;
+
+type
+  TForm7 = class(TForm)
+    SpinEdit1: TSpinEdit;
+    Label1: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    procedure SpinEdit1Change(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form7: TForm7;
+  AngleVal: Byte;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm7.SpinEdit1Change(Sender: TObject);
+begin
+  AngleVal := SpinEdit1.Value+1;
+end;
+
+end.

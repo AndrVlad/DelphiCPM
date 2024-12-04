@@ -4,10 +4,17 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Samples.Spin;
 
 type
   TForm7 = class(TForm)
+    SpinEdit1: TSpinEdit;
+    Label1: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    procedure SpinEdit1Change(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -16,9 +23,47 @@ type
 
 var
   Form7: TForm7;
+  AngleVal: Byte;
 
 implementation
 
+uses TransmitReceiveCOM, pr1, ModbusTransmitReceive;
+
 {$R *.dfm}
+
+procedure TForm7.Button1Click(Sender: TObject);
+var
+  msg: string;
+begin
+
+  if (AngleVal = 0) then
+  begin
+    ShowMessage('Ошибка! Ничего не задано');
+    Exit;
+  end;
+
+     msg := msg+IntToHex(AngleVal,2)+'41';
+
+  AngleVal:=0;
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+  ShowMessage('Отправлено '+msg);
+
+  Form7.Close;
+end;
+
+procedure TForm7.Button2Click(Sender: TObject);
+begin
+  Form7.Close;
+end;
+
+procedure TForm7.SpinEdit1Change(Sender: TObject);
+begin
+  AngleVal := SpinEdit1.Value;
+end;
 
 end.

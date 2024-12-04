@@ -1,0 +1,67 @@
+unit WriteAngleMSB;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Samples.Spin;
+
+type
+  TForm8 = class(TForm)
+    SpinEdit1: TSpinEdit;
+    Label1: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    procedure SpinEdit1Change(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form8: TForm8;
+  AngleVal: Byte;
+implementation
+
+uses pr1,TransmitReceiveCOM,ModbusTransmitReceive;
+
+{$R *.dfm}
+
+procedure TForm8.Button1Click(Sender: TObject);
+var
+  msg: string;
+begin
+
+  if (AngleVal = 0) then
+  begin
+    AngleVal := 1;
+  end;
+
+     msg := msg+IntToHex(AngleVal,2)+'51';
+
+  AngleVal:=0;
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+  ShowMessage('Отправлено '+msg);
+
+  Form8.Close;
+end;
+
+procedure TForm8.Button2Click(Sender: TObject);
+begin
+  Form8.Close;
+end;
+
+procedure TForm8.SpinEdit1Change(Sender: TObject);
+begin
+  AngleVal := SpinEdit1.Value;
+end;
+
+end.

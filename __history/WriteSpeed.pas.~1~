@@ -1,0 +1,38 @@
+unit WriteSpeed;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
+
+type
+  TForm9 = class(TForm)
+    Label1: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    ComboBox1: TComboBox;
+    procedure ComboBox1Change(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form9: TForm9;
+  SpeedVal: Byte;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm9.ComboBox1Change(Sender: TObject);
+var
+  CI:TStrings;
+begin
+  CI := ComboBox1.Items;
+  SpeedVal := ComboBox1.ItemIndex;
+end;
+
+end.

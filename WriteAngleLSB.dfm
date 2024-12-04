@@ -1,9 +1,9 @@
 object Form7: TForm7
-  Left = 494
-  Top = 208
+  Left = 703
+  Top = 369
   Caption = 'Form7'
-  ClientHeight = 117
-  ClientWidth = 282
+  ClientHeight = 100
+  ClientWidth = 218
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -12,4 +12,40 @@ object Form7: TForm7
   Font.Style = []
   Position = poDesigned
   TextHeight = 15
+  object Label1: TLabel
+    Left = 24
+    Top = 26
+    Width = 80
+    Height = 15
+    Caption = #1047#1085#1072#1095#1077#1085#1080#1077' '#1091#1075#1083#1072
+  end
+  object SpinEdit1: TSpinEdit
+    Left = 128
+    Top = 23
+    Width = 65
+    Height = 24
+    MaxValue = 127
+    MinValue = 1
+    TabOrder = 0
+    Value = 0
+    OnChange = SpinEdit1Change
+  end
+  object Button1: TButton
+    Left = 118
+    Top = 67
+    Width = 75
+    Height = 25
+    Caption = #1054#1090#1087#1088#1072#1074#1080#1090#1100
+    TabOrder = 1
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 37
+    Top = 67
+    Width = 75
+    Height = 25
+    Caption = #1054#1090#1084#1077#1085#1072
+    TabOrder = 2
+    OnClick = Button2Click
+  end
 end

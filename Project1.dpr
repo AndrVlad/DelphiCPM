@@ -17,7 +17,9 @@ uses
   SetPorog in 'SetPorog.pas' {PorogSet},
   SetOkno in 'SetOkno.pas' {OknoSet},
   TurnOffFilter in 'TurnOffFilter.pas' {Form6},
-  WriteAngleLSB in 'WriteAngleLSB.pas' {Form7};
+  WriteAngleLSB in 'WriteAngleLSB.pas' {Form7},
+  WriteAngleMSB in 'WriteAngleMSB.pas' {Form8},
+  WriteSpeed in 'WriteSpeed.pas' {Form9};
 
 {$R *.res}
 
@@ -34,5 +36,7 @@ begin
   Application.CreateForm(TOknoSet, OknoSet);
   Application.CreateForm(TForm6, Form6);
   Application.CreateForm(TForm7, Form7);
+  Application.CreateForm(TForm8, Form8);
+  Application.CreateForm(TForm9, Form9);
   Application.Run;
 end.

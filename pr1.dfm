@@ -21,8 +21,8 @@ object winMain: TwinMain
     Width = 904
     Height = 19
     Panels = <>
-    ExplicitTop = 553
-    ExplicitWidth = 900
+    ExplicitTop = 536
+    ExplicitWidth = 894
   end
   object PageControl1: TPageControl
     Left = 0
