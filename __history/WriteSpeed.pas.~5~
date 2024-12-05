@@ -31,7 +31,6 @@ uses TransmitReceiveCOM, pr1, ModbusTransmitReceive;
 
 {$R *.dfm}
 
-// Обработчик кнопки "Отправить"
 procedure TForm9.Button1Click(Sender: TObject);
 var
   msg: string;
@@ -58,20 +57,17 @@ begin
   Form9.Close;
 end;
 
-// Обработчик кнопки "Отмена"
 procedure TForm9.Button2Click(Sender: TObject);
 begin
   Form9.Close;
 end;
 
-// Обработчик выбора номера кристалла
 procedure TForm9.ComboBox1Change(Sender: TObject);
 var
   CI:TStrings;
 begin
   CI := ComboBox1.Items;
   SpeedVal := ComboBox1.ItemIndex;
-  Button1.Enabled := True;
 end;
 
 end.

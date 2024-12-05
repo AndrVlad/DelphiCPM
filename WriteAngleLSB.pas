@@ -64,6 +64,8 @@ end;
 procedure TForm7.SpinEdit1Change(Sender: TObject);
 begin
   AngleVal := SpinEdit1.Value;
+  Button1.Enabled := True;
 end;
+
 
 end.

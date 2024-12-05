@@ -1,0 +1,57 @@
+unit WriteCrystallNum;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
+
+type
+  TForm10 = class(TForm)
+    Button1: TButton;
+    Button2: TButton;
+    Label1: TLabel;
+    ComboBox1: TComboBox;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form10: TForm10;
+  CrystallNum: Byte;
+
+implementation
+
+uses TransmitReceiveCOM, pr1, ModbusTransmitReceive;
+
+{$R *.dfm}
+
+procedure TForm10.Button1Click(Sender: TObject);
+var
+  msg: string;
+begin
+
+  if (CrystallNum = -1) then
+  begin
+    ShowMessage('Ошибка! Ничего не задано');
+    Exit;
+  end;
+
+     msg := msg+IntToHex(CrystallNum,2)+'91';
+
+  CrystallNum:=0;
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+  ShowMessage('Отправлено '+msg);
+
+  Form10.Close;
+end;
+
+end.

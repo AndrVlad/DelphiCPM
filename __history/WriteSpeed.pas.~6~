@@ -71,7 +71,6 @@ var
 begin
   CI := ComboBox1.Items;
   SpeedVal := ComboBox1.ItemIndex;
-  Button1.Enabled := True;
 end;
 
 end.

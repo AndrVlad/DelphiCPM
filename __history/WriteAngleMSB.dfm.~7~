@@ -29,7 +29,6 @@ object Form8: TForm8
     TabOrder = 0
     Value = 1
     OnChange = SpinEdit1Change
-    OnClick = SpinEdit1Change
   end
   object Button1: TButton
     Left = 118
@@ -37,7 +36,6 @@ object Form8: TForm8
     Width = 75
     Height = 25
     Caption = #1054#1090#1087#1088#1072#1074#1080#1090#1100
-    Enabled = False
     TabOrder = 1
     OnClick = Button1Click
   end

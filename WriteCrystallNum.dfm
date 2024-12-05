@@ -1,9 +1,9 @@
-object Form9: TForm9
-  Left = 690
-  Top = 383
-  Caption = 'Form9'
-  ClientHeight = 96
-  ClientWidth = 213
+object Form10: TForm10
+  Left = 681
+  Top = 381
+  Caption = 'Form10'
+  ClientHeight = 91
+  ClientWidth = 232
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -13,24 +13,23 @@ object Form9: TForm9
   Position = poDesigned
   TextHeight = 15
   object Label1: TLabel
-    Left = 16
+    Left = 8
     Top = 24
-    Width = 55
+    Width = 98
     Height = 15
-    Caption = #1057#1082#1086#1088#1086#1089#1090#1100':'
+    Caption = #1053#1086#1084#1077#1088' '#1082#1088#1080#1089#1090#1072#1083#1083#1072
   end
   object Button1: TButton
-    Left = 117
+    Left = 142
     Top = 58
     Width = 75
     Height = 25
     Caption = #1054#1090#1087#1088#1072#1074#1080#1090#1100
-    Enabled = False
     TabOrder = 0
     OnClick = Button1Click
   end
   object Button2: TButton
-    Left = 28
+    Left = 61
     Top = 58
     Width = 75
     Height = 25
@@ -39,21 +38,20 @@ object Form9: TForm9
     OnClick = Button2Click
   end
   object ComboBox1: TComboBox
-    Left = 99
+    Left = 119
     Top = 21
-    Width = 93
+    Width = 98
     Height = 23
     Style = csDropDownList
     TabOrder = 2
     OnChange = ComboBox1Change
     Items.Strings = (
-      '360'
-      '180'
-      '11,2'
-      '2,8'
-      '5,6'
-      '0,7'
-      '0,35'
-      '0,18')
+      '1'
+      '2'
+      '3'
+      '4'
+      '5'
+      '6'
+      '7')
   end
 end

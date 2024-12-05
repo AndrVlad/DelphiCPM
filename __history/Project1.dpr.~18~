@@ -19,8 +19,7 @@ uses
   TurnOffFilter in 'TurnOffFilter.pas' {Form6},
   WriteAngleLSB in 'WriteAngleLSB.pas' {Form7},
   WriteAngleMSB in 'WriteAngleMSB.pas' {Form8},
-  WriteSpeed in 'WriteSpeed.pas' {Form9},
-  WriteCrystallNum in 'WriteCrystallNum.pas' {Form10};
+  WriteSpeed in 'WriteSpeed.pas' {Form9};
 
 {$R *.res}
 
@@ -39,6 +38,5 @@ begin
   Application.CreateForm(TForm7, Form7);
   Application.CreateForm(TForm8, Form8);
   Application.CreateForm(TForm9, Form9);
-  Application.CreateForm(TForm10, Form10);
   Application.Run;
 end.

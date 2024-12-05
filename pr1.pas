@@ -139,7 +139,8 @@ implementation
 
 {$R *.dfm}
 uses Unit1,Unit2,TransmitReceiveCOM,TurnOnFilter,WriteSample,ModbusTransmitReceive,
-TurnOnVVI, SetPorog, SetOkno, TurnOffFilter,WriteAngleLSB,WriteAngleMSB,WriteSpeed;
+TurnOnVVI, SetPorog, SetOkno, TurnOffFilter,WriteAngleLSB,WriteAngleMSB,WriteSpeed,
+WriteCrystallNum;
 
 // Старт программы
 
@@ -595,7 +596,10 @@ begin
       end;
     7: ShowCurrentAngle;
     8: Stop_M;
-    9: Write_Ncr;
+    9: begin
+          Form10:=TForm10.Create(Self);
+          Form10.ShowModal;
+      end;
     10: TurnOff_B1;
     11: TurnOff_B2;
     12: StartAngle;
