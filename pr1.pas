@@ -603,6 +603,7 @@ begin
     10: TurnOff_B1;
     11: TurnOff_B2;
     12: StartAngle;
+    13: WriteAngleLSB;
   end;
 end;
 
@@ -662,12 +663,14 @@ procedure TwinMain.WriteAngleLSB;
 var
   msg: string;
 begin
-  msg:= '0041';
+  msg:= 'C71C';
 
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
+
+  ShowMessage('Отправлено ' + msg);
 
 end;
 
@@ -701,14 +704,16 @@ procedure TwinMain.ShowCurrentAngle;
 var
   msg: string;
 begin
-  msg:= '0271';
+  msg:= '4071';
+
 
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
 
-  msg:= '4071';
+  msg:= '0271';
+
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);

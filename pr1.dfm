@@ -21,8 +21,8 @@ object winMain: TwinMain
     Width = 904
     Height = 19
     Panels = <>
-    ExplicitTop = 553
-    ExplicitWidth = 900
+    ExplicitTop = 536
+    ExplicitWidth = 894
   end
   object PageControl1: TPageControl
     Left = 0
@@ -289,7 +289,8 @@ object winMain: TwinMain
           #1047#1072#1087#1080#1089#1100' N'#1082#1088
           #1042#1099#1082#1083'. '#1042'/'#1042'-1'
           #1042#1099#1082#1083'. '#1042'/'#1042'-2'
-          #1057#1090#1072#1088#1090#1086#1074#1099#1081' '#1091#1075#1086#1083)
+          #1057#1090#1072#1088#1090#1086#1074#1099#1081' '#1091#1075#1086#1083
+          #1058#1077#1089#1090' C71C')
         TabOrder = 15
         Visible = False
         OnClick = ListBox6Click
