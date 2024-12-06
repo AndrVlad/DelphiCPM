@@ -197,10 +197,10 @@ begin
           If Btr.Size<>0 then //Если байты присутствуют,
           begin
             //ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);
-            ReadFile(getPhndl, RBuffer, 3, Temp, @OverRead);
+            ReadFile(getPhndl, RBuffer, 5, Temp, @OverRead);
             //Synchronize(OutVoltageValue);//Делаем синхронный вызов загрузки буфера в Memo;
-
             OutVoltageValue;
+
             //WriteChartFile;
           end;
 
@@ -916,8 +916,7 @@ var
 begin
 
 SendMessage(winMain.Memo1.Handle, EM_LINESCROLL, 0,winMain.Memo1.Lines.Count);
-winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+String(RBuffer);//Загружаем в Memo содержимое буфера;
-
+winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+String(RBuffer)+'n';//Загружаем в Memo содержимое буфера;
 //Main.Memo1.Lines.Add(#13#10);
 
   //i:= Random(100);

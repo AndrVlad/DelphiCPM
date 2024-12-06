@@ -100,6 +100,7 @@ begin
     // вывод в окно чтени€ с порта отправленной посылки
      winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+'>'+msg;
      winMain.Memo1.Lines.Add(#13#10);
+     winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+'<';
 
 end;
 

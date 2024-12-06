@@ -199,7 +199,7 @@ begin
             //ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);
             ReadFile(getPhndl, RBuffer, 3, Temp, @OverRead);
             //Synchronize(OutVoltageValue);//Делаем синхронный вызов загрузки буфера в Memo;
-
+            winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+'<';
             OutVoltageValue;
             //WriteChartFile;
           end;
