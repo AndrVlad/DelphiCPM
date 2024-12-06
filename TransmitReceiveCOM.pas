@@ -96,6 +96,27 @@ begin
       ShowMessage('Данные отправлены')
     else
       ShowMessage('Ошибка отправки'); }
+     winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+'>'+msg;
+     winMain.Memo1.Lines.Add(#13#10);
+       //Загружаем в Memo содержимое буфера;
+end;
+
+procedure Delay(Value: Cardinal);        // SDP
+var
+  F, N: Cardinal;
+begin
+  N := 0;
+  while N <= (Value div 10) do
+  begin
+    SleepEx(1, True);
+    Application.ProcessMessages;
+    Inc(N);
+  end;
+  F := GetTickCount;
+  repeat
+    Application.ProcessMessages;
+    N := GetTickCount;
+  until (N - F >= (Value mod 10)) or (N < F);
 end;
 
 // инициализация COM-порта
@@ -130,6 +151,13 @@ begin
     ShowMessage('Настройки заданы');
     COMConnectionState := true;
   end;
+
+  // sdp 051224
+    EscapeCommFunction(Phndl, SETRTS);
+    EscapeCommFunction(Phndl, SETDTR);
+    EscapeCommFunction(Phndl, CLRRTS);
+    Delay(1000);
+    EscapeCommFunction(Phndl, SETRTS);
 
 
   if not SetCommMask(Phndl, EV_RXchar) then

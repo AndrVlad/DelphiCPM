@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.Menus,
   System.UITypes,Vcl.DBCtrls,IniFiles, IdBaseComponent, IdComponent, IdTCPConnection,
-  IdTCPClient, IdModbusClient, SetTexp;
+  IdTCPClient, SetTexp;// IdModbusClient
 
 type
   TwinMain = class(TForm)
@@ -89,7 +89,7 @@ type
     procedure StartAngle;
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
-    procedure Button3Click(Sender: TObject);
+ //   procedure Button3Click(Sender: TObject);
     procedure Button5Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
     procedure Edit3Change(Sender: TObject);
@@ -129,7 +129,7 @@ var
   OverRead:TOverlapped;
   Ini: Tinifile;
   var ChartFile: TextFile;
-  PLC: TIdModBusClient;
+ // PLC: TIdModBusClient;
   RegisterData: array[0..2] of Word;
   ConnectionType: Byte = 1;
   //COMConnectionState: boolean = false;
@@ -148,7 +148,7 @@ procedure TwinMain.FormCreate(Sender: TObject);
 begin
 
   // создание объектов классов
-  PLC := TIdModBusClient.Create;
+ // PLC := TIdModBusClient.Create;
 
   // создание файла конфигурации на случай, если такового нет
   // со стандартными настройками скорости 9600 бит/с
@@ -221,18 +221,27 @@ end;
 
 procedure TwinMain.Button2Click(Sender: TObject);
 begin
+  if MyThr = nil then //Если поток не запущен;
+      begin
+        if COMConnectionState then
+          begin
+            MyThr:=MyThread.Create(false); //Создаем поток чтения;
+            MyThr.FreeOnTerminate:=true; //Запускаем поток чтения;
+            MyThr.Priority:=tpNormal; //Устанавливаем приоритет;
+          end;
+      end;
   CloseFile(ChartFile);
 end;
 
 // запись в регистр по Modbus Ethernet
 
-procedure TwinMain.Button3Click(Sender: TObject);
-begin
-  if PLC.WriteRegisters(5, RegisterData) then
-    MessageDlg('Успешная запись в регистры!', mtCustom, [mbOk], 0)
-  else
-    MessageDlg('Ошибка при записи в регистры', mtError, [mbOk], 0);
-end;
+//procedure TwinMain.Button3Click(Sender: TObject);
+//begin
+//  if PLC.WriteRegisters(5, RegisterData) then
+//    MessageDlg('Успешная запись в регистры!', mtCustom, [mbOk], 0)
+//  else
+//    MessageDlg('Ошибка при записи в регистры', mtError, [mbOk], 0);
+//end;
 
 // чтение регистров Modbus Ethernet
 
@@ -243,28 +252,28 @@ var
   i: Integer;
   sLine: String;
 begin
-  iAmount := StrToInt(Edit6.Text);
-  if (iAmount > 0) then
-  begin
-    if PLC.ReadHoldingRegisters(StrToInt(Edit4.Text), iAmount, Data) then
-    begin
-      sLine := 'Считанные значения регистров:';
-      for i := 0 to (iAmount - 1) do
-        sLine := sLine +
-                 #13#10'     ' +
-                 IntToStr(StrToInt(Edit4.Text) + i) +
-                 ': 0x'  +
-                 IntToHex(Data[i], 4);
-      ShowMessage(sLine);
-    end
-    else
-      ShowMessage('PLC read operation failed!');
-  end;
+//  iAmount := StrToInt(Edit6.Text);
+//  if (iAmount > 0) then
+//  begin
+//    if PLC.ReadHoldingRegisters(StrToInt(Edit4.Text), iAmount, Data) then
+//    begin
+//      sLine := 'Считанные значения регистров:';
+//      for i := 0 to (iAmount - 1) do
+//        sLine := sLine +
+//                 #13#10'     ' +
+//                 IntToStr(StrToInt(Edit4.Text) + i) +
+//                 ': 0x'  +
+//                 IntToHex(Data[i], 4);
+//      ShowMessage(sLine);
+//    end
+//    else
+//      ShowMessage('PLC read operation failed!');
+//  end;
 end;
 
 procedure TwinMain.Button5Click(Sender: TObject);
 begin
-  PLC.Host := Edit1.Text;
+  //PLC.Host := Edit1.Text;
   Button3.Enabled := True;
   Button4.Enabled := True;
 end;
@@ -282,7 +291,7 @@ end;
 procedure TwinMain.Button7Click(Sender: TObject);
 begin
   //PLC.Host := Edit2.Text;
-  InitPLC(Edit2.Text);
+  //InitPLC(Edit2.Text);
   RadioButton2.Enabled := True;
   RadioButton3.Enabled := True;
   Button8.Enabled := True;
@@ -293,7 +302,7 @@ var
   reg: Word;
 begin
   reg := StrToInt(Edit3.Text);
-  SetRegNum(reg);
+ // SetRegNum(reg);
 end;
 
 procedure TwinMain.ComboBox1Change(Sender: TObject);
@@ -354,8 +363,8 @@ begin
   case item_ind of
   0: FCom31.ShowModal;
   1: begin
-       ReadVVI();
-      if MyThr = nil then //Если поток не запущен;
+       //ReadVVI();
+      { if MyThr = nil then //Если поток не запущен;
       begin
         if COMConnectionState then
           begin
@@ -363,7 +372,7 @@ begin
             MyThr.FreeOnTerminate:=true; //Запускаем поток чтения;
             MyThr.Priority:=tpNormal; //Устанавливаем приоритет;
           end;
-      end
+      end }
     end;
   2: Form5.ShowModal;
   end;
@@ -704,6 +713,7 @@ procedure TwinMain.ShowCurrentAngle;
 var
   msg: string;
 begin
+
   msg:= '4071';
 
 
@@ -712,7 +722,7 @@ begin
   2: WriteEthernet(msg,0);
   end;
 
-  msg:= '0271';
+   msg:= '0271';
 
   case ConnectionType of
   1: WriteCOM(msg,0);
@@ -903,6 +913,7 @@ begin
 SendMessage(winMain.Memo1.Handle, EM_LINESCROLL, 0,winMain.Memo1.Lines.Count);
 winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+String(RBuffer);//Загружаем в Memo содержимое буфера;
 
+
   //i:= Random(100);
 //winMain.Memo1.Lines.Text := IntToStr(i);
 //winMain.Memo1.Lines.Text := IntToStr(SizeOf(String(RBuffer)));
@@ -924,7 +935,7 @@ CloseHandle(getPhndl); //Закрываем Порт;
 
 // очистка памяти созданных объектов
 
-PLC.Free;
+//PLC.Free;
 
 end;
 
