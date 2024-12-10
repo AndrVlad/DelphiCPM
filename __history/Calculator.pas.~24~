@@ -1,0 +1,65 @@
+unit Calculator;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Mask;
+
+type
+  TForm11 = class(TForm)
+    Label1: TLabel;
+    MaskEdit1: TMaskEdit;
+    Label2: TLabel;
+    MaskEdit2: TMaskEdit;
+    Label3: TLabel;
+    MaskEdit3: TMaskEdit;
+    Button1: TButton;
+    Label4: TLabel;
+    Label5: TLabel;
+    MaskEdit4: TMaskEdit;
+    MaskEdit5: TMaskEdit;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form11: TForm11;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm11.Button1Click(Sender: TObject);
+Var
+  Teta,  Teta_tek1: real;
+
+  Code,  Code_tek,Code_inv,Code_tek_int: word;
+  errposition,Teta_tek: integer;
+  s: string;
+begin
+      //рассчет углов
+
+
+    Val( MaskEdit1.Text, Teta, errposition);     // вводим угол   xxx.yy
+    if errposition = 0
+       then
+       Begin
+            Code:= Trunc(Teta*65535/360);
+            MaskEdit2.Text:=inttohex(Code,4);     // прямой код угла
+            Code_inv:=not(Code);
+            MaskEdit3.Text:=inttohex(Code_inv,4);     // инвертированный код  угла
+       End;                                           //
+       // Обработка текущего угла
+             s:=  '$'+MaskEdit4.Text;        // вводим 4 значный код текущего угла в гекс формате
+             Code_tek_int:=StrToInt(s);
+             Teta_tek:=360*Code_tek_int;
+             Teta_tek1:=Code_tek div 65535;
+             MaskEdit5.Text:=  FloatToStrF(Teta_tek,ffFixed, 3, 2);     //   вывод текущего угла xxx.yy
+
+end;
+
+end.

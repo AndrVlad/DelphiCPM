@@ -1,13 +1,10 @@
 unit pr1;
-
 interface
-
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.Menus,
   System.UITypes,Vcl.DBCtrls,IniFiles, IdBaseComponent, IdComponent, IdTCPConnection,
   IdTCPClient, SetTexp;// IdModbusClient
-
 type
   TwinMain = class(TForm)
     MainMenu: TMainMenu;
@@ -51,8 +48,9 @@ type
     Label1: TLabel;
     ListBox5: TListBox;
     ListBox6: TListBox;
+    N1: TMenuItem;
+    Button9: TButton;
     //PLC: TIdTCPClient;
-
     procedure ListBox1Click(Sender: TObject);
     procedure ComboBox1Change(Sender: TObject);
     procedure configClick(Sender: TObject);
@@ -87,6 +85,7 @@ type
     procedure TurnOff_B1;
     procedure TurnOff_B2;
     procedure StartAngle;
+    procedure PollAngle;
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
  //   procedure Button3Click(Sender: TObject);
@@ -101,7 +100,8 @@ type
     procedure Button8Click(Sender: TObject);
     procedure ListBox5Click(Sender: TObject);
     procedure ListBox6Click(Sender: TObject);
-
+    procedure N1Click(Sender: TObject);
+    procedure Button9Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -110,17 +110,25 @@ type
   end;
 
 MyThread=class(Tthread)
-private
-{ private declarations }
-protected
-procedure execute; override;
-procedure OutVoltageValue;
-procedure WriteChartFile;
-end;
+  private
+  { private declarations }
+  protected
+    procedure execute; override;
+    procedure OutVoltageValue;
+    procedure WriteChartFile;
+  end;
+
+TAngleThread = class(TThread)
+  private
+    { Private declarations }
+  protected
+    procedure ExecuteAngleThread; override;
+  end;
 
 var
   winMain: TwinMain;
   MyThr: MyThread;
+  AngleThread: MyThread;
   ComStat:TComStat;
   Btr, Mask, Temp, Signal: DWORD;
   //Rbuffer: array[0..50] of AnsiChar;
@@ -136,20 +144,15 @@ var
   str: string = '';
 implementation
 
-
 {$R *.dfm}
 uses Unit1,Unit2,TransmitReceiveCOM,TurnOnFilter,WriteSample,ModbusTransmitReceive,
 TurnOnVVI, SetPorog, SetOkno, TurnOffFilter,WriteAngleLSB,WriteAngleMSB,WriteSpeed,
-WriteCrystallNum;
-
+WriteCrystallNum, Calculator;
 // Старт программы
-
 procedure TwinMain.FormCreate(Sender: TObject);
 begin
-
   // создание объектов классов
  // PLC := TIdModBusClient.Create;
-
   // создание файла конфигурации на случай, если такового нет
   // со стандартными настройками скорости 9600 бит/с
   if not FileExists(extractfilepath(paramstr(0))+'config.ini') then
@@ -158,9 +161,7 @@ begin
       Ini.WriteInteger('FControls','ComboBox2.ItemIndex',4);
       Ini.WriteInteger('COM','BaudRate',9600);
     end;
-
   // инициализация существующего файла конфигурации
-
   Ini:=TiniFile.Create(extractfilepath(paramstr(0))+'config.ini');
   FControls:= TFControls.Create(Self);
   FControls.ComboBox2.ItemIndex := Ini.ReadInteger('FControls','ComboBox2.ItemIndex',4);
@@ -168,15 +169,11 @@ begin
   Edit1.Text := Ini.ReadString('Modbus','SlaveAddr','192.168.1.111');
   Edit2.Text := Ini.ReadString('Modbus','SlaveAddr','192.168.1.111');
   Edit3.Text := Ini.ReadString('Modbus','RegNum','5');
-
   AssignFile(ChartFile,extractfilepath(paramstr(0))+'chart.txt');
   Rewrite(ChartFile);
-
   var num_w: Word;
   var str: string;
-
 end;
-
 
 procedure MyThread.execute;
 begin
@@ -193,34 +190,27 @@ begin
         begin
           ClearCommError(getPhndl, Temp, @ComStat); //Заполняем структуру COMSTAT;
           Btr:=ComStat.cbInQue; //Получаем из структуры количество байт;
-
           If Btr.Size<>0 then //Если байты присутствуют,
           begin
             ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);
-            Synchronize(OutVoltageValue);//Делаем синхронный вызов загрузки буфера в Memo;
-            //OutVoltageValue;
-
+            //Synchronize(OutVoltageValue);//Делаем синхроннй вызов загрузки буфера в Memo;
+            OutVoltageValue;
             //WriteChartFile;
           end;
-          winMain.Memo1.Lines.Add(#13#10);
         end;
       end
     end;
   end;
  CloseHandle(OverRead.Hevent);
  end;
-
 // обработка кнопки Очистить окно вывода из COM-порта
-
 procedure TwinMain.Button1Click(Sender: TObject);
 begin
   PurgeComm(getPhndl, Purge_TXabort or Purge_RXabort or Purge_TXclear or Purge_RXclear);
   RBuffer:='';
   Memo1.Lines.Clear;
 end;
-
 // закрытие файла
-
 procedure TwinMain.Button2Click(Sender: TObject);
 begin
   if MyThr = nil then //Если поток не запущен;
@@ -234,9 +224,7 @@ begin
       end;
   CloseFile(ChartFile);
 end;
-
 // запись в регистр по Modbus Ethernet
-
 //procedure TwinMain.Button3Click(Sender: TObject);
 //begin
 //  if PLC.WriteRegisters(5, RegisterData) then
@@ -244,9 +232,7 @@ end;
 //  else
 //    MessageDlg('Ошибка при записи в регистры', mtError, [mbOk], 0);
 //end;
-
 // чтение регистров Modbus Ethernet
-
 procedure TwinMain.Button4Click(Sender: TObject);
 var
   Data: array[0..4096] of Word;
@@ -272,24 +258,19 @@ begin
 //      ShowMessage('PLC read operation failed!');
 //  end;
 end;
-
 procedure TwinMain.Button5Click(Sender: TObject);
 begin
   //PLC.Host := Edit1.Text;
   Button3.Enabled := True;
   Button4.Enabled := True;
 end;
-
 // кнопка "Настроить" в COM-подключении
-
 procedure TwinMain.Button6Click(Sender: TObject);
 begin
   FControls.InquiryPort(Sender); // опрос портов
   FControls.ShowModal;
 end;
-
 // кнопка "Соединение" в IP-адресе ПЛК
-
 procedure TwinMain.Button7Click(Sender: TObject);
 begin
   //PLC.Host := Edit2.Text;
@@ -298,7 +279,6 @@ begin
   RadioButton3.Enabled := True;
   Button8.Enabled := True;
 end;
-
 procedure TwinMain.Button8Click(Sender: TObject);
 var
   reg: Word;
@@ -306,22 +286,22 @@ begin
   reg := StrToInt(Edit3.Text);
  // SetRegNum(reg);
 end;
+procedure TwinMain.Button9Click(Sender: TObject);
+begin
+  PollAngle();
+end;
 
 procedure TwinMain.ComboBox1Change(Sender: TObject);
-
   var CI:TStrings;
   item_ind:integer;
   s:string;
 begin
-
   ListBox1.Visible:=False;
   ListBox2.Visible:=False;
   ListBox5.Visible:=False;
   ListBox6.Visible:=False;
-
   CI:=ComboBox1.Items;
   item_ind:=ComboBox1.ItemIndex;
-
   case item_ind of
     0: ListBox1.Visible:=True;
     1: ListBox2.Visible:=True;
@@ -329,7 +309,6 @@ begin
     3: ListBox6.Visible:=True;
   end;
 end;
-
 procedure TwinMain.configClick(Sender: TObject);
 begin
   //FControls:= TFControls.Create(Self);
@@ -337,31 +316,24 @@ begin
   FControls.InquiryPort(Sender); // опрос портов
   FControls.ShowModal;
 end;
-
 procedure TwinMain.Edit3Change(Sender: TObject);
 begin
-
 end;
-
 {
   ListBox(1-4) - обработчики выбора команд из соответствующей выбранной группы
 }
-
 //    Команды управления ВВИ
-
 procedure TwinMain.ListBox1Click(Sender: TObject);
 var
   LI:TStrings;
   item_ind:integer;
   s:string;
 begin
-
   LI:=ListBox1.Items;
   item_ind:=ListBox1.ItemIndex;
   s:=LI[item_ind];
   FCom31:=TFCom31.Create(Self);
   Form5 := TForm5.Create(Self);
-
   case item_ind of
   0: FCom31.ShowModal;
   1: begin
@@ -378,21 +350,17 @@ begin
     end;
   2: Form5.ShowModal;
   end;
-
 end;
-
 procedure TwinMain.ReadVVI;
 var
   msg: string;
 begin
   msg:= '021F';
-
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
 end;
-
 // Команды управления САУ
 procedure TwinMain.ListBox2Click(Sender: TObject);
 var
@@ -402,7 +370,6 @@ var
 begin
   LI:=ListBox2.Items;
   item_ind:=ListBox2.ItemIndex;
-
   case item_ind of
     0: begin                        // запись номера образца
         Form4:=TForm4.Create(Self);
@@ -429,49 +396,45 @@ begin
         end;
     15: AbortMeasurement;
   end;
-
 end;
-
 procedure TwinMain.FilterReset;
 var
   msg: string;
 begin
   msg:= '00E0';
-
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
-
   //ShowMessage('Сообщение отправлено');
 end;
-
 procedure TwinMain.LiftExample;
 var
   msg: string;
 begin
   msg:= '00B0';
-
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
-
   //ShowMessage('Сообщение отправлено');
 end;
-
 procedure TwinMain.LowerExample;
 var
   msg: string;
 begin
   msg:= '00C0';
-
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
-
   //ShowMessage('Сообщение отправлено');
+end;
+procedure TwinMain.N1Click(Sender: TObject);
+begin
+      //вызов калькулятора
+      Form11:=TForm11.Create(Self);
+      Form11.ShowModal;
 end;
 
 procedure TwinMain.PollSAU(NumSAU: integer; command_type: integer);
@@ -494,65 +457,53 @@ begin
   end;
   if (NumSAU = 3) then
         msg := '00F0';
-
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
-
   //ShowMessage('Сообщение отправлено');
 end;
-
 procedure TwinMain.LoadDisk;
 var
   msg: string;
 begin
   msg:= '00F1';
-
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
 end;
-
 procedure TwinMain.LoadDiskReverse;
 var
   msg: string;
 begin
   msg:= '00F2';
-
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
 end;
-
 procedure TwinMain.StopLoadDisk;
 var
   msg: string;
 begin
   msg:= '00F3';
-
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
 end;
-
 procedure TwinMain.AbortMeasurement;
 var
   msg: string;
 begin
   msg:= '00F4';
-
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
 end;
-
 // Команды управления БУД
-
 procedure TwinMain.ListBox5Click(Sender: TObject);
 var
   LI:TStrings;
@@ -561,7 +512,6 @@ var
 begin
   LI:=ListBox5.Items;
   item_ind:=ListBox5.ItemIndex;
-
   case item_ind of
     0: WriteThreshold(1);
     1: WriteThreshold(0);
@@ -570,15 +520,12 @@ begin
         WriteTexp:=TWriteTexp.Create(Self);
         WriteTexp.ShowModal;
         end;
-
     4: OutputTexp;
     5: ReadDACPorogOkno;
     6: ReadStateBUD;
   end;
 end;
-
 // Команды управления вакуумным СК
-
 procedure TwinMain.ListBox6Click(Sender: TObject);
 var
   LI:TStrings;
@@ -587,7 +534,6 @@ var
 begin
   LI:=ListBox6.Items;
   item_ind:=ListBox6.ItemIndex;
-
   case item_ind of
     0: PollStateSC;
     1: Run_M;
@@ -617,186 +563,143 @@ begin
     13: WriteAngleLSB;
   end;
 end;
-
 procedure TwinMain.PollStateSC;
 var
   msg: string;
 begin
   msg:= '4001';
-
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
-
 end;
-
 procedure TwinMain.Run_M;
 var
   msg: string;
 begin
   msg:= '0011';
-
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
-
 end;
-
 procedure TwinMain.UpwardDirection;
 var
   msg: string;
 begin
   msg:= '0021';
-
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
-
 end;
-
 procedure TwinMain.DownwardDirection;
 var
   msg: string;
 begin
   msg:= '0031';
-
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
-
 end;
-
 procedure TwinMain.WriteAngleLSB;
 var
   msg: string;
 begin
   msg:= 'C71C';
-
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
-
   ShowMessage('Отправлено ' + msg);
-
 end;
-
 procedure TwinMain.WriteAngleMSB;
 var
   msg: string;
 begin
   msg:= '0051';
-
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
-
 end;
-
 procedure TwinMain.WriteSpeed;
 var
   msg: string;
 begin
   msg:= '0061';
-
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
-
 end;
-
 procedure TwinMain.ShowCurrentAngle;
 var
   msg: string;
 begin
-
   msg:= '4071';
 
-
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
-
    msg:= '0271';
-
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
-
 end;
-
 procedure TwinMain.Stop_M;
 var
   msg: string;
 begin
   msg:= '0081';
-
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
-
 end;
-
 procedure TwinMain.Write_Ncr;
 var
   msg: string;
 begin
   msg:= '0091';
-
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
-
 end;
-
 procedure TwinMain.TurnOff_B1;
 var
   msg: string;
 begin
   msg:= '00A1';
-
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
-
 end;
 procedure TwinMain.TurnOff_B2;
 var
   msg: string;
 begin
   msg:= '00B1';
-
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
-
 end;
-
 procedure TwinMain.StartAngle;
 var
   msg: string;
 begin
   msg:= '00C1';
-
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
-
 end;
-
 procedure TwinMain.WriteThreshold(thresh_type: integer);
 var
   msg: string;
@@ -811,93 +714,73 @@ begin
     OknoSet:=TOknoSet.Create(Self);
     OknoSet.ShowModal;
   end;
-
 end;
-
 procedure TwinMain.RepeatTexp;
 var
   msg: string;
 begin
   msg:= '000A';
-
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
-
   //ShowMessage('Сообщение отправлено');
 end;
-
 procedure TwinMain.SetTexp;
 var
   msg: string;
 begin
   msg:= '0109';
-
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
-
   //ShowMessage('Сообщение отправлено');
 end;
-
 procedure TwinMain.OutputTexp;
 var
   msg: string;
 begin
   msg:= '021B';
-
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
-
   //ShowMessage('Сообщение отправлено');
 end;
-
 procedure TwinMain.ReadDACPorogOkno;
 var
   msg: string;
 begin
   msg:= '0102';
-
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
 end;
-
 procedure TwinMain.ReadStateBUD;
 var
   msg: string;
 begin
   msg:= '020F';
-
   case ConnectionType of
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
-
   //ShowMessage('Сообщение отправлено');
 end;
-
 procedure TwinMain.RadioButton1Click(Sender: TObject);
 begin
   ConnectionType := 1;
 end;
-
 procedure TwinMain.RadioButton2Click(Sender: TObject);
 begin
   ConnectionType := 2;
-
 end;
-
 procedure TwinMain.RadioButton3Click(Sender: TObject);
 begin
   ConnectionType := 3;
 end;
-
 function ConvertVVIVal : Integer;
 var
   res: integer;
@@ -906,39 +789,73 @@ begin
   Result := 0
 end;
 
+procedure TwinMain.PollAngle;
+var
+  msg: string;
+begin
+  msg:= '4071';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+   msg:= '0271';
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+end;
+
 procedure MyThread.OutVoltageValue;//Процедура вывода в Memo;
 var
   res: integer;
   i: integer;
 begin
-
 SendMessage(winMain.Memo1.Handle, EM_LINESCROLL, 0,winMain.Memo1.Lines.Count);
 winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+String(RBuffer);//Загружаем в Memo содержимое буфера;
-
 
   //i:= Random(100);
 //winMain.Memo1.Lines.Text := IntToStr(i);
 //winMain.Memo1.Lines.Text := IntToStr(SizeOf(String(RBuffer)));
 //winMain.Memo1.Lines.Add(String(RBuffer));
 RBuffer := '';
+end;
+
+procedure TAngleThread.ExecuteAngleThread;
+var
+  msg: string;
+begin
+
+  while True do
+  begin
+  Delay(1000);
+  msg:= '4071';
+
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+  msg:= '0271';
+  case ConnectionType of
+  1: WriteCOM(msg,0);
+  2: WriteEthernet(msg,0);
+  end;
+
+  end;
 
 end;
+
 
 procedure MyThread.WriteChartFile;//Процедура записи в файл
 begin
   Write(ChartFile,RBuffer);
 end;
-
 procedure TwinMain.FormClose(Sender: TObject; var Action: TCloseAction); //Закрытие програмы;
 begin
 if  MyThr <> nil then //Если поток запущен;
 MyThr.Terminate; //Останавливаем его;
 CloseHandle(getPhndl); //Закрываем Порт;
-
 // очистка памяти созданных объектов
-
 //PLC.Free;
-
 end;
-
 end.

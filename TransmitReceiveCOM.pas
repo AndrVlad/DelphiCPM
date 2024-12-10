@@ -8,7 +8,7 @@ function getPhndl: THandle;
 function ReadCOM: string;
 procedure InitCOM(PortName: string);
 procedure WriteCOM(msg: string; commandType: integer);
-
+procedure Delay(Value: Cardinal);
 implementation
 
 uses
@@ -96,11 +96,9 @@ begin
       ShowMessage('Данные отправлены')
     else
       ShowMessage('Ошибка отправки'); }
-
-    // вывод в окно чтения с порта отправленной посылки
      winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+'>'+msg;
      winMain.Memo1.Lines.Add(#13#10);
-
+       //Загружаем в Memo содержимое буфера;
 end;
 
 procedure Delay(Value: Cardinal);        // SDP

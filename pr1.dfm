@@ -2,8 +2,8 @@ object winMain: TwinMain
   Left = 374
   Top = 138
   Caption = 'TestCPM'
-  ClientHeight = 573
-  ClientWidth = 904
+  ClientHeight = 535
+  ClientWidth = 876
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,12 +17,10 @@ object winMain: TwinMain
   TextHeight = 15
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 554
-    Width = 904
+    Top = 516
+    Width = 876
     Height = 19
     Panels = <>
-    ExplicitTop = 553
-    ExplicitWidth = 900
   end
   object PageControl1: TPageControl
     Left = 0
@@ -185,7 +183,7 @@ object winMain: TwinMain
         OnClick = Button1Click
       end
       object Button2: TButton
-        Left = 574
+        Left = 561
         Top = 327
         Width = 99
         Height = 25
@@ -294,6 +292,15 @@ object winMain: TwinMain
         Visible = False
         OnClick = ListBox6Click
       end
+      object Button9: TButton
+        Left = 480
+        Top = 400
+        Width = 75
+        Height = 25
+        Caption = #1042#1082#1083#1102#1095#1080#1090#1100
+        TabOrder = 16
+        OnClick = Button9Click
+      end
     end
     object Modbus: TTabSheet
       Caption = 'Modbus'
@@ -399,12 +406,25 @@ object winMain: TwinMain
       end
     end
   end
+  object Button10: TButton
+    Left = 576
+    Top = 434
+    Width = 75
+    Height = 25
+    Caption = #1042#1099#1082#1083#1102#1095#1080#1090#1100
+    TabOrder = 2
+    OnClick = Button10Click
+  end
   object MainMenu: TMainMenu
     Left = 8
     Top = 528
     object config: TMenuItem
       Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080
       OnClick = configClick
+    end
+    object N1: TMenuItem
+      Caption = #1050#1072#1083#1100#1082#1091#1083#1103#1090#1086#1088' '#1091#1075#1083#1072' '#1080' '#1089#1082#1086#1088#1086#1089#1090#1080
+      OnClick = N1Click
     end
   end
 end

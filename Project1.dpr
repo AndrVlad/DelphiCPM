@@ -1,5 +1,4 @@
 program Project1;
-
 uses
   Vcl.Forms,
   pr1 in 'pr1.pas' {winMain},
@@ -20,10 +19,11 @@ uses
   WriteAngleLSB in 'WriteAngleLSB.pas' {Form7},
   WriteAngleMSB in 'WriteAngleMSB.pas' {Form8},
   WriteSpeed in 'WriteSpeed.pas' {Form9},
-  WriteCrystallNum in 'WriteCrystallNum.pas' {Form10};
+  WriteCrystallNum in 'WriteCrystallNum.pas' {Form10},
+  Calculator in 'Calculator.pas' {Form11},
+  AngleTThread in 'AngleTThread.pas';
 
 {$R *.res}
-
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
@@ -40,5 +40,6 @@ begin
   Application.CreateForm(TForm8, Form8);
   Application.CreateForm(TForm9, Form9);
   Application.CreateForm(TForm10, Form10);
+  Application.CreateForm(TForm11, Form11);
   Application.Run;
 end.

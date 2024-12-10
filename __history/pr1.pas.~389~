@@ -51,6 +51,7 @@ type
     Label1: TLabel;
     ListBox5: TListBox;
     ListBox6: TListBox;
+    N1: TMenuItem;
     //PLC: TIdTCPClient;
 
     procedure ListBox1Click(Sender: TObject);
@@ -101,6 +102,7 @@ type
     procedure Button8Click(Sender: TObject);
     procedure ListBox5Click(Sender: TObject);
     procedure ListBox6Click(Sender: TObject);
+    procedure N1Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -472,7 +474,12 @@ begin
   //ShowMessage('Сообщение отправлено');
 end;
 
-procedure TwinMain.PollSAU(NumSAU: integer; command_type: integer);
+pprocedure TwinMain.N1Click(Sender: TObject);
+begin
+
+end;
+
+rocedure TwinMain.PollSAU(NumSAU: integer; command_type: integer);
 var
   msg: string;
 begin
@@ -912,7 +919,7 @@ begin
 
 SendMessage(winMain.Memo1.Handle, EM_LINESCROLL, 0,winMain.Memo1.Lines.Count);
 winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+String(RBuffer);//Загружаем в Memo содержимое буфера;
-winMain.Memo1.Lines.Add(#13#10);
+
 
   //i:= Random(100);
 //winMain.Memo1.Lines.Text := IntToStr(i);

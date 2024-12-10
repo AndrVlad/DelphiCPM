@@ -51,6 +51,7 @@ type
     Label1: TLabel;
     ListBox5: TListBox;
     ListBox6: TListBox;
+    N1: TMenuItem;
     //PLC: TIdTCPClient;
 
     procedure ListBox1Click(Sender: TObject);
@@ -101,6 +102,7 @@ type
     procedure Button8Click(Sender: TObject);
     procedure ListBox5Click(Sender: TObject);
     procedure ListBox6Click(Sender: TObject);
+    procedure N1Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -140,7 +142,7 @@ implementation
 {$R *.dfm}
 uses Unit1,Unit2,TransmitReceiveCOM,TurnOnFilter,WriteSample,ModbusTransmitReceive,
 TurnOnVVI, SetPorog, SetOkno, TurnOffFilter,WriteAngleLSB,WriteAngleMSB,WriteSpeed,
-WriteCrystallNum;
+WriteCrystallNum, Calculator;
 
 // Старт программы
 
@@ -197,9 +199,8 @@ begin
           If Btr.Size<>0 then //Если байты присутствуют,
           begin
             ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);
-            Synchronize(OutVoltageValue);//Делаем синхроннй вызов загрузки буфера в Memo;
-            //OutVoltageValue;
-            winMain.Memo1.Lines.Add(#13#10);
+            //Synchronize(OutVoltageValue);//Делаем синхроннй вызов загрузки буфера в Memo;
+            OutVoltageValue;
             //WriteChartFile;
           end;
         end;
@@ -471,6 +472,13 @@ begin
   end;
 
   //ShowMessage('Сообщение отправлено');
+end;
+
+procedure TwinMain.N1Click(Sender: TObject);
+begin
+      //вызов калькулятора
+      Form11:=TForm11.Create(Self);
+      Form11.ShowModal;
 end;
 
 procedure TwinMain.PollSAU(NumSAU: integer; command_type: integer);
