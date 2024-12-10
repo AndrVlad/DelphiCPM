@@ -1,0 +1,216 @@
+unit TransmitReceiveCOM;
+
+interface
+
+var COMConnectionState: boolean = False;
+
+function getPhndl: THandle;
+function ReadCOM: string;
+procedure InitCOM(PortName: string);
+procedure WriteCOM(msg: string; commandType: integer);
+procedure Delay(Value: Cardinal);
+implementation
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Samples.Spin,Unit2,pr1, inifiles;
+
+var
+  Phndl: THandle;
+  DCB: TDcb;
+  Rbuffer: array[0..255] of Byte;
+
+function getPhndl: THandle;
+begin
+  Result := Phndl;
+end;
+
+// функция преобразования байта посылки в строку
+
+function BytesToString(const Bytes: array of Byte): string;
+var
+  I: Integer;
+begin
+  Result := '';
+  if Bytes[0] = 5 then
+    Result := Result + '05'
+  else if Bytes[0] = 7 then
+    Result := Result + '07';
+{  else
+    логика на случай получения некорректной посылки }
+
+  for I := Low(Bytes)+1 to High(Bytes) do
+    Result := Result + Chr(Bytes[I]);
+end;
+
+{
+  Отправляет посылку по COM-порту
+  1 парам. - строка данных без первого байта
+  2 парам. - тип передачи посылки и формирование первого байта
+}
+
+procedure WriteCOM(msg: string; commandType: integer);
+type
+  buffer = array of Byte;
+var
+  bytesWritten: DWORD;
+  Wbuffer: array[0..4] of Byte;
+  i: integer;
+begin
+
+  case commandType of
+    0: begin
+          Wbuffer[0] := Ord(Chr(5));
+          for i := 1 to 4 do
+          begin
+            Wbuffer[i] := Ord(msg[i]);
+          end;
+        end;
+    1: begin
+          Wbuffer[0] := Ord(Chr(7));
+          for i := 1 to 4 do
+          begin
+            Wbuffer[i] := Ord(msg[i]);
+          end;
+        end;
+    2: begin
+            // логика на случай отсылки для ** (шлем 2 раза посылку сначала с 5,
+            // затем с 7 первым байтом)
+        end;
+  end;
+
+  if Phndl = INVALID_HANDLE_VALUE then
+  ShowMessage('Ошибка дескриптора порта');
+
+  {
+  if(not WriteFile(Phndl, Wbuffer, SizeOf(Wbuffer), bytesWritten, nil))
+  and (GetLastError <> ERROR_IO_PENDING) then
+    ShowMessage('Ошибка в функции отправки');
+  }
+
+  if(not WriteFile(Phndl, Wbuffer, SizeOf(Wbuffer), bytesWritten, @winMain.OverRead))
+  and (GetLastError <> ERROR_IO_PENDING) then
+    ShowMessage('Ошибка в функции отправки');
+  {
+  if bytesWritten > 0 then
+      ShowMessage('Данные отправлены')
+    else
+      ShowMessage('Ошибка отправки'); }
+     winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+'>'+msg;
+
+       //Загружаем в Memo содержимое буфера;
+end;
+
+procedure Delay(Value: Cardinal);        // SDP
+var
+  F, N: Cardinal;
+begin
+  N := 0;
+  while N <= (Value div 10) do
+  begin
+    SleepEx(1, True);
+    Application.ProcessMessages;
+    Inc(N);
+  end;
+  F := GetTickCount;
+  repeat
+    Application.ProcessMessages;
+    N := GetTickCount;
+  until (N - F >= (Value mod 10)) or (N < F);
+end;
+
+// инициализация COM-порта
+procedure InitCOM(PortName: string);
+begin
+  {
+  Phndl := CreateFile(PChar(PortName),
+  GENERIC_READ or GENERIC_WRITE, 0, nil,
+  OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+  }
+
+  Phndl := CreateFile(PChar(PortName),
+  Generic_Read+Generic_Write, 0,nil,
+  Open_Existing,File_Flag_Overlapped,0);
+
+  if Phndl = INVALID_HANDLE_VALUE then
+    ShowMessage('Порт не удалось открыть');
+  {
+  PurgeComm(Phndl, Purge_TXabort or Purge_RXabort
+  or Purge_TXclear or Purge_RXclear);
+  }
+  GetCommState(Phndl, DCB);
+
+  //DCB.BaudRate := 19200;
+  DCB.BaudRate := FControls.BaudRate;
+  DCB.Parity := NOPARITY;
+  DCB.ByteSize := 8;
+  DCB.StopBits := ONESTOPBIT;
+
+  if (SetCommState(Phndl, DCB)) then
+  begin
+    ShowMessage('Подключено к ' + PortName);
+    COMConnectionState := true;
+  end;
+
+  // sdp 051224
+    EscapeCommFunction(Phndl, SETRTS);
+    EscapeCommFunction(Phndl, SETDTR);
+    EscapeCommFunction(Phndl, CLRRTS);
+    Delay(1000);
+    EscapeCommFunction(Phndl, SETRTS);
+
+
+  if not SetCommMask(Phndl, EV_RXchar) then
+  ShowMessage('Маска не задалась');
+
+  PurgeComm(Phndl, PURGE_RXCLEAR or PURGE_TXCLEAR);
+
+end;
+
+{
+  Функция чтения с COM-порта
+  Возвращает полученную посылку в виде строки.
+}
+function ReadCOM:string;
+var
+  Rbuffer: array[0..255] of Byte;
+  bytesReaden: DWORD;
+  Data: string;
+begin
+  FIllChar(Rbuffer,SizeOf(Rbuffer),0);
+  if not SetCommMask(Phndl, EV_RXchar) then
+  ShowMessage('Маска не задалась');
+
+  if (not ReadFile(Phndl,Rbuffer,SizeOf(Rbuffer),bytesReaden,nil)) then
+    ShowMessage('Ошибка в функции приема');
+
+  { if bytesReaden = 0 then
+  ShowMessage('Ничего не считано');  }
+
+  Data := BytesToString(RBuffer);
+  Result := Data;
+
+end;
+
+// функция для отладки - получение и расшифровка кода ошибки функции
+
+function GetLastErrorMessage: string;
+var
+  ErrorCode: DWORD;
+  Buffer: array[0..255] of Char;
+begin
+  ErrorCode := GetLastError;
+  FormatMessage(
+    FORMAT_MESSAGE_FROM_SYSTEM,
+    nil,
+    ErrorCode,
+    0,
+    Buffer,
+    Length(Buffer),
+    nil
+  );
+  Result := Format('Error code: %d, Message: %s', [ErrorCode, Buffer]);
+end;
+
+
+end.

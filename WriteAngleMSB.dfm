@@ -2,8 +2,8 @@ object Form8: TForm8
   Left = 635
   Top = 369
   Caption = 'Form8'
-  ClientHeight = 101
-  ClientWidth = 208
+  ClientHeight = 100
+  ClientWidth = 204
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

@@ -48,6 +48,7 @@ begin
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
+  winMain.Memo1.Lines.Add(#13#10);
 
   ShowMessage('Отправлено '+msg);
 

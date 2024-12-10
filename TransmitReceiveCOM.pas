@@ -90,14 +90,14 @@ begin
 
   if(not WriteFile(Phndl, Wbuffer, SizeOf(Wbuffer), bytesWritten, @winMain.OverRead))
   and (GetLastError <> ERROR_IO_PENDING) then
-    ShowMessage('Ошибка в функции отправки');
+    ShowMessage('Ошибка в функции отправки. Проверьте подключение');
   {
   if bytesWritten > 0 then
       ShowMessage('Данные отправлены')
     else
       ShowMessage('Ошибка отправки'); }
      winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+'>'+msg;
-     winMain.Memo1.Lines.Add(#13#10);
+
        //Загружаем в Memo содержимое буфера;
 end;
 
@@ -148,8 +148,9 @@ begin
 
   if (SetCommState(Phndl, DCB)) then
   begin
-    ShowMessage('Настройки заданы');
+    ShowMessage('Подключено к ' + PortName);
     COMConnectionState := true;
+    winMain.Label10.Caption := FControls.PortName;
   end;
 
   // sdp 051224

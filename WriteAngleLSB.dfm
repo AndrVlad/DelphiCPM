@@ -3,8 +3,8 @@ object Form7: TForm7
   Top = 369
   ActiveControl = SpinEdit1
   Caption = 'Form7'
-  ClientHeight = 100
-  ClientWidth = 218
+  ClientHeight = 99
+  ClientWidth = 214
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

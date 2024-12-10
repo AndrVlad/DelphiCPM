@@ -21,6 +21,8 @@ object winMain: TwinMain
     Width = 876
     Height = 19
     Panels = <>
+    ExplicitTop = 515
+    ExplicitWidth = 872
   end
   object PageControl1: TPageControl
     Left = 0
@@ -52,6 +54,14 @@ object winMain: TwinMain
         Height = 15
         Caption = 'IP-'#1072#1076#1088#1077#1089' '#1055#1051#1050':'
       end
+      object Label6: TLabel
+        Left = 688
+        Top = 376
+        Width = 34
+        Height = 15
+        Caption = 'Label6'
+        Visible = False
+      end
       object GroupBox4: TGroupBox
         Left = 16
         Top = 0
@@ -65,6 +75,25 @@ object winMain: TwinMain
           Width = 109
           Height = 15
           Caption = #1057#1090#1072#1088#1090#1086#1074#1099#1081' '#1088#1077#1075#1080#1089#1090#1088':'
+        end
+        object Label8: TLabel
+          Left = 17
+          Top = 54
+          Width = 46
+          Height = 15
+          Caption = #1042#1099#1073#1088#1072#1085':'
+        end
+        object Label10: TLabel
+          Left = 69
+          Top = 54
+          Width = 30
+          Height = 17
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Segoe UI'
+          Font.Style = [fsBold]
+          ParentFont = False
         end
         object Edit2: TEdit
           Left = 408
@@ -81,6 +110,15 @@ object winMain: TwinMain
           Height = 23
           TabOrder = 1
           Text = 'Edit3'
+        end
+        object Button11: TButton
+          Left = 128
+          Top = 48
+          Width = 75
+          Height = 25
+          Caption = #1055#1086#1076#1082#1083#1102#1095#1080#1090#1100
+          TabOrder = 2
+          OnClick = Button11Click
         end
       end
       object ListBox1: TListBox
@@ -193,7 +231,7 @@ object winMain: TwinMain
       end
       object RadioButton1: TRadioButton
         Left = 33
-        Top = 31
+        Top = 21
         Width = 64
         Height = 17
         Caption = 'COM'
@@ -223,12 +261,13 @@ object winMain: TwinMain
         OnClick = RadioButton3Click
       end
       object Button6: TButton
-        Left = 103
-        Top = 27
+        Left = 217
+        Top = 17
         Width = 74
         Height = 25
         Caption = #1053#1072#1089#1090#1088#1086#1080#1090#1100'...'
         TabOrder = 10
+        Visible = False
         OnClick = Button6Click
       end
       object Button7: TButton
@@ -292,14 +331,31 @@ object winMain: TwinMain
         Visible = False
         OnClick = ListBox6Click
       end
-      object Button9: TButton
-        Left = 480
-        Top = 400
-        Width = 75
-        Height = 25
-        Caption = #1042#1082#1083#1102#1095#1080#1090#1100
+      object GroupBox5: TGroupBox
+        Left = 464
+        Top = 376
+        Width = 161
+        Height = 73
+        Caption = #1053#1077#1087#1088#1077#1088#1099#1074#1085#1086#1077' '#1095#1090#1077#1085#1080#1077' '#1091#1075#1083#1072
         TabOrder = 16
-        OnClick = Button9Click
+        object RadioButton4: TRadioButton
+          Left = 16
+          Top = 24
+          Width = 49
+          Height = 17
+          Caption = #1042#1050#1051
+          TabOrder = 0
+          OnClick = RadioButton4Click
+        end
+        object RadioButton5: TRadioButton
+          Left = 16
+          Top = 47
+          Width = 72
+          Height = 17
+          Caption = #1042#1067#1050#1051
+          TabOrder = 1
+          OnClick = RadioButton5Click
+        end
       end
     end
     object Modbus: TTabSheet
@@ -405,15 +461,6 @@ object winMain: TwinMain
         TabOrder = 7
       end
     end
-  end
-  object Button10: TButton
-    Left = 576
-    Top = 434
-    Width = 75
-    Height = 25
-    Caption = #1042#1099#1082#1083#1102#1095#1080#1090#1100
-    TabOrder = 2
-    OnClick = Button10Click
   end
   object MainMenu: TMainMenu
     Left = 8

@@ -52,8 +52,8 @@ begin
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
-
-  ShowMessage('Отправлено '+msg);
+  winMain.Memo1.Lines.Add(#13#10);
+  //ShowMessage('Отправлено '+msg);
 
   Form9.Close;
 end;
