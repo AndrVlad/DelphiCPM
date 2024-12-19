@@ -8,12 +8,12 @@ function getPhndl: THandle;
 function ReadCOM: string;
 procedure InitCOM(PortName: string);
 procedure WriteCOM(msg: string; commandType: integer);
-
+procedure Delay(Value: Cardinal);
 implementation
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Samples.Spin,Unit2,pr1, inifiles;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Samples.Spin,Unit2,pr1, inifiles, ComPortDriverThread;
 
 var
   Phndl: THandle;
@@ -90,12 +90,33 @@ begin
 
   if(not WriteFile(Phndl, Wbuffer, SizeOf(Wbuffer), bytesWritten, @winMain.OverRead))
   and (GetLastError <> ERROR_IO_PENDING) then
-    ShowMessage('Ошибка в функции отправки');
+    ShowMessage('Ошибка в функции отправки. Проверьте подключение');
   {
   if bytesWritten > 0 then
       ShowMessage('Данные отправлены')
     else
       ShowMessage('Ошибка отправки'); }
+     winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+'>'+msg;
+
+       //Загружаем в Memo содержимое буфера;
+end;
+
+procedure Delay(Value: Cardinal);        // SDP
+var
+  F, N: Cardinal;
+begin
+  N := 0;
+  while N <= (Value div 10) do
+  begin
+    SleepEx(1, True);
+    Application.ProcessMessages;
+    Inc(N);
+  end;
+  F := GetTickCount;
+  repeat
+    Application.ProcessMessages;
+    N := GetTickCount;
+  until (N - F >= (Value mod 10)) or (N < F);
 end;
 
 // инициализация COM-порта
@@ -127,15 +148,23 @@ begin
 
   if (SetCommState(Phndl, DCB)) then
   begin
-    ShowMessage('Настройки заданы');
+    ShowMessage('Подключено к ' + PortName);
     COMConnectionState := true;
+    winMain.Label10.Caption := FControls.PortName;
   end;
+
+  // sdp 051224
+    EscapeCommFunction(Phndl, SETRTS);
+    EscapeCommFunction(Phndl, SETDTR);
+    EscapeCommFunction(Phndl, CLRRTS);
+    Delay(1000);
+    EscapeCommFunction(Phndl, SETRTS);
 
 
   if not SetCommMask(Phndl, EV_RXchar) then
   ShowMessage('Маска не задалась');
 
-  PurgeComm(Phndl, Purge_TXabort or Purge_RXabort or Purge_TXclear or Purge_RXclear);
+  PurgeComm(Phndl, PURGE_RXCLEAR or PURGE_TXCLEAR);
 
 end;
 

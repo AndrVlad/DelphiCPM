@@ -144,7 +144,6 @@ var
   AngleThread: TThread;
   ComStat:TComStat;
   Btr, Mask, Temp, Signal: DWORD;
-  //Rbuffer: array[0..50] of AnsiChar;
   Rbuffer: array[0..255] of AnsiChar;
   Action: TCloseAction;
   OverRead:TOverlapped;
@@ -339,6 +338,8 @@ begin
     3: ListBox6.Visible:=True;
   end;
 end;
+
+// обработчик пункта меню "Настройки"
 procedure TwinMain.configClick(Sender: TObject);
 begin
   //FControls:= TFControls.Create(Self);

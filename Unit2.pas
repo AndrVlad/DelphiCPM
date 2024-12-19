@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, ComPortDriverThread;
 
 type
   TFControls = class(TForm)
@@ -28,6 +28,7 @@ type
     PortName: string;
     DCB: TDcb;
     BaudRate: integer;
+    ComPortDriver: TComPortDriverThread;
     procedure InquiryPort(Sender: TObject);
 
   end;
@@ -41,7 +42,7 @@ implementation
 
 uses TransmitReceiveCOM, pr1;
 
-// инициализация выбранного порта из меню Настройки
+// (обработчик кнопки "Подтвердить") инициализация выбранного порта из меню Настройки
 procedure TFControls.Button1Click(Sender: TObject);
 begin
   InitCOM(PortName);
@@ -63,7 +64,7 @@ begin
   COMConnectionState := False;
 end;
 
-// обработка списка доступных портов
+// обработчик списка доступных портов
 
 procedure TFControls.ComboBox1Change(Sender: TObject);
 var

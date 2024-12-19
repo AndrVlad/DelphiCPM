@@ -2,8 +2,8 @@ object winMain: TwinMain
   Left = 374
   Top = 138
   Caption = 'TestCPM'
-  ClientHeight = 573
-  ClientWidth = 904
+  ClientHeight = 535
+  ClientWidth = 876
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,12 +17,12 @@ object winMain: TwinMain
   TextHeight = 15
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 554
-    Width = 904
+    Top = 516
+    Width = 876
     Height = 19
     Panels = <>
-    ExplicitTop = 553
-    ExplicitWidth = 900
+    ExplicitTop = 515
+    ExplicitWidth = 872
   end
   object PageControl1: TPageControl
     Left = 0
@@ -54,6 +54,14 @@ object winMain: TwinMain
         Height = 15
         Caption = 'IP-'#1072#1076#1088#1077#1089' '#1055#1051#1050':'
       end
+      object Label6: TLabel
+        Left = 688
+        Top = 376
+        Width = 34
+        Height = 15
+        Caption = 'Label6'
+        Visible = False
+      end
       object GroupBox4: TGroupBox
         Left = 16
         Top = 0
@@ -67,6 +75,25 @@ object winMain: TwinMain
           Width = 109
           Height = 15
           Caption = #1057#1090#1072#1088#1090#1086#1074#1099#1081' '#1088#1077#1075#1080#1089#1090#1088':'
+        end
+        object Label8: TLabel
+          Left = 17
+          Top = 54
+          Width = 46
+          Height = 15
+          Caption = #1042#1099#1073#1088#1072#1085':'
+        end
+        object Label10: TLabel
+          Left = 69
+          Top = 54
+          Width = 30
+          Height = 17
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Segoe UI'
+          Font.Style = [fsBold]
+          ParentFont = False
         end
         object Edit2: TEdit
           Left = 408
@@ -83,6 +110,15 @@ object winMain: TwinMain
           Height = 23
           TabOrder = 1
           Text = 'Edit3'
+        end
+        object Button11: TButton
+          Left = 128
+          Top = 48
+          Width = 75
+          Height = 25
+          Caption = #1055#1086#1076#1082#1083#1102#1095#1080#1090#1100
+          TabOrder = 2
+          OnClick = Button11Click
         end
       end
       object ListBox1: TListBox
@@ -112,7 +148,8 @@ object winMain: TwinMain
         Items.Strings = (
           #1059#1087#1088#1072#1074#1083#1077#1085#1080#1077' '#1074'/'#1074' '#1080#1089#1090#1086#1095#1085#1080#1082#1072#1084#1080' '#1076#1077#1090#1077#1082#1090#1086#1088#1086#1074
           #1059#1087#1088#1072#1074#1083#1077#1085#1080#1077' '#1057#1040#1059
-          #1059#1087#1088#1072#1074#1083#1077#1085#1080#1077' '#1041#1059#1044', '#1087#1077#1088#1077#1089#1095#1077#1090)
+          #1059#1087#1088#1072#1074#1083#1077#1085#1080#1077' '#1041#1059#1044', '#1087#1077#1088#1077#1089#1095#1077#1090
+          #1059#1087#1088#1072#1074#1083#1077#1085#1080#1077' '#1074#1072#1082#1091#1091#1084#1085#1099#1084' '#1057#1050)
       end
       object ListBox2: TListBox
         Left = 16
@@ -184,18 +221,17 @@ object winMain: TwinMain
         OnClick = Button1Click
       end
       object Button2: TButton
-        Left = 574
+        Left = 561
         Top = 327
-        Width = 75
+        Width = 99
         Height = 25
-        Caption = 'Button2'
+        Caption = #1063#1090#1077#1085#1080#1077' '#1089' '#1087#1086#1088#1090#1072
         TabOrder = 6
-        Visible = False
         OnClick = Button2Click
       end
       object RadioButton1: TRadioButton
         Left = 33
-        Top = 31
+        Top = 21
         Width = 64
         Height = 17
         Caption = 'COM'
@@ -225,12 +261,13 @@ object winMain: TwinMain
         OnClick = RadioButton3Click
       end
       object Button6: TButton
-        Left = 103
-        Top = 27
+        Left = 217
+        Top = 17
         Width = 74
         Height = 25
         Caption = #1053#1072#1089#1090#1088#1086#1080#1090#1100'...'
         TabOrder = 10
+        Visible = False
         OnClick = Button6Click
       end
       object Button7: TButton
@@ -263,10 +300,62 @@ object winMain: TwinMain
           #1055#1059#1057#1050' ('#1055#1086#1074#1090#1086#1088') - '#1085#1072#1095#1072#1083#1086' '#1101#1082#1089#1087#1086#1079#1080#1094#1080#1080
           #1047#1072#1087#1080#1089#1100' '#1058#1101#1082#1089'. '#1076#1083#1103' '#1074#1089#1077#1093' '#1082#1072#1085#1072#1083#1086#1074
           #1042#1099#1074#1086#1076' '#1085#1072#1073#1086#1088#1072' '#1080#1084#1087#1091#1083#1100#1089#1086#1074' '#1074' '#1082#1072#1085#1072#1083#1072#1093' '#1080' '#1085#1086#1084'. '#1082#1072#1085#1072#1083#1072
-          #1063#1090#1077#1085#1080#1077' '#1062#1040#1055' '#1055#1086#1088#1086#1075'/'#1054#1082#1085#1086)
+          #1063#1090#1077#1085#1080#1077' '#1062#1040#1055' '#1055#1086#1088#1086#1075'/'#1054#1082#1085#1086
+          #1042#1099#1074#1086#1076' '#1080#1085#1092' '#1086' '#1058#1101#1082#1089', '#1043#1058'-'#1042#1050', '#1043#1058'-'#1057#1063', '#1057#1073#1088#1086#1089)
         TabOrder = 14
         Visible = False
         OnClick = ListBox5Click
+      end
+      object ListBox6: TListBox
+        Left = 16
+        Top = 200
+        Width = 321
+        Height = 209
+        ItemHeight = 15
+        Items.Strings = (
+          #1054#1087#1088#1086#1089' '#1089#1086#1089#1090#1086#1103#1085#1080#1103' '#1057#1050
+          #1055#1091#1089#1082' '#1052
+          #1053#1072#1087#1088#1072#1074#1083#1077#1085#1080#1077' '#1074#1074#1077#1088#1093' '#1052
+          #1053#1072#1087#1088#1072#1074#1083#1077#1085#1080#1077' '#1074#1085#1080#1079' '#1052
+          #1047#1072#1087#1080#1089#1100' '#1079#1072#1076#1072#1085#1085#1086#1075#1086' '#1091#1075#1083#1072', '#1084#1083#1072#1076#1096#1080#1081' '#1088#1072#1079#1088#1103#1076
+          #1047#1072#1087#1080#1089#1100' '#1079#1072#1076#1072#1085#1085#1086#1075#1086' '#1091#1075#1083#1072', '#1089#1090#1072#1088#1096#1080#1081' '#1088#1072#1079#1088#1103#1076
+          #1047#1072#1087#1080#1089#1100' '#1089#1082#1086#1088#1086#1089#1090#1080', '#1090#1077#1090#1072'/'#1084#1080#1085
+          #1042#1099#1074#1086#1076' '#1090#1077#1082#1091#1097#1077#1075#1086' '#1091#1075#1083#1072
+          #1057#1090#1086#1087' '#1052
+          #1047#1072#1087#1080#1089#1100' N'#1082#1088
+          #1042#1099#1082#1083'. '#1042'/'#1042'-1'
+          #1042#1099#1082#1083'. '#1042'/'#1042'-2'
+          #1057#1090#1072#1088#1090#1086#1074#1099#1081' '#1091#1075#1086#1083
+          #1058#1077#1089#1090' C71C')
+        TabOrder = 15
+        Visible = False
+        OnClick = ListBox6Click
+      end
+      object GroupBox5: TGroupBox
+        Left = 464
+        Top = 376
+        Width = 161
+        Height = 73
+        Caption = #1053#1077#1087#1088#1077#1088#1099#1074#1085#1086#1077' '#1095#1090#1077#1085#1080#1077' '#1091#1075#1083#1072
+        TabOrder = 16
+        object RadioButton4: TRadioButton
+          Left = 16
+          Top = 24
+          Width = 49
+          Height = 17
+          Caption = #1042#1050#1051
+          TabOrder = 0
+          OnClick = RadioButton4Click
+        end
+        object RadioButton5: TRadioButton
+          Left = 16
+          Top = 47
+          Width = 72
+          Height = 17
+          Caption = #1042#1067#1050#1051
+          TabOrder = 1
+          OnClick = RadioButton5Click
+        end
       end
     end
     object Modbus: TTabSheet
@@ -357,7 +446,6 @@ object winMain: TwinMain
         Height = 25
         Caption = #1054#1090#1087#1088#1072#1074#1080#1090#1100
         TabOrder = 6
-        OnClick = Button3Click
       end
       object ListBox4: TListBox
         Left = 16
@@ -380,6 +468,10 @@ object winMain: TwinMain
     object config: TMenuItem
       Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080
       OnClick = configClick
+    end
+    object N1: TMenuItem
+      Caption = #1050#1072#1083#1100#1082#1091#1083#1103#1090#1086#1088' '#1091#1075#1083#1072' '#1080' '#1089#1082#1086#1088#1086#1089#1090#1080
+      OnClick = N1Click
     end
   end
 end

@@ -86,7 +86,7 @@ object winMain: TwinMain
         object Label10: TLabel
           Left = 69
           Top = 54
-          Width = 30
+          Width = 4
           Height = 17
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
