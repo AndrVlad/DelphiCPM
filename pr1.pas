@@ -92,7 +92,7 @@ type
     procedure TurnOff_B2;
     procedure StartAngle;
     procedure PollAngle;
-    procedure ComPortReceiveData(Sender: TObject);
+    procedure cpDrvReceiveData(Sender: TObject; DataPtr: Pointer;DataSize: Cardinal);
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
  //   procedure Button3Click(Sender: TObject);
@@ -912,21 +912,22 @@ begin
 
 end;
 
-procedure TwinMain.ComPortReceiveData(Sender: TObject);
-var
-  ReceivedString: string;
-  BytesRead: Integer;
+procedure TwinMain.cpDrvReceiveData(Sender: TObject; DataPtr: Pointer;DataSize: Cardinal);
+var i,k: integer;
+    s: ansistring;
+    s1,s2: string;
 begin
-ShowMessage('get');
-  // Чтение данных из порта
-  //BytesRead := cpDrv.ReadString(ReceivedString);
-  if BytesRead > 0 then
-  begin
-    ShowMessage('get');
-    // Обработка полученной строки
-    Memo1.Lines.Add('Received: ' + ReceivedString); // Добавление в Memo для отображения
-  end;
+
+  // преобразование входных данных в строку - Convert incoming data into a string
+  s := StringOfChar( ' ', DataSize );
+  move( DataPtr^, pAnsiChar(s)^, DataSize  );
+
+  Memo1.Lines.Append( s );
+  Memo1.Lines.EndUpdate;
 end;
+
+
+
 
 {
 procedure MyThread.WriteChartFile;//Процедура записи в файл

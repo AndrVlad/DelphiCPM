@@ -118,6 +118,8 @@ begin
 
   testmsg := 'AC31';
 
+  cpDrv.OnReceiveData := winMain.cpDrvReceiveData;
+
   if cpDrv.Connect then
     begin
        Wbuffer[0] := Ord(Chr(5));
