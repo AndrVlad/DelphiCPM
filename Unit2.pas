@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, ComPortDriverThread;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, CPDrv;
 
 type
   TFControls = class(TForm)
@@ -28,7 +28,6 @@ type
     PortName: string;
     DCB: TDcb;
     BaudRate: integer;
-    ComPortDriver: TComPortDriverThread;
     procedure InquiryPort(Sender: TObject);
 
   end;

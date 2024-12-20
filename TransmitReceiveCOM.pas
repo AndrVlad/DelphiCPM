@@ -1,8 +1,9 @@
 unit TransmitReceiveCOM;
 interface
+uses CPDrv;
 var
   COMConnectionState: boolean = False;
-  ComPortDriver: TComportDriverThread;
+  cpDrv: TCommPortDriver;
 function getPhndl: THandle;
 function ReadCOM: string;
 procedure InitCOM(PortName: string);
@@ -11,7 +12,7 @@ procedure Delay(Value: Cardinal);
 implementation
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Samples.Spin,Unit2,pr1, inifiles, ComPortDriverThread;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Samples.Spin,Unit2,pr1, inifiles;
 var
   Phndl: THandle;
   DCB: TDcb;
@@ -104,8 +105,33 @@ begin
   until (N - F >= (Value mod 10)) or (N < F);
 end;
 procedure InitCOM(PortName: string);
+var
+  testmsg: string;
+  Wbuffer: array[0..4] of Byte;
+  i: integer;
+  sended: Cardinal;
 begin
 
+  cpDrv := TCommportDriver.Create(cpDrv);
+  cpDrv.Port := pnCom2;
+  cpDrv.BaudRate := br9600;
+
+  testmsg := 'AC31';
+
+  if cpDrv.Connect then
+    begin
+       Wbuffer[0] := Ord(Chr(5));
+          for i := 1 to 4 do
+          begin
+            Wbuffer[i] := Ord(testmsg[i]);
+          end;
+      sended := cpDrv.SendData(@Wbuffer,5);
+      if (sended <> 0) then
+        ShowMessage('Message sent!')
+      else
+        ShowMessage('Failed to send message!');
+
+    end;
 end;
 {
 // инициализация COM-порта

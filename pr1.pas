@@ -92,6 +92,7 @@ type
     procedure TurnOff_B2;
     procedure StartAngle;
     procedure PollAngle;
+    procedure ComPortReceiveData(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
  //   procedure Button3Click(Sender: TObject);
@@ -119,15 +120,17 @@ type
     { Public declarations }
   end;
 
+
 MyThread=class(Tthread)
   private
   { private declarations }
   protected
     procedure execute; override;
-    procedure OutVoltageValue;
-    procedure WriteChartFile;
+    //procedure OutVoltageValue;
+    //procedure WriteChartFile;
 
   end;
+
 
 
 TAngleThread = class(TThread)
@@ -209,7 +212,7 @@ begin
           begin
             ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);
             //Synchronize(OutVoltageValue);//Делаем синхроннй вызов загрузки буфера в Memo;
-            OutVoltageValue;
+            //OutVoltageValue;
             //WriteChartFile;
           end;
         end;
@@ -239,15 +242,6 @@ end;
 // закрытие файла
 procedure TwinMain.Button2Click(Sender: TObject);
 begin
-  if MyThr = nil then //Если поток не запущен;
-      begin
-        if COMConnectionState then
-          begin
-            MyThr:=MyThread.Create(false); //Создаем поток чтения;
-            MyThr.FreeOnTerminate:=true; //Запускаем поток чтения;
-            MyThr.Priority:=tpNormal; //Устанавливаем приоритет;
-          end;
-      end;
       Button2.Enabled := False;
   CloseFile(ChartFile);
 end;
@@ -864,6 +858,8 @@ begin
   winMain.Memo1.Lines.Add(#13#10);
 end;
 
+
+{
 procedure MyThread.OutVoltageValue;//Процедура вывода в Memo;
 var
   res: integer;
@@ -884,8 +880,11 @@ Count := Integer(Temp);
 //winMain.Memo1.Lines.Text := IntToStr(i);
 //winMain.Memo1.Lines.Text := IntToStr(SizeOf(String(RBuffer)));
 //winMain.Memo1.Lines.Add(String(RBuffer));
+{
 RBuffer := '';
-end;
+end;    }
+
+
 procedure TAngleThread.Execute;
 var
   msg: string;
@@ -913,11 +912,28 @@ begin
 
 end;
 
+procedure TwinMain.ComPortReceiveData(Sender: TObject);
+var
+  ReceivedString: string;
+  BytesRead: Integer;
+begin
+ShowMessage('get');
+  // Чтение данных из порта
+  //BytesRead := cpDrv.ReadString(ReceivedString);
+  if BytesRead > 0 then
+  begin
+    ShowMessage('get');
+    // Обработка полученной строки
+    Memo1.Lines.Add('Received: ' + ReceivedString); // Добавление в Memo для отображения
+  end;
+end;
 
+{
 procedure MyThread.WriteChartFile;//Процедура записи в файл
 begin
   Write(ChartFile,RBuffer);
 end;
+}
 procedure TwinMain.FormClose(Sender: TObject; var Action: TCloseAction); //Закрытие програмы;
 begin
 
@@ -926,6 +942,7 @@ begin
 
 if  MyThr <> nil then //Если поток запущен;
 MyThr.Terminate; //Останавливаем его;
+cpDrv.Disconnect;
 CloseHandle(getPhndl); //Закрываем Порт;
 // очистка памяти созданных объектов
 //PLC.Free;
