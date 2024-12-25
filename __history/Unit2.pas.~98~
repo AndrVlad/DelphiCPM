@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, CPDrv;
 
 type
   TFControls = class(TForm)
@@ -41,10 +41,11 @@ implementation
 
 uses TransmitReceiveCOM, pr1;
 
-// инициализация выбранного порта из меню Настройки
+// (обработчик кнопки "Подтвердить") инициализация выбранного порта из меню Настройки
 procedure TFControls.Button1Click(Sender: TObject);
 begin
-  InitCOM(PortName);
+  InitCOM(PortName,BaudRate);
+  ShowMessage(IntToStr(BaudRate));
   FControls.Close;
   ComboBox2.Enabled := False;
 end;
@@ -52,24 +53,26 @@ end;
 // закрытие(сброс) выбранного порта из меню Настройки
 procedure TFControls.Button2Click(Sender: TObject);
 begin
-
+  {
   if  MyThr <> nil then //Если поток запущен;
   MyThr.Terminate; //Останавливаем его;
   MyThr := nil;
-
-  CloseHandle(getPhndl);
+  }
+  //CloseHandle(getPhndl);
+  DisconnectPort;
   InquiryPort(Self);
   ComboBox2.Enabled := True;
   COMConnectionState := False;
 end;
 
-// обработка списка доступных портов
+// обработчик списка доступных портов
 
 procedure TFControls.ComboBox1Change(Sender: TObject);
 var
   CI: TStrings;
   item_ind: integer;
 begin
+
   CI:=ComboBox1.Items;
   item_ind:=ComboBox1.ItemIndex;
   PortName:=CI[item_ind];
@@ -79,6 +82,7 @@ begin
 
 end;
 
+// обработчик установки скорости обмена данных
 procedure TFControls.ComboBox2Change(Sender: TObject);
 var
   CI: TStrings;

@@ -44,7 +44,7 @@ uses TransmitReceiveCOM, pr1;
 // (обработчик кнопки "Подтвердить") инициализация выбранного порта из меню Настройки
 procedure TFControls.Button1Click(Sender: TObject);
 begin
-  InitCOM(PortName);
+  InitCOM(PortName,BaudRate);
   FControls.Close;
   ComboBox2.Enabled := False;
 end;
@@ -52,12 +52,7 @@ end;
 // закрытие(сброс) выбранного порта из меню Настройки
 procedure TFControls.Button2Click(Sender: TObject);
 begin
-
-  if  MyThr <> nil then //Если поток запущен;
-  MyThr.Terminate; //Останавливаем его;
-  MyThr := nil;
-
-  CloseHandle(getPhndl);
+  DisconnectPort;
   InquiryPort(Self);
   ComboBox2.Enabled := True;
   COMConnectionState := False;
@@ -70,6 +65,7 @@ var
   CI: TStrings;
   item_ind: integer;
 begin
+
   CI:=ComboBox1.Items;
   item_ind:=ComboBox1.ItemIndex;
   PortName:=CI[item_ind];
@@ -79,6 +75,7 @@ begin
 
 end;
 
+// обработчик установки скорости обмена данных
 procedure TFControls.ComboBox2Change(Sender: TObject);
 var
   CI: TStrings;

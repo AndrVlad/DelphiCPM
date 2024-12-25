@@ -229,7 +229,7 @@ end;
 
 procedure TwinMain.Button11Click(Sender: TObject);
 begin
-  InitCOM(FControls.PortName);
+  //InitCOM(FControls.PortName);
   Button11.Enabled := False;
 end;
 
@@ -912,21 +912,21 @@ begin
 
 end;
 
-procedure TwinMain.cpDrvReceiveData(Sender: TObject; DataPtr: Pointer;DataSize: Cardinal);
+// чтение данных из порта
+procedure TwinMain.cpDrvReceiveData(Sender: TObject; DataPtr: Pointer; DataSize: Cardinal);
 var i,k: integer;
-    s: ansistring;
+    s: AnsiString;
     s1,s2: string;
 begin
 
-  // преобразование входных данных в строку - Convert incoming data into a string
-  s := StringOfChar( ' ', DataSize );
-  move( DataPtr^, pAnsiChar(s)^, DataSize  );
+  // преобразование входных данных в строку
+  s := StringOfChar(' ', DataSize);
+  move(DataPtr^, pAnsiChar(s)^, DataSize);
 
-  Memo1.Lines.Append( s );
+
+  Memo1.Lines.Append(s);
   Memo1.Lines.EndUpdate;
 end;
-
-
 
 
 {

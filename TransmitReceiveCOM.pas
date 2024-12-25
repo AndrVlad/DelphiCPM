@@ -6,9 +6,10 @@ var
   cpDrv: TCommPortDriver;
 function getPhndl: THandle;
 function ReadCOM: string;
-procedure InitCOM(PortName: string);
+procedure InitCOM(PortName: string; BaudRate: integer);
 procedure WriteCOM(msg: string; commandType: integer);
 procedure Delay(Value: Cardinal);
+procedure DisconnectPort;
 implementation
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
@@ -48,6 +49,7 @@ var
   bytesWritten: DWORD;
   Wbuffer: array[0..4] of Byte;
   i: integer;
+  sended: Byte;
 begin
   case commandType of
     0: begin
@@ -65,27 +67,15 @@ begin
           end;
         end;
     2: begin
-            // логика на случай отсылки для ** (шлем 2 раза посылку сначала с 5,
+            // логика на случай отсылки для ** (шлем 2 раза посылку: сначала с 5,
             // затем с 7 первым байтом)
         end;
   end;
-  if Phndl = INVALID_HANDLE_VALUE then
-  ShowMessage('Ошибка дескриптора порта');
-  {
-  if(not WriteFile(Phndl, Wbuffer, SizeOf(Wbuffer), bytesWritten, nil))
-  and (GetLastError <> ERROR_IO_PENDING) then
-    ShowMessage('Ошибка в функции отправки');
-  }
-  if(not WriteFile(Phndl, Wbuffer, SizeOf(Wbuffer), bytesWritten, @winMain.OverRead))
-  and (GetLastError <> ERROR_IO_PENDING) then
-    ShowMessage('Ошибка в функции отправки. Проверьте подключение');
-  {
-  if bytesWritten > 0 then
-      ShowMessage('Данные отправлены')
-    else
-      ShowMessage('Ошибка отправки'); }
-     winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+'>'+msg;
-       //Загружаем в Memo содержимое буфера;
+
+    sended := cpDrv.SendData(@Wbuffer,5);
+      if (sended = 0) then
+        ShowMessage('Ошибка отправки сообщения');
+  winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+'>'+msg;
 end;
 procedure Delay(Value: Cardinal);        // SDP
 var
@@ -104,7 +94,8 @@ begin
     N := GetTickCount;
   until (N - F >= (Value mod 10)) or (N < F);
 end;
-procedure InitCOM(PortName: string);
+
+procedure InitCOM(PortName: string; BaudRate: integer);
 var
   testmsg: string;
   Wbuffer: array[0..4] of Byte;
@@ -113,16 +104,18 @@ var
 begin
 
   cpDrv := TCommportDriver.Create(cpDrv);
-  cpDrv.Port := pnCom2;
-  cpDrv.BaudRate := br9600;
+  //cpDrv.Port := pnCom7;
+  cpDrv.PortName :=	 '\\.\'+PortName;
+  cpDrv.BaudRateValue := BaudRate;
 
   testmsg := 'AC31';
 
   cpDrv.OnReceiveData := winMain.cpDrvReceiveData;
 
   if cpDrv.Connect then
-    begin
-       Wbuffer[0] := Ord(Chr(5));
+  begin
+      ShowMessage('Подключение по '+PortName+' установлено');
+      Wbuffer[0] := Ord(Chr(5));
           for i := 1 to 4 do
           begin
             Wbuffer[i] := Ord(testmsg[i]);
@@ -133,7 +126,14 @@ begin
       else
         ShowMessage('Failed to send message!');
 
-    end;
+  end
+  else
+     ShowMessage('Ошибка подключения по '+PortName);
+end;
+
+procedure DisconnectPort;
+begin
+  cpDrv.Disconnect;
 end;
 {
 // инициализация COM-порта
