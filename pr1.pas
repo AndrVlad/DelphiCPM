@@ -241,10 +241,10 @@ end;
 // закрытие файла
 procedure TwinMain.Button2Click(Sender: TObject);
 begin
-
   CloseFile(ChartFile);
 end;
-// запись в регистр по Modbus Ethernet
+
+// запись в регистр по Modbus Ethernet (старый функционал на отдельной вкладке)
 procedure TwinMain.Button3Click(Sender: TObject);
 begin
 //  if PLC.WriteRegisters(5, RegisterData) then
