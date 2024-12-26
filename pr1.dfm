@@ -68,7 +68,7 @@ object winMain: TwinMain
         Width = 865
         Height = 94
         Caption = #1057#1087#1086#1089#1086#1073' '#1087#1077#1088#1077#1076#1072#1095#1080' '#1076#1072#1085#1085#1099#1093':'
-        TabOrder = 11
+        TabOrder = 10
         object Label1: TLabel
           Left = 287
           Top = 58
@@ -220,15 +220,6 @@ object winMain: TwinMain
         TabOrder = 5
         OnClick = Button1Click
       end
-      object Button2: TButton
-        Left = 561
-        Top = 327
-        Width = 99
-        Height = 25
-        Caption = #1063#1090#1077#1085#1080#1077' '#1089' '#1087#1086#1088#1090#1072
-        TabOrder = 6
-        OnClick = Button2Click
-      end
       object RadioButton1: TRadioButton
         Left = 33
         Top = 21
@@ -236,7 +227,7 @@ object winMain: TwinMain
         Height = 17
         Caption = 'COM'
         Checked = True
-        TabOrder = 7
+        TabOrder = 6
         TabStop = True
         OnClick = RadioButton1Click
       end
@@ -247,7 +238,7 @@ object winMain: TwinMain
         Height = 17
         Caption = 'Modbus over Ethernet'
         Enabled = False
-        TabOrder = 8
+        TabOrder = 7
         OnClick = RadioButton2Click
       end
       object RadioButton3: TRadioButton
@@ -257,7 +248,7 @@ object winMain: TwinMain
         Height = 17
         Caption = 'Modbus ASCII'
         Enabled = False
-        TabOrder = 9
+        TabOrder = 8
         OnClick = RadioButton3Click
       end
       object Button6: TButton
@@ -266,7 +257,7 @@ object winMain: TwinMain
         Width = 74
         Height = 25
         Caption = #1053#1072#1089#1090#1088#1086#1080#1090#1100'...'
-        TabOrder = 10
+        TabOrder = 9
         Visible = False
         OnClick = Button6Click
       end
@@ -276,7 +267,7 @@ object winMain: TwinMain
         Width = 75
         Height = 25
         Caption = #1057#1086#1077#1076#1080#1085#1077#1085#1080#1077
-        TabOrder = 12
+        TabOrder = 11
         OnClick = Button7Click
       end
       object Button8: TButton
@@ -285,7 +276,7 @@ object winMain: TwinMain
         Width = 75
         Height = 25
         Caption = #1055#1088#1080#1084#1077#1085#1080#1090#1100
-        TabOrder = 13
+        TabOrder = 12
         OnClick = Button8Click
       end
       object ListBox5: TListBox
@@ -302,7 +293,7 @@ object winMain: TwinMain
           #1042#1099#1074#1086#1076' '#1085#1072#1073#1086#1088#1072' '#1080#1084#1087#1091#1083#1100#1089#1086#1074' '#1074' '#1082#1072#1085#1072#1083#1072#1093' '#1080' '#1085#1086#1084'. '#1082#1072#1085#1072#1083#1072
           #1063#1090#1077#1085#1080#1077' '#1062#1040#1055' '#1055#1086#1088#1086#1075'/'#1054#1082#1085#1086
           #1042#1099#1074#1086#1076' '#1080#1085#1092' '#1086' '#1058#1101#1082#1089', '#1043#1058'-'#1042#1050', '#1043#1058'-'#1057#1063', '#1057#1073#1088#1086#1089)
-        TabOrder = 14
+        TabOrder = 13
         Visible = False
         OnClick = ListBox5Click
       end
@@ -327,7 +318,7 @@ object winMain: TwinMain
           #1042#1099#1082#1083'. '#1042'/'#1042'-2'
           #1057#1090#1072#1088#1090#1086#1074#1099#1081' '#1091#1075#1086#1083
           #1058#1077#1089#1090' C71C')
-        TabOrder = 15
+        TabOrder = 14
         Visible = False
         OnClick = ListBox6Click
       end
@@ -337,7 +328,8 @@ object winMain: TwinMain
         Width = 161
         Height = 73
         Caption = #1053#1077#1087#1088#1077#1088#1099#1074#1085#1086#1077' '#1095#1090#1077#1085#1080#1077' '#1091#1075#1083#1072
-        TabOrder = 16
+        TabOrder = 15
+        Visible = False
         object RadioButton4: TRadioButton
           Left = 16
           Top = 24

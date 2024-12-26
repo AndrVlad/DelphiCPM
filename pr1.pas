@@ -4,7 +4,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.Menus,
   System.UITypes,Vcl.DBCtrls,IniFiles, IdBaseComponent, IdComponent, IdTCPConnection,
-  IdTCPClient, SetTexp;// IdModbusClient
+  IdTCPClient, SetTexp, IdModbusClient;
 type
   TwinMain = class(TForm)
     MainMenu: TMainMenu;
@@ -21,7 +21,6 @@ type
     GroupBox1: TGroupBox;
     Memo1: TMemo;
     Button1: TButton;
-    Button2: TButton;
     Modbus: TTabSheet;
     Edit1: TEdit;
     Label4: TLabel;
@@ -50,13 +49,13 @@ type
     ListBox6: TListBox;
     N1: TMenuItem;
     GroupBox5: TGroupBox;
-    Label6: TLabel;
     Label8: TLabel;
     Label10: TLabel;
     Button11: TButton;
     RadioButton4: TRadioButton;
     RadioButton5: TRadioButton;
-    //PLC: TIdTCPClient;
+    Label6: TLabel;
+    PLC: TIdTCPClient;
     procedure ListBox1Click(Sender: TObject);
     procedure ComboBox1Change(Sender: TObject);
     procedure configClick(Sender: TObject);
@@ -95,7 +94,7 @@ type
     procedure cpDrvReceiveData(Sender: TObject; DataPtr: Pointer;DataSize: Cardinal);
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
- //   procedure Button3Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
     procedure Button5Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
     procedure Edit3Change(Sender: TObject);
@@ -131,8 +130,6 @@ MyThread=class(Tthread)
 
   end;
 
-
-
 TAngleThread = class(TThread)
   private
     { Private declarations }
@@ -152,10 +149,10 @@ var
   OverRead:TOverlapped;
   Ini: Tinifile;
   var ChartFile: TextFile;
- // PLC: TIdModBusClient;
+  PLC: TIdModBusClient;
   RegisterData: array[0..2] of Word;
   ConnectionType: Byte = 1;
-  //COMConnectionState: boolean = false;
+  COMConnectionState: boolean = false;
   str: string = '';
 implementation
 
@@ -163,11 +160,12 @@ implementation
 uses Unit1,Unit2,TransmitReceiveCOM,TurnOnFilter,WriteSample,ModbusTransmitReceive,
 TurnOnVVI, SetPorog, SetOkno, TurnOffFilter,WriteAngleLSB,WriteAngleMSB,WriteSpeed,
 WriteCrystallNum, Calculator;
+
 // Старт программы
 procedure TwinMain.FormCreate(Sender: TObject);
 begin
   // создание объектов классов
- // PLC := TIdModBusClient.Create;
+  PLC := TIdModBusClient.Create;
   // создание файла конфигурации на случай, если такового нет
   // со стандартными настройками скорости 9600 бит/с
   if not FileExists(extractfilepath(paramstr(0))+'config.ini') then
@@ -221,7 +219,8 @@ begin
   end;
  CloseHandle(OverRead.Hevent);
  end;
-// обработка кнопки Очистить окно вывода из COM-порта
+ 
+// обработка кнопки "Очистить" окна чтения из COM-порта
 procedure TwinMain.Button10Click(Sender: TObject);
 begin
   AngleThread.Terminate;
@@ -242,17 +241,18 @@ end;
 // закрытие файла
 procedure TwinMain.Button2Click(Sender: TObject);
 begin
-      Button2.Enabled := False;
+
   CloseFile(ChartFile);
 end;
 // запись в регистр по Modbus Ethernet
-//procedure TwinMain.Button3Click(Sender: TObject);
-//begin
+procedure TwinMain.Button3Click(Sender: TObject);
+begin
 //  if PLC.WriteRegisters(5, RegisterData) then
 //    MessageDlg('Успешная запись в регистры!', mtCustom, [mbOk], 0)
 //  else
 //    MessageDlg('Ошибка при записи в регистры', mtError, [mbOk], 0);
-//end;
+end;
+
 // чтение регистров Modbus Ethernet
 procedure TwinMain.Button4Click(Sender: TObject);
 var
@@ -279,9 +279,10 @@ begin
 //      ShowMessage('PLC read operation failed!');
 //  end;
 end;
+
 procedure TwinMain.Button5Click(Sender: TObject);
 begin
-  //PLC.Host := Edit1.Text;
+  PLC.Host := Edit1.Text;
   Button3.Enabled := True;
   Button4.Enabled := True;
 end;
@@ -294,8 +295,8 @@ end;
 // кнопка "Соединение" в IP-адресе ПЛК
 procedure TwinMain.Button7Click(Sender: TObject);
 begin
-  //PLC.Host := Edit2.Text;
-  //InitPLC(Edit2.Text);
+  PLC.Host := Edit2.Text;
+  InitPLC(Edit2.Text);
   RadioButton2.Enabled := True;
   RadioButton3.Enabled := True;
   Button8.Enabled := True;
@@ -305,7 +306,7 @@ var
   reg: Word;
 begin
   reg := StrToInt(Edit3.Text);
- // SetRegNum(reg);
+  SetRegNum(reg);
 end;
 procedure TwinMain.Button9Click(Sender: TObject);
 begin
@@ -323,13 +324,20 @@ begin
   ListBox2.Visible:=False;
   ListBox5.Visible:=False;
   ListBox6.Visible:=False;
+  
+  GroupBox5.Visible:=False; // скрытие группы "Непрерывное чтение угла ВСК"
   CI:=ComboBox1.Items;
   item_ind:=ComboBox1.ItemIndex;
   case item_ind of
-    0: ListBox1.Visible:=True;
+    0: begin
+          ListBox1.Visible:=True;
+        end;
     1: ListBox2.Visible:=True;
     2: ListBox5.Visible:=True;
-    3: ListBox6.Visible:=True;
+    3: begin
+          ListBox6.Visible:=True;
+          GroupBox5.Visible:=True;
+        end;
   end;
 end;
 
@@ -431,7 +439,6 @@ begin
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
-  //ShowMessage('Сообщение отправлено');
 end;
 procedure TwinMain.LiftExample;
 var
@@ -805,7 +812,6 @@ begin
   1: WriteCOM(msg,0);
   2: WriteEthernet(msg,0);
   end;
-  //ShowMessage('Сообщение отправлено');
 end;
 procedure TwinMain.RadioButton1Click(Sender: TObject);
 begin
@@ -835,7 +841,6 @@ function ConvertVVIVal : Integer;
 var
   res: integer;
 begin
-  //res := StrToInt(RBuffer);
   Result := 0
 end;
 
@@ -858,33 +863,7 @@ begin
   winMain.Memo1.Lines.Add(#13#10);
 end;
 
-
-{
-procedure MyThread.OutVoltageValue;//Процедура вывода в Memo;
-var
-  res: integer;
-  i: integer;
-begin
-SendMessage(winMain.Memo1.Handle, EM_LINESCROLL, 0,winMain.Memo1.Lines.Count);
-winMain.Memo1.Lines.Text := winMain.Memo1.Lines.Text+String(RBuffer);//Загружаем в Memo содержимое буфера;
-{
-BinaryString := '';
-Count := Integer(Temp);
-  for i := 0 to Count do
-  begin
-    BinaryString := BinaryString + '1';
-  end;
-  winMain.Label6.Caption := BinaryString;
- }
-  //i:= Random(100);
-//winMain.Memo1.Lines.Text := IntToStr(i);
-//winMain.Memo1.Lines.Text := IntToStr(SizeOf(String(RBuffer)));
-//winMain.Memo1.Lines.Add(String(RBuffer));
-{
-RBuffer := '';
-end;    }
-
-
+// работа потока непрерывной отправки команд на чтение угла
 procedure TAngleThread.Execute;
 var
   msg: string;
@@ -922,8 +901,6 @@ begin
   // преобразование входных данных в строку
   s := StringOfChar(' ', DataSize);
   move(DataPtr^, pAnsiChar(s)^, DataSize);
-
-
   Memo1.Lines.Append(s);
   Memo1.Lines.EndUpdate;
 end;
@@ -935,17 +912,14 @@ begin
   Write(ChartFile,RBuffer);
 end;
 }
+
+// Действия при закрытии программы
+
 procedure TwinMain.FormClose(Sender: TObject; var Action: TCloseAction); //Закрытие програмы;
 begin
+  if cpDrv <> nil then   // освобождение COM-порта
+    cpDrv.Disconnect;
 
-//if AngleThread <> nil then
-//AngleThread.Terminate;
-
-if  MyThr <> nil then //Если поток запущен;
-MyThr.Terminate; //Останавливаем его;
-cpDrv.Disconnect;
-CloseHandle(getPhndl); //Закрываем Порт;
-// очистка памяти созданных объектов
-//PLC.Free;
+//PLC.Free;             // освобождение объекта для связи с ПЛК
 end;
 end.

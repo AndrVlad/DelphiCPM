@@ -21,7 +21,6 @@ type
     GroupBox1: TGroupBox;
     Memo1: TMemo;
     Button1: TButton;
-    Button2: TButton;
     Modbus: TTabSheet;
     Edit1: TEdit;
     Label4: TLabel;
@@ -49,9 +48,12 @@ type
     ListBox5: TListBox;
     ListBox6: TListBox;
     N1: TMenuItem;
-    Button9: TButton;
-    Button10: TButton;
     GroupBox5: TGroupBox;
+    Label8: TLabel;
+    Label10: TLabel;
+    Button11: TButton;
+    RadioButton4: TRadioButton;
+    RadioButton5: TRadioButton;
     Label6: TLabel;
     //PLC: TIdTCPClient;
     procedure ListBox1Click(Sender: TObject);
@@ -89,6 +91,7 @@ type
     procedure TurnOff_B2;
     procedure StartAngle;
     procedure PollAngle;
+    procedure cpDrvReceiveData(Sender: TObject; DataPtr: Pointer;DataSize: Cardinal);
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
  //   procedure Button3Click(Sender: TObject);
@@ -106,6 +109,9 @@ type
     procedure N1Click(Sender: TObject);
     procedure Button9Click(Sender: TObject);
     procedure Button10Click(Sender: TObject);
+    procedure Button11Click(Sender: TObject);
+    procedure RadioButton4Click(Sender: TObject);
+    procedure RadioButton5Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -113,15 +119,17 @@ type
     { Public declarations }
   end;
 
+
 MyThread=class(Tthread)
   private
   { private declarations }
   protected
     procedure execute; override;
-    procedure OutVoltageValue;
-    procedure WriteChartFile;
+    //procedure OutVoltageValue;
+    //procedure WriteChartFile;
 
   end;
+
 
 
 TAngleThread = class(TThread)
@@ -138,7 +146,6 @@ var
   AngleThread: TThread;
   ComStat:TComStat;
   Btr, Mask, Temp, Signal: DWORD;
-  //Rbuffer: array[0..50] of AnsiChar;
   Rbuffer: array[0..255] of AnsiChar;
   Action: TCloseAction;
   OverRead:TOverlapped;
@@ -167,17 +174,20 @@ begin
       Ini:=TiniFile.Create(extractfilepath(paramstr(0))+'config.ini');
       Ini.WriteInteger('FControls','ComboBox2.ItemIndex',4);
       Ini.WriteInteger('COM','BaudRate',9600);
+      Ini.WriteString('COM','Port','COM1');
     end;
   // инициализация существующего файла конфигурации
   Ini:=TiniFile.Create(extractfilepath(paramstr(0))+'config.ini');
   FControls:= TFControls.Create(Self);
   FControls.ComboBox2.ItemIndex := Ini.ReadInteger('FControls','ComboBox2.ItemIndex',4);
   FControls.BaudRate := Ini.ReadInteger('COM','BaudRate',9600);
+  FControls.PortName := Ini.ReadString('COM','Port','COM1');
   Edit1.Text := Ini.ReadString('Modbus','SlaveAddr','192.168.1.111');
   Edit2.Text := Ini.ReadString('Modbus','SlaveAddr','192.168.1.111');
   Edit3.Text := Ini.ReadString('Modbus','RegNum','5');
   AssignFile(ChartFile,extractfilepath(paramstr(0))+'chart.txt');
   Rewrite(ChartFile);
+  winMain.Label10.Caption := FControls.PortName;
   var num_w: Word;
   var str: string;
 end;
@@ -201,7 +211,7 @@ begin
           begin
             ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);
             //Synchronize(OutVoltageValue);//Делаем синхроннй вызов загрузки буфера в Memo;
-            OutVoltageValue;
+            //OutVoltageValue;
             //WriteChartFile;
           end;
         end;
@@ -216,6 +226,12 @@ begin
   AngleThread.Terminate;
 end;
 
+procedure TwinMain.Button11Click(Sender: TObject);
+begin
+  //InitCOM(FControls.PortName);
+  Button11.Enabled := False;
+end;
+
 procedure TwinMain.Button1Click(Sender: TObject);
 begin
   PurgeComm(getPhndl, Purge_TXabort or Purge_RXabort or Purge_TXclear or Purge_RXclear);
@@ -225,15 +241,7 @@ end;
 // закрытие файла
 procedure TwinMain.Button2Click(Sender: TObject);
 begin
-  if MyThr = nil then //Если поток не запущен;
-      begin
-        if COMConnectionState then
-          begin
-            MyThr:=MyThread.Create(false); //Создаем поток чтения;
-            MyThr.FreeOnTerminate:=true; //Запускаем поток чтения;
-            MyThr.Priority:=tpNormal; //Устанавливаем приоритет;
-          end;
-      end;
+
   CloseFile(ChartFile);
 end;
 // запись в регистр по Modbus Ethernet
@@ -314,15 +322,24 @@ begin
   ListBox2.Visible:=False;
   ListBox5.Visible:=False;
   ListBox6.Visible:=False;
+  GroupBox5.Visible:=False;
   CI:=ComboBox1.Items;
   item_ind:=ComboBox1.ItemIndex;
   case item_ind of
-    0: ListBox1.Visible:=True;
+    0: begin
+          ListBox1.Visible:=True; 
+          
+        end;
     1: ListBox2.Visible:=True;
     2: ListBox5.Visible:=True;
-    3: ListBox6.Visible:=True;
+    3: begin
+          ListBox6.Visible:=True;
+          GroupBox5.Visible:=True;
+        end;
   end;
 end;
+
+// обработчик пункта меню "Настройки"
 procedure TwinMain.configClick(Sender: TObject);
 begin
   //FControls:= TFControls.Create(Self);
@@ -808,6 +825,18 @@ procedure TwinMain.RadioButton3Click(Sender: TObject);
 begin
   ConnectionType := 3;
 end;
+procedure TwinMain.RadioButton4Click(Sender: TObject);
+begin
+  AngleThread:= TAngleThread.Create(False);
+  AngleThread.Priority:=tpNormal;
+  AngleThread.FreeOnTerminate:=true;
+end;
+
+procedure TwinMain.RadioButton5Click(Sender: TObject);
+begin
+   AngleThread.Terminate;
+end;
+
 function ConvertVVIVal : Integer;
 var
   res: integer;
@@ -835,6 +864,8 @@ begin
   winMain.Memo1.Lines.Add(#13#10);
 end;
 
+
+{
 procedure MyThread.OutVoltageValue;//Процедура вывода в Memo;
 var
   res: integer;
@@ -855,8 +886,11 @@ Count := Integer(Temp);
 //winMain.Memo1.Lines.Text := IntToStr(i);
 //winMain.Memo1.Lines.Text := IntToStr(SizeOf(String(RBuffer)));
 //winMain.Memo1.Lines.Add(String(RBuffer));
+{
 RBuffer := '';
-end;
+end;    }
+
+
 procedure TAngleThread.Execute;
 var
   msg: string;
@@ -884,21 +918,35 @@ begin
 
 end;
 
+// чтение данных из порта
+procedure TwinMain.cpDrvReceiveData(Sender: TObject; DataPtr: Pointer; DataSize: Cardinal);
+var i,k: integer;
+    s: AnsiString;
+    s1,s2: string;
+begin
 
+  // преобразование входных данных в строку
+  s := StringOfChar(' ', DataSize);
+  move(DataPtr^, pAnsiChar(s)^, DataSize);
+  Memo1.Lines.Append(s);
+  Memo1.Lines.EndUpdate;
+end;
+
+
+{
 procedure MyThread.WriteChartFile;//Процедура записи в файл
 begin
   Write(ChartFile,RBuffer);
 end;
+}
+
+// Действия при закрытии программы
+
 procedure TwinMain.FormClose(Sender: TObject; var Action: TCloseAction); //Закрытие програмы;
 begin
+  if cpDrv <> nil then   // освобождение COM-порта
+    cpDrv.Disconnect;
 
-if AngleThread <> nil then
-AngleThread.Terminate;
-
-if  MyThr <> nil then //Если поток запущен;
-MyThr.Terminate; //Останавливаем его;
-CloseHandle(getPhndl); //Закрываем Порт;
-// очистка памяти созданных объектов
-//PLC.Free;
+//PLC.Free;             // освобождение объекта для связи с ПЛК
 end;
 end.
