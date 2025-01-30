@@ -115,6 +115,7 @@ begin
   if cpDrv.Connect then
   begin
       ShowMessage('Подключение по '+PortName+' установлено');
+      {
       Wbuffer[0] := Ord(Chr(5));
           for i := 1 to 4 do
           begin
@@ -125,7 +126,7 @@ begin
         ShowMessage('Message sent!')
       else
         ShowMessage('Failed to send message!');
-
+       }
   end
   else
      ShowMessage('Ошибка подключения по '+PortName);

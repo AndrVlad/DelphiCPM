@@ -82,11 +82,12 @@ object winMain: TwinMain
           Width = 46
           Height = 15
           Caption = #1042#1099#1073#1088#1072#1085':'
+          Visible = False
         end
         object Label10: TLabel
           Left = 69
           Top = 54
-          Width = 4
+          Width = 20
           Height = 17
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
@@ -94,6 +95,7 @@ object winMain: TwinMain
           Font.Name = 'Segoe UI'
           Font.Style = [fsBold]
           ParentFont = False
+          Visible = False
         end
         object Edit2: TEdit
           Left = 408
@@ -118,6 +120,7 @@ object winMain: TwinMain
           Height = 25
           Caption = #1055#1086#1076#1082#1083#1102#1095#1080#1090#1100
           TabOrder = 2
+          Visible = False
           OnClick = Button11Click
         end
       end
