@@ -21,8 +21,6 @@ object winMain: TwinMain
     Width = 876
     Height = 19
     Panels = <>
-    ExplicitTop = 515
-    ExplicitWidth = 872
   end
   object PageControl1: TPageControl
     Left = 0
@@ -87,7 +85,7 @@ object winMain: TwinMain
         object Label10: TLabel
           Left = 69
           Top = 54
-          Width = 20
+          Width = 4
           Height = 17
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText

@@ -120,15 +120,15 @@ type
   end;
 
 
-MyThread=class(Tthread)
-  private
-  { private declarations }
-  protected
-    procedure execute; override;
-    //procedure OutVoltageValue;
-    //procedure WriteChartFile;
-
-  end;
+//MyThread=class(Tthread)
+//  private
+//  { private declarations }
+//  protected
+//    procedure execute; override;
+//    //procedure OutVoltageValue;
+//    //procedure WriteChartFile;
+//
+//  end;
 
 TAngleThread = class(TThread)
   private
@@ -140,10 +140,10 @@ TAngleThread = class(TThread)
 
 var
   winMain: TwinMain;
-  MyThr: MyThread;
+  //MyThr: MyThread;
   AngleThread: TThread;
   ComStat:TComStat;
-  Btr, Mask, Temp, Signal: DWORD;
+  //Btr, Mask, Temp, Signal: DWORD;
   Rbuffer: array[0..255] of AnsiChar;
   Action: TCloseAction;
   OverRead:TOverlapped;
@@ -191,34 +191,34 @@ begin
   var str: string;
 end;
 
-procedure MyThread.execute;
-begin
-  OverRead.Hevent:=CreateEvent(Nil, True, True, Nil);//Сигнальный объект событие для ассинхронных операций;
-  While not MyThr.Terminated do//Пока поток не остановлен;
-  begin
-    WaitCommEvent(getPhndl, Mask, @OverRead);//Ожидаем события (поступление байта);
-    Signal:=WaitForSingleObject(OverRead.hEvent, Infinite);//Приостанавливаем поток до тех пор пока байт не поступит;
-    if (Signal=Wait_Object_0) then //Если байт поступил;
-    begin
-      if GetOverlappedResult(getPhndl, OverRead, Temp, true) then //Проверяем успешность завершения операции;
-      begin
-        if ((Mask and EV_RXchar)<>0) then
-        begin
-          ClearCommError(getPhndl, Temp, @ComStat); //Заполняем структуру COMSTAT;
-          Btr:=ComStat.cbInQue; //Получаем из структуры количество байт;
-          If Btr.Size<>0 then //Если байты присутствуют,
-          begin
-            ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);
-            //Synchronize(OutVoltageValue);//Делаем синхроннй вызов загрузки буфера в Memo;
-            //OutVoltageValue;
-            //WriteChartFile;
-          end;
-        end;
-      end
-    end;
-  end;
- CloseHandle(OverRead.Hevent);
- end;
+//procedure MyThread.execute;
+//begin
+//  OverRead.Hevent:=CreateEvent(Nil, True, True, Nil);//Сигнальный объект событие для ассинхронных операций;
+//  While not MyThr.Terminated do//Пока поток не остановлен;
+//  begin
+//    WaitCommEvent(getPhndl, Mask, @OverRead);//Ожидаем события (поступление байта);
+//    Signal:=WaitForSingleObject(OverRead.hEvent, Infinite);//Приостанавливаем поток до тех пор пока байт не поступит;
+//    if (Signal=Wait_Object_0) then //Если байт поступил;
+//    begin
+//      if GetOverlappedResult(getPhndl, OverRead, Temp, true) then //Проверяем успешность завершения операции;
+//      begin
+//        if ((Mask and EV_RXchar)<>0) then
+//        begin
+//          ClearCommError(getPhndl, Temp, @ComStat); //Заполняем структуру COMSTAT;
+//          Btr:=ComStat.cbInQue; //Получаем из структуры количество байт;
+//          If Btr.Size<>0 then //Если байты присутствуют,
+//          begin
+//            ReadFile(getPhndl, RBuffer, SizeOf(RBuffer), Temp, @OverRead);
+//            //Synchronize(OutVoltageValue);//Делаем синхроннй вызов загрузки буфера в Memo;
+//            //OutVoltageValue;
+//            //WriteChartFile;
+//          end;
+//        end;
+//      end
+//    end;
+//  end;
+// CloseHandle(OverRead.Hevent);
+// end;
  
 // обработка кнопки "Очистить" окна чтения из COM-порта
 procedure TwinMain.Button10Click(Sender: TObject);
