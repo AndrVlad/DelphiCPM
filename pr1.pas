@@ -174,6 +174,8 @@ begin
       Ini.WriteInteger('FControls','ComboBox2.ItemIndex',4);
       Ini.WriteInteger('COM','BaudRate',9600);
       Ini.WriteString('COM','Port','COM1');
+      Ini.WriteString('Modbus','SlaveAddr','192.168.1.111');
+      Ini.WriteString('Modbus','RegNum','513');
     end;
   // инициализация существующего файла конфигурации
   Ini:=TiniFile.Create(extractfilepath(paramstr(0))+'config.ini');
@@ -183,7 +185,7 @@ begin
   FControls.PortName := Ini.ReadString('COM','Port','COM1');
   Edit1.Text := Ini.ReadString('Modbus','SlaveAddr','192.168.1.111');
   Edit2.Text := Ini.ReadString('Modbus','SlaveAddr','192.168.1.111');
-  Edit3.Text := Ini.ReadString('Modbus','RegNum','5');
+  Edit3.Text := Ini.ReadString('Modbus','RegNum','0');
   AssignFile(ChartFile,extractfilepath(paramstr(0))+'chart.txt');
   Rewrite(ChartFile);
   winMain.Label10.Caption := FControls.PortName;
@@ -296,9 +298,9 @@ end;
 procedure TwinMain.Button7Click(Sender: TObject);
 begin
   PLC.Host := Edit2.Text;
-  InitPLC(Edit2.Text);
+  InitPLC(Edit2.Text, StrToInt(Edit3.Text));
   RadioButton2.Enabled := True;
-  RadioButton3.Enabled := True;
+  //RadioButton3.Enabled := True;
   Button8.Enabled := True;
 end;
 procedure TwinMain.Button8Click(Sender: TObject);

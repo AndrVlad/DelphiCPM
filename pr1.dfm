@@ -110,6 +110,7 @@ object winMain: TwinMain
           Height = 23
           TabOrder = 1
           Text = 'Edit3'
+          OnChange = Edit3Change
         end
         object Button11: TButton
           Left = 128

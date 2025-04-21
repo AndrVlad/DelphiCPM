@@ -4,7 +4,7 @@ interface
 
 procedure WriteEthernet(msg: string; commandType: Byte);
 procedure SendMsgEthernet(var msg: array of Word);
-procedure InitPLC(addr: string);
+procedure InitPLC(addr: string; startRegNum: Word);
 procedure SetRegNum(num: Word);
 
 implementation
@@ -15,7 +15,7 @@ uses
 
 var
   PLC: TIdModBusClient;
-  RegNum: Word = 5;
+  RegNum: Word;
 
 procedure WriteEthernet(msg: string; commandType: Byte);
 var
@@ -51,16 +51,16 @@ if PLC.WriteRegisters(513, msg) then
     MessageDlg('Ошибка при записи в регистры', mtError, [mbOk], 0);
 end;
 
-procedure InitPLC(addr: string);
+procedure InitPLC(addr: string; startRegNum: Word);
 begin
   PLC := TIdModBusClient.Create;
   PLC.Host := addr;
-  SetRegNum(RegNum);
+  SetRegNum(startRegNum);
 end;
 
 procedure SetRegNum(num: Word);
 begin
-  RegNum := 513+num;
+  RegNum := num;
 end;
 
 end.
